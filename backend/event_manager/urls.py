@@ -8,11 +8,9 @@ from .views import index, index_protected, register_user, login_user, logout_use
 
 urlpatterns = [
     path('', index, name='index'),
-    path('protected', index_protected, name='index_protected'),
+    path('protected/', index_protected, name='index_protected'),
     path('auth/register/', register_user, name='register'),
-    path('auth/login/', login_user, name='login'),
-    path('auth/logout/', logout_user, name='logout'),
     path('auth/token/',  MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('auth/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
 ]

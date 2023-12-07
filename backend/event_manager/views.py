@@ -16,13 +16,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-
-        # Add custom claims
         token['username'] = user.username
-        # ...
-
         return token
-
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -35,29 +30,6 @@ def register_user(request):
         user.save()
         return Response(user.data, status=status.HTTP_201_CREATED)
     return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def login_user(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-    user = authenticate(request, username=username, password=password)
-    if user:
-        print(user, "1111")
-        refresh = RefreshToken.for_user(user)
-        access_token = str(refresh.access_token)
-        return Response({ 'access_token': access_token, 'user': username}, status=status.HTTP_200_OK)
-    return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def logout_user(request):
-    refresh_token = request.headers.get('Authorization').split(' ')[1]
-    print(refresh_token, "!!!!!!!!")
-    refresh = AccessToken(refresh_token)
-    refresh.blacklist()
-    logout(request)
-    return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
 
 def index(request):
     return JsonResponse(data={"hello" : "world"})
