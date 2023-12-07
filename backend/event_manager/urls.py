@@ -1,7 +1,10 @@
 # yourappname/urls.py
 
 from django.urls import path
-from .views import index, index_protected, register_user, login_user, logout_user
+from rest_framework_simplejwt.views import TokenRefreshView
+
+from .views import index, index_protected, register_user, login_user, logout_user, MyTokenObtainPairView
+
 
 urlpatterns = [
     path('', index, name='index'),
@@ -9,4 +12,7 @@ urlpatterns = [
     path('auth/register/', register_user, name='register'),
     path('auth/login/', login_user, name='login'),
     path('auth/logout/', logout_user, name='logout'),
+    path('auth/token/',  MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+
 ]
