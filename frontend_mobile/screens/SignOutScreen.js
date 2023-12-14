@@ -1,6 +1,15 @@
-import { Text, View } from "react-native";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../store/authSlice";
+
+import { Text, View, Button } from "react-native";
 
 const SignOutScreen = function ({ navigation }) {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(clearUser());
+    console.log("loggging out");
+  };
   return (
     <View
       style={{
@@ -11,6 +20,7 @@ const SignOutScreen = function ({ navigation }) {
       }}
     >
       <Text>Sign Out</Text>
+      <Button title="Log out" onPress={handleLogout} />
     </View>
   );
 };
