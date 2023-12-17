@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, Text } from "react-native";
+import axios from "axios";
 
 const RegisterScreen = function ({ navigation }) {
   const [username, setUsername] = useState("");
@@ -7,7 +8,12 @@ const RegisterScreen = function ({ navigation }) {
   const [confirmedPassword, setConfirmedPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = () => {
+  const clearInputFields = () => {
+    setUsername("");
+    setPassword("");
+    setConfirmedPassword("");
+  };
+  const handleRegister = async () => {
     setErrorMessage("");
     if (!username || !password) {
       setErrorMessage("Username and Password cannot be empty");
@@ -19,6 +25,31 @@ const RegisterScreen = function ({ navigation }) {
     }
     console.log("Username:", username);
     console.log("Password:", password);
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/auth/register/",
+        {
+          username: username,
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response, "!!!!!!!!!");
+      if (response.status >= 200 && response.status < 300) {
+        const data = response.data;
+        console.log(data, "resp");
+        setErrorMessage("Successful registration");
+      } else {
+        setErrorMessage("Log in failed");
+      }
+    } catch (error) {
+      setErrorMessage("Log in failed");
+    }
+    clearInputFields();
   };
 
   return (
@@ -40,7 +71,7 @@ const RegisterScreen = function ({ navigation }) {
         value={confirmedPassword}
         onChangeText={(text) => setConfirmedPassword(text)}
       />
-      <Button title="Register" onPress={handleLogin} />
+      <Button title="Register" onPress={handleRegister} />
       <Text>{errorMessage}</Text>
     </View>
   );
