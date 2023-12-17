@@ -8,6 +8,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+import datetime
 
 from .serializers import MyUserSerializer
 
@@ -32,12 +33,14 @@ def register_user(request):
     return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def index(request):
-    return JsonResponse(data={"hello" : "world"})
+    dt = datetime.datetime.now()
+    return JsonResponse(data={"hello" : dt})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def index_protected(request):
     print(request.user, "ssss")
-    return JsonResponse(data={"hello" : "protected"})
+    dt = datetime.datetime.now()
+    return JsonResponse(data={"protected" : dt})
 
 

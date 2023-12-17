@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, Text } from "react-native";
 import { useDispatch } from "react-redux";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import dayjs from "dayjs";
+
+
 import { setUser } from "../store/authSlice";
 
 const SignInScreen = function ({ navigation }) {
@@ -10,13 +15,43 @@ const SignInScreen = function ({ navigation }) {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setErrorMessage("");
     if (!username || !password) {
       setErrorMessage("Username and Password cannot be empty");
       return;
     }
-    dispatch(setUser({ username }));
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/auth/token/",
+        {
+          username: username,
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response, "!!!!!!!!!");
+      if (response.status === 200) {
+        const data = response.data;
+        const decodedData = jwtDecode(data.access);
+        console.log(decodedData.username, "?????");
+        console.log(dayjs.unix(decodedData.exp), "new token expiration time");
+        console.log(data, "tokens on login");
+        dispatch(
+          setUser({
+            authTokens: JSON.stringify(data),
+          })
+        );
+      } else {
+        setErrorMessage("Log in failed");
+      }
+    } catch (error) {
+      setErrorMessage("Log in failed");
+    }
   };
 
   return (

@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { jwtDecode } from "jwt-decode";
 
 const initialState = {
   user: null,
-  isLoggedIn: false,
+  authTokens: null,
 };
 
 const authSlice = createSlice({
@@ -10,17 +11,18 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload.username;
-      state.isLoggedIn = !!action.payload.username;
+      state.authTokens = JSON.stringify(action.payload.authTokens); // !!! to change
+      // state.user = "BestUser"
+      state.user = jwtDecode(action.payload.authTokens).username;
     },
     clearUser: (state) => {
       state.user = null;
-      state.isLoggedIn = false;
+      state.authTokens = null;
     },
   },
 });
 
-export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
 export const selectUser = (state) => state.auth.user;
+export const selectAuthTokens = (state) => state.auth.authTokens;
 export const { setUser, clearUser } = authSlice.actions;
 export default authSlice.reducer;

@@ -9,12 +9,7 @@ const HomeScreen = function ({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text> Home</Text>
-      {user ? (
-          <Text> Logged in as : {user}</Text>
-        ) : (
-          <Text> Logged out</Text>
-
-        )}
+      {user ? <Text> Logged in as : {user}</Text> : <Text> Logged out</Text>}
     </View>
   );
 };
