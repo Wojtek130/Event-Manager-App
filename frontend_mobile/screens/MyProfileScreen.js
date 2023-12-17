@@ -12,8 +12,6 @@ const MyProfileScreen = function ({ navigation }) {
   console.log("hello from profile");
   const fetchData = async () => {
     const response = await axiosInstance.get("http://127.0.0.1:8000/protected/");
-    // const response = await axios.get("http://127.0.0.1:8000/");
-    console.log(response.data, "aaasdsk");
     if (response.status === 200) {
       setNotes(JSON.stringify(response.data));
     }

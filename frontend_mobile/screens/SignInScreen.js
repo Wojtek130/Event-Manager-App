@@ -38,9 +38,6 @@ const SignInScreen = function ({ navigation }) {
       if (response.status === 200) {
         const data = response.data;
         const decodedData = jwtDecode(data.access);
-        console.log(decodedData.username, "?????");
-        console.log(dayjs.unix(decodedData.exp), "new token expiration time");
-        console.log(data, "tokens on login");
         dispatch(
           setUser({
             authTokens: JSON.stringify(data),
