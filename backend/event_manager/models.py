@@ -4,6 +4,6 @@ from jsonfield import JSONField
 # Create your models here.
 class MyUser(AbstractUser):
     
-    json_data = JSONField()
+    social_media = JSONField(default={})
     def __str__(self):
         return self.username
