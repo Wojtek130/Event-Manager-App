@@ -3,3 +3,4 @@ djangorestframework
 djangorestframework-simplejwt
 djangorestframework-jwt
 django-cors-headers
+django-jsonfield

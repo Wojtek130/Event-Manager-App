@@ -6,7 +6,12 @@ User = get_user_model()
 class MyUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'password']
+        fields = ['id', 'username', 'password', 'social_media']
+
+    def validate(self, data):
+        # Perform custom validation here
+        print(dict(data))
+        return data
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)

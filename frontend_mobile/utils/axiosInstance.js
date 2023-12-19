@@ -28,15 +28,19 @@ axiosInstance.interceptors.request.use(async (req) => {
   if (!isExpired) {
     return req;
   }
-  const response = await axios.post(`${baseURL}/auth/token/refresh/`, {
-    refresh: parsedAuthTokens.refresh,
-  });
-  store.dispatch(
-    setUser({
-      authTokens: JSON.stringify(response.data),
-    })
-  );
-  req.headers.Authorization = `Bearer ${response.data.access}`;
+  try {
+    const response = await axios.post(`${baseURL}/auth/token/refresh/`, {
+      refresh: parsedAuthTokens.refresh,
+    });
+    store.dispatch(
+      setUser({
+        authTokens: JSON.stringify(response.data),
+      })
+    );
+    req.headers.Authorization = `Bearer ${response.data.access}`;
+  } catch (error) {
+    console.error(error);
+  }
   return req;
 });
 

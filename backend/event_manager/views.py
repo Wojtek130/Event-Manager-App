@@ -27,8 +27,9 @@ class MyTokenObtainPairView(TokenObtainPairView):
 @permission_classes([AllowAny])
 def register_user(request):
     user = MyUserSerializer(data=request.data)
+    print(request.data)
     if user.is_valid():
-        user.save()
+        # user.save()
         return Response(user.data, status=status.HTTP_201_CREATED)
     return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
 
