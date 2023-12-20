@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
+from django.views import View
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
@@ -11,6 +12,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 import datetime
 
 from .serializers import MyUserSerializer
+from .models import MyUser
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -43,4 +45,18 @@ def index_protected(request):
     dt = datetime.datetime.now()
     return JsonResponse(data={"protected" : dt})
 
+
+# class UserProfile(View):
+#     permission_classes = [IsAuthenticated]
+#     def get(self, request):
+#         print(request, request.user, request.__dict__)
+#         return JsonResponse({"user" : "profile"})
+    
+@api_view(['GET', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def profile(request):
+    print(request.user, request, "ssss")
+    user = MyUser.objects.get(username=request.user)
+    user_data = {"social_media" : user.social_media}
+    return JsonResponse(data=user_data)
 
