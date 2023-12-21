@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Text, StyleSheet, Button, View, TextInput } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import axiosInstance from "../utils/axiosInstance";
 import {
@@ -9,9 +8,10 @@ import {
 } from "../utils/constants";
 
 const MyProfileScreen = function ({ navigation }) {
+  const initialOSM = ["", ""];
   const [userData, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [otherSocialMedia, setOtherSocialMedia] = useState(["", ""]);
+  const [otherSocialMedia, setOtherSocialMedia] = useState(initialOSM);
   const [errorMessage, setErrorMessage] = useState("");
 
   const fetchUserData = async () => {
@@ -23,14 +23,15 @@ const MyProfileScreen = function ({ navigation }) {
       const osm = Object.entries(response.data.social_media).filter(
         ([key]) => !SOCIAL_MEDIA_PLATFORMS.includes(key)
       );
-      const osmArray = osm[0];
+      const osmArray = osm[0] ? osm[0] : initialOSM;
+      console.log(osm, "@@@@@@@@@@@@@@@", osmArray);
       setOtherSocialMedia(osmArray);
     } catch (error) {
       console.log(error, "!!!");
     }
   };
   const handleEdit = () => setEditMode(true);
-  const handleSave = () => {
+  const handleSave = async () => {
     if (otherSocialMedia[0] && !otherSocialMedia[1]) {
       setErrorMessage(
         "Other Social Media User cannot be empty when Other Social Media is given"
@@ -53,7 +54,25 @@ const MyProfileScreen = function ({ navigation }) {
       newSocialMedia[otherSocialMedia[0]] = otherSocialMedia[1];
     }
     console.log(newSocialMedia, "new social media");
+    try {
+      const response = await axiosInstance.patch(
+        "profile/",
+        {
+          social_media: newSocialMedia,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (error) {
+      setErrorMessage(error);
+      return;
+    }
+    setUserData((prevData) => ({ ...prevData, social_media: newSocialMedia }));
     setEditMode(false);
+    setErrorMessage("");
   };
   const handleChange = (field, value) => {
     setUserData((prevData) => {

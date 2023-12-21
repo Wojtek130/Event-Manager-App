@@ -55,8 +55,21 @@ def index_protected(request):
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def profile(request):
-    print(request.user, request, "ssss")
     user = MyUser.objects.get(username=request.user)
-    user_data = {"social_media" : user.social_media}
-    return JsonResponse(data=user_data)
-
+    if request.method == "GET":
+        print(request.user, request, "ssss")
+        user_data = {"social_media" : user.social_media}
+        return JsonResponse(data=user_data)
+    if request.method == "PATCH":
+        user_fields = [field.name for field in user._meta.get_fields()]
+        print(user_fields)
+        for k, v in request.data.items():
+            print(k, v, k in user_fields, "jejejejjejej")
+            if k in user_fields:
+                setattr(user, k, v)
+                print(k, v, "from loop")
+        print(user.social_media)
+        user.save()
+        return JsonResponse(data={"message": "Profile updated successfully."})
+    return JsonResponse(data={"error": "Method not allowed"}, status=405)
+    
