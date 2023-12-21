@@ -1,35 +1,149 @@
 import { useState, useEffect } from "react";
-import { Text, View, Button } from "react-native";
+import { Text, StyleSheet, Button, View, TextInput } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import axiosInstance from "../utils/axiosInstance";
-import axios from "axios";
-
-const Tab = createBottomTabNavigator();
+import {
+  SOCIAL_MEDIA_PLATFORMS,
+  SOCIAL_MEDIA_PLATFORMS_NAMES,
+} from "../utils/constants";
 
 const MyProfileScreen = function ({ navigation }) {
-  const [notes, setNotes] = useState("");
-  console.log("hello from profile");
-  const fetchData = async () => {
-    const response = await axiosInstance.get("http://127.0.0.1:8000/protected/");
-    if (response.status === 200) {
-      setNotes(JSON.stringify(response.data));
+  const [userData, setUserData] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [otherSocialMedia, setOtherSocialMedia] = useState(["", ""]);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const fetchUserData = async () => {
+    console.log("fetching data called");
+    try {
+      const response = await axiosInstance.get("profile/");
+      setUserData(await response.data);
+      console.log(response.data.social_media);
+      const osm = Object.entries(response.data.social_media).filter(
+        ([key]) => !SOCIAL_MEDIA_PLATFORMS.includes(key)
+      );
+      const osmArray = osm[0];
+      setOtherSocialMedia(osmArray);
+    } catch (error) {
+      console.log(error, "!!!");
     }
   };
+  const handleEdit = () => setEditMode(true);
+  const handleSave = () => {
+    if (otherSocialMedia[0] && !otherSocialMedia[1]) {
+      setErrorMessage(
+        "Other Social Media User cannot be empty when Other Social Media is given"
+      );
+      return;
+    }
+    if (!otherSocialMedia[0] && otherSocialMedia[1]) {
+      setErrorMessage(
+        "Other Social Media cannot be empty when Other Social Media User is given"
+      );
+      return;
+    }
+    const newSocialMedia = {};
+    Object.entries(userData.social_media).forEach(([k, v]) => {
+      if (SOCIAL_MEDIA_PLATFORMS.includes(k)) {
+        newSocialMedia[k] = v;
+      }
+    });
+    if (otherSocialMedia[0] && otherSocialMedia[1]) {
+      newSocialMedia[otherSocialMedia[0]] = otherSocialMedia[1];
+    }
+    console.log(newSocialMedia, "new social media");
+    setEditMode(false);
+  };
+  const handleChange = (field, value) => {
+    setUserData((prevData) => {
+      const newData = prevData;
+      newData.social_media[field] = value;
+      return newData;
+    });
+  };
+  // useEffect(() => {
+  //   fetchUserData();
+  // }, []);
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "rgb(10,200,50)",
-      }}
-    >
-      <Text>MyProfile</Text>
-      <Button title="Fetch data" onPress={fetchData} />
-      <Text>{notes}</Text>
-    </View>
+    <>
+      {!editMode ? (
+        <>
+          <Text>MyProfile : {JSON.stringify(userData)}</Text>
+          {userData &&
+            Object.keys(userData.social_media).map((key) => {
+              if (
+                SOCIAL_MEDIA_PLATFORMS.includes(key) &&
+                userData.social_media[key]
+              ) {
+                return (
+                  <Text key={key}>
+                    {SOCIAL_MEDIA_PLATFORMS_NAMES[key]
+                      ? SOCIAL_MEDIA_PLATFORMS_NAMES[key]
+                      : key}
+                    {""}: {userData.social_media[key]}
+                  </Text>
+                );
+              }
+            })}
+          {otherSocialMedia[0] !== "" && (
+            <Text>
+              {otherSocialMedia[0]}: {otherSocialMedia[1]}
+            </Text>
+          )}
+          <Button title="fetch profile" onPress={fetchUserData} />
+          {userData && <Button title="edit profile" onPress={handleEdit} />}
+        </>
+      ) : (
+        <>
+          {SOCIAL_MEDIA_PLATFORMS.map((item, index) => (
+            <View key={item} style={styles.horizontalInputsContainer}>
+              <Text>{SOCIAL_MEDIA_PLATFORMS_NAMES[item]}: </Text>
+              <TextInput
+                // placeholder={SOCIAL_MEDIA_PLATFORMS_NAMES[item]}
+                defaultValue={userData.social_media[item]}
+                onChangeText={(text) => handleChange(item, text)}
+              />
+            </View>
+          ))}
+          <View style={styles.horizontalInputsContainer}>
+            <TextInput
+              placeholder={
+                !otherSocialMedia[0]
+                  ? "Other Social Media"
+                  : otherSocialMedia[0]
+              }
+              value={otherSocialMedia[0]}
+              onChangeText={(text) =>
+                setOtherSocialMedia((prevState) => {
+                  return [text, prevState[1]];
+                })
+              }
+            />
+            <TextInput
+              placeholder={
+                !otherSocialMedia[1]
+                  ? "Other Social Media Username"
+                  : otherSocialMedia[1]
+              }
+              value={otherSocialMedia[1]}
+              onChangeText={(text) =>
+                setOtherSocialMedia((prevState) => {
+                  return [prevState[0], text];
+                })
+              }
+            />
+          </View>
+          <Button title="save changes" onPress={handleSave} />
+          <Text>{errorMessage}</Text>
+        </>
+      )}
+    </>
   );
 };
-
+const styles = StyleSheet.create({
+  horizontalInputsContainer: {
+    flexDirection: "row",
+  },
+});
 export default MyProfileScreen;

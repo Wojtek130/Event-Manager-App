@@ -2,19 +2,25 @@ import React, { useState } from "react";
 import { View, TextInput, Button, Text, StyleSheet } from "react-native";
 import axios from "axios";
 
+import {
+  SOCIAL_MEDIA_PLATFORMS,
+  SOCIAL_MEDIA_PLATFORMS_NAMES,
+} from "../utils/constants";
+
 const RegisterScreen = function ({ navigation }) {
-  const [formData, setFormData] = useState({
+  const initialSocialMedia = SOCIAL_MEDIA_PLATFORMS.reduce((acc, key) => {
+    acc[key] = "";
+    return acc;
+  }, {});
+  const initialInputs = {
     username: "",
     password: "",
     confirmedPassword: "",
-    fb: "",
-    ig: "",
-    snapchat: "",
-    tiktok: "",
-    wa: "",
+    ...initialSocialMedia,
     otherSocialMedia: "",
     otherSocialMediaUsername: "",
-  });
+  };
+  const [formData, setFormData] = useState(initialInputs);
 
   const handleChange = (field, value) => {
     setFormData((prevData) => ({
@@ -25,40 +31,18 @@ const RegisterScreen = function ({ navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   const clearInputFields = () => {
-    setFormData(() => ({
-      username: "",
-      password: "",
-      confirmedPassword: "",
-      fb: "",
-      ig: "",
-      snapchat: "",
-      tiktok: "",
-      wa: "",
-      otherSocialMedia: "",
-      otherSocialMediaUsername: "",
-    }));
+    setFormData(() => initialInputs);
   };
 
   const getAllGivenSocialMedia = (data) => {
     const socialMedia = {};
     Object.entries(data).forEach(([key, value]) => {
-      if (
-        key !== "username" &&
-        key !== "password" &&
-        key !== "confirmedPassword" &&
-        key !== "otherSocialMedia" &&
-        key !== "otherSocialMediaUsername" &&
-        value !== ""
-      ) {
+      if (SOCIAL_MEDIA_PLATFORMS.includes(key) && value !== "") {
         socialMedia[key] = value;
       }
     });
-    if (
-      data["otherSocialMedia"] &&
-      data["otherSocialMediaUsername"]
-    ) {
-      socialMedia[data["otherSocialMedia"]] =
-        data["otherSocialMediaUsername"];
+    if (data["otherSocialMedia"] && data["otherSocialMediaUsername"]) {
+      socialMedia[data["otherSocialMedia"]] = data["otherSocialMediaUsername"];
     }
     return socialMedia;
   };
@@ -91,8 +75,7 @@ const RegisterScreen = function ({ navigation }) {
         {
           username: formData.username,
           password: formData.password,
-          haha : "huhu",
-          socialMedia : JSON.stringify(socialMedia),
+          social_media: JSON.stringify(socialMedia),
         },
         {
           headers: {
@@ -133,40 +116,21 @@ const RegisterScreen = function ({ navigation }) {
         value={formData.confirmedPassword}
         onChangeText={(text) => handleChange("confirmedPassword", text)}
       />
-      <TextInput
-        placeholder="Facebook"
-        value={formData.fb}
-        onChangeText={(text) => handleChange("fb", text)}
-      />
-      <TextInput
-        placeholder="Instagram"
-        value={formData.ig}
-        onChangeText={(text) => handleChange("ig", text)}
-      />
-      <TextInput
-        placeholder="Snapchat"
-        value={formData.snapchat}
-        onChangeText={(text) => handleChange("snapchat", text)}
-      />
-      <TextInput
-        placeholder="Tik Tok"
-        value={formData.tiktok}
-        onChangeText={(text) => handleChange("tiktok", text)}
-      />
-      <TextInput
-        placeholder="WhatsApp"
-        value={formData.wa}
-        onChangeText={(text) => handleChange("wa", text)}
-      />
+      {SOCIAL_MEDIA_PLATFORMS.map((item, index) => (
+        <TextInput
+          placeholder={SOCIAL_MEDIA_PLATFORMS_NAMES[item]}
+          value={formData[item]}
+          onChangeText={(text) => handleChange(item, text)}
+        />
+      ))}
       <View style={styles.horizontalInputsContainer}>
         <TextInput
           placeholder="Other Social Media"
           value={formData.otherSocialMedia}
-          // onChangeText={(text) => text}
           onChangeText={(text) => handleChange("otherSocialMedia", text)}
         />
         <TextInput
-          placeholder="Username"
+          placeholder="Other Social Media Username"
           value={formData.otherSocialMediaUsername}
           onChangeText={(text) =>
             handleChange("otherSocialMediaUsername", text)
