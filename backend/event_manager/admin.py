@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import MyUser
+from .models import MyUser, MyEvent
 
 class MyUserAdmin(UserAdmin):
     fieldsets = (
@@ -16,6 +16,8 @@ class MyUserAdmin(UserAdmin):
         ),
     )
 
-admin.site.register(MyUser, MyUserAdmin)
 
-# Register your models here.
+admin.site.register(MyUser, MyUserAdmin)
+admin.site.register(MyEvent)
+
+

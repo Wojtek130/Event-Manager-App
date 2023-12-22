@@ -13,7 +13,6 @@ const MyEventsScreen = function ({ navigation }) {
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "rgb(10,150,50)",
         }}
       >
         <Tab.Navigator>
