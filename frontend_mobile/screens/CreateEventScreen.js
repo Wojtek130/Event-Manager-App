@@ -1,27 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, Button, TextInput } from "react-native";
-import MultiSelect from "react-native-multiple-select";
+import { ScrollView, Button, TextInput } from "react-native";
+import { useSelector } from "react-redux";
 
+import { selectUser } from "../store/authSlice";
 import axiosInstance from "../utils/axiosInstance";
 import LongTextInput from "../components/LongTextInput";
 import DateTimeInput from "../components/DateTimeInput";
 import MySwitch from "../components/MySwitch";
 import MyMultiSelect from "../components/MyMultiSelect";
 import ErrorMessage from "../components/ErrorMessage";
+import {
+  DATE_FORMAT,
+  TIME_FORMAT,
+  DATE_REGEX,
+  TIME_REGEX,
+} from "../utils/constants";
 
 const CreateEventScreen = () => {
-  const [users, setUsers] = useState([]);
-  const [formData, setFormData] = useState({
+  const user = useSelector(selectUser);
+  console.log("current user", user);
+  const initialFormData = {
     name: "",
     startTime: "",
     startDate: "",
-    startTime: "",
+    endTime: "",
     endDate: "",
     description: "",
     faq: "",
     private: false,
     organizers: [],
-  });
+  };
+  const [users, setUsers] = useState([]);
+  const [events, setEvents] = useState([]);
+
+  const [formData, setFormData] = useState(initialFormData);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (field, value) => {
@@ -29,20 +41,92 @@ const CreateEventScreen = () => {
       ...formData,
       [field]: value,
     });
-    console.log(value, "|?|");
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    console.log(events);
+    setErrorMessage("");
+    if (!formData.name) {
+      setErrorMessage("Event name cannot be empty");
+      return;
+    }
+    if (events.find((e) => e.name === formData.name)) {
+      setErrorMessage("An event with this name already exists");
+      return;
+    }
+    if (
+      !DATE_REGEX.test(formData.startDate) ||
+      !DATE_REGEX.test(formData.startDate)
+    ) {
+      setErrorMessage(`Dates must be in format: ${DATE_FORMAT}`);
+      return;
+    }
+    if (
+      !TIME_REGEX.test(formData.startTime) ||
+      !TIME_REGEX.test(formData.endTime)
+    ) {
+      console.log(formData.startTime, formData.endTime);
+      setErrorMessage(`Times must be in format: ${TIME_FORMAT}`);
+      return;
+    }
+    if (!typeof formData.private === "boolean") {
+      setErrorMessage(`Private must be either true of false`);
+      return;
+    }
+    formData.organizers.forEach((o) => {
+      if (!formData.organizers.find((user) => user.id === o.id)) {
+        setErrorMessage(`The id of the chosen user ${o.username} is unknown`);
+        return;
+      }
+    });
     console.log(formData);
-    console.log(users);
+    try {
+      const response = await axiosInstance.post(
+        "event/",
+        {
+          name: formData.name,
+          start_date: `${formData.startDate} ${formData.startTime}`,
+          end_date: `${formData.endDate} ${formData.endTime}`,
+          description: formData.description,
+          faq: formData.faq,
+          private: formData.private,
+          organizers: formData.organizers,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setErrorMessage("Event Successfully craeted");
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(
+        error.request.responseText ? error.request.responseText : error.message
+      );
+      return;
+    }
+    setFormData(initialFormData);
+    try {
+      fetchEvents();
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
   };
-  // useEffect(() => (fetchUsers()), []);
+  const fetchEvents = async () => {
+    try {
+      const response = await axiosInstance.get("events/");
+      setEvents(response.data.events);
+    } catch (error) {
+      setErrorMessage(error);
+    }
+  };
   useEffect(() => {
     ///
     const fetchUsers = async () => {
       try {
         const response = await axiosInstance.get("users/");
-        setUsers(response.data.users);
+        setUsers(response.data.users.filter((u) => u.username !== user));
       } catch (error) {
         setErrorMessage(error);
       }
@@ -50,6 +134,7 @@ const CreateEventScreen = () => {
     };
 
     fetchUsers();
+    fetchEvents();
   }, []);
 
   return (
@@ -103,30 +188,6 @@ const CreateEventScreen = () => {
           handleChange("private", value);
         }}
       />
-      {/* <MultiSelect
-        // hideTags
-        items={users}
-        uniqueKey="id"
-        // ref={(component) => {
-        //   this.multiSelect = component;
-        // }}
-        onSelectedItemsChange={(value) => handleChange("organizers", value)}
-        selectedItems={formData.organizers}
-        selectText="Pick Users"
-        searchInputPlaceholderText="Search Items..."
-        // onChangeInput={(text) => console.log(text)}
-        altFontFamily="ProximaNova-Light"
-        tagRemoveIconColor="#CCC"
-        tagBorderColor="#CCC"
-        tagTextColor="#CCC"
-        selectedItemTextColor="#CCC"
-        selectedItemIconColor="#CCC"
-        itemTextColor="#000"
-        displayKey="username"
-        searchInputStyle={{ color: "#CCC" }}
-        submitButtonColor="#CCC"
-        submitButtonText="Choose"
-      /> */}
       <MyMultiSelect
         items={users}
         value={formData.organizers}

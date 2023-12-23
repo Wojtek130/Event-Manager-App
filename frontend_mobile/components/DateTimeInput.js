@@ -1,10 +1,12 @@
 import { TextInput, View, Text, StyleSheet } from "react-native";
+import { TIME_FORMAT, DATE_FORMAT } from "../utils/constants";
 
 const DateTimeInput = (props) => {
+  const format = props.type === "date" ? DATE_FORMAT : TIME_FORMAT;
   const placeholder =
     props.type === "date"
-      ? "(dd.mm.yyyy), eg. 01.02.2023"
-      : "(hh:mm), eg. 07:55";
+      ? `(${format})), eg. 01.02.2023`
+      : `(${format})), eg. 07:55`;
   const maxLength = props.type === "date" ? 10 : 5;
 
   return (

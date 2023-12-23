@@ -11,8 +11,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import datetime
 
-from .serializers import MyUserSerializer
-from .models import MyUser
+from .serializers import MyUserSerializer, MyEventSerializer
+from .models import MyUser, MyEvent
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -64,11 +64,8 @@ def profile(request):
         user_fields = [field.name for field in user._meta.get_fields()]
         print(user_fields)
         for k, v in request.data.items():
-            print(k, v, k in user_fields, "jejejejjejej")
             if k in user_fields:
                 setattr(user, k, v)
-                print(k, v, "from loop")
-        print(user.social_media)
         user.save()
         return JsonResponse(data={"message": "Profile updated successfully."})
     return JsonResponse(data={"error": "Method not allowed"}, status=405)
@@ -82,4 +79,18 @@ def users(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def event(request):
-    return JsonResponse(data={"create": "event"})
+    print(request.data)
+    event = MyEventSerializer(data=request.data, context={'request': request})
+    if event.is_valid():
+        event.save()
+        return Response(event.data, status=status.HTTP_201_CREATED)
+    try:
+        return Response(event.errors, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def events(request):
+    events = [{"name" : event.name, "id" : event.id} for event in MyEvent.objects.all()]
+    return JsonResponse(data={"events": events})

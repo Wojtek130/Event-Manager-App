@@ -10,7 +10,7 @@ class MyUser(AbstractUser):
         return self.username
     
 class MyEvent(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     description = models.TextField()
