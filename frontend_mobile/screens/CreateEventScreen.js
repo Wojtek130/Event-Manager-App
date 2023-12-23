@@ -6,6 +6,7 @@ import axiosInstance from "../utils/axiosInstance";
 import LongTextInput from "../components/LongTextInput";
 import DateTimeInput from "../components/DateTimeInput";
 import MySwitch from "../components/MySwitch";
+import MyMultiSelect from "../components/MyMultiSelect";
 import ErrorMessage from "../components/ErrorMessage";
 
 const CreateEventScreen = () => {
@@ -28,7 +29,7 @@ const CreateEventScreen = () => {
       ...formData,
       [field]: value,
     });
-    console.log(value);
+    console.log(value, "|?|");
   };
 
   const handleSubmit = () => {
@@ -51,48 +52,6 @@ const CreateEventScreen = () => {
     fetchUsers();
   }, []);
 
-  const items = [
-    {
-      id: "92iijs7yta",
-      name: "Ondo",
-    },
-    {
-      id: "a0s0a8ssbsd",
-      name: "Ogun",
-    },
-    {
-      id: "16hbajsabsd",
-      name: "Calabar",
-    },
-    {
-      id: "nahs75a5sg",
-      name: "Lagos",
-    },
-    {
-      id: "667atsas",
-      name: "Maiduguri",
-    },
-    {
-      id: "hsyasajs",
-      name: "Anambra",
-    },
-    {
-      id: "djsjudksjd",
-      name: "Benue",
-    },
-    {
-      id: "sdhyaysdj",
-      name: "Kaduna",
-    },
-    {
-      id: "suudydjsjd",
-      name: "Abuja",
-    },
-  ];
-  const [selectedItems, setSelectedItems] = useState([]);
-  const onSelectedItemsChange = (selectedItems) => {
-    setSelectedItems(selectedItems);
-  };
   return (
     <ScrollView>
       <TextInput
@@ -144,7 +103,7 @@ const CreateEventScreen = () => {
           handleChange("private", value);
         }}
       />
-      <MultiSelect
+      {/* <MultiSelect
         // hideTags
         items={users}
         uniqueKey="id"
@@ -155,7 +114,7 @@ const CreateEventScreen = () => {
         selectedItems={formData.organizers}
         selectText="Pick Users"
         searchInputPlaceholderText="Search Items..."
-        onChangeInput={(text) => console.log(text)}
+        // onChangeInput={(text) => console.log(text)}
         altFontFamily="ProximaNova-Light"
         tagRemoveIconColor="#CCC"
         tagBorderColor="#CCC"
@@ -167,6 +126,11 @@ const CreateEventScreen = () => {
         searchInputStyle={{ color: "#CCC" }}
         submitButtonColor="#CCC"
         submitButtonText="Choose"
+      /> */}
+      <MyMultiSelect
+        items={users}
+        value={formData.organizers}
+        callback={(value) => handleChange("organizers", value)}
       />
       <Button title="submit" onPress={handleSubmit} />
       <ErrorMessage errorMessage={errorMessage} />
