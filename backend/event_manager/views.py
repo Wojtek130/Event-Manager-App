@@ -73,3 +73,13 @@ def profile(request):
         return JsonResponse(data={"message": "Profile updated successfully."})
     return JsonResponse(data={"error": "Method not allowed"}, status=405)
     
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def users(request):
+    users = [user.username for user in MyUser.objects.all()]
+    return JsonResponse(data={"users": users})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def event(request):
+    return JsonResponse(data={"create": "evet"})

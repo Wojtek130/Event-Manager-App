@@ -8,6 +8,8 @@ import HomeScreen from "../screens/HomeScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import MyEventsScreen from "../screens/MyEventsScreen";
 import MyProfileScreen from "../screens/MyProfileScreen";
+import CreateEventScreen from "../screens/CreateEventScreen";
+
 import SignInScreen from "../screens/SignInScreen";
 import SignOutScreen from "../screens/SignOutScreen";
 
@@ -24,6 +26,7 @@ export default function AppWrapper() {
           <>
             <Drawer.Screen name="My Events" component={MyEventsScreen} />
             <Drawer.Screen name="My Profile" component={MyProfileScreen} />
+            <Drawer.Screen name="Create Event" component={CreateEventScreen} />
             <Drawer.Screen name="Sign Out" component={SignOutScreen} />
           </>
         ) : (
