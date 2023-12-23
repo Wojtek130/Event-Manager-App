@@ -76,10 +76,10 @@ def profile(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def users(request):
-    users = [user.username for user in MyUser.objects.all()]
+    users = [{"username" : user.username, "id" : user.id} for user in MyUser.objects.all() if not user.is_superuser]
     return JsonResponse(data={"users": users})
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def event(request):
-    return JsonResponse(data={"create": "evet"})
+    return JsonResponse(data={"create": "event"})

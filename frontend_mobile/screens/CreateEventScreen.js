@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, View, Text, Button, TextInput } from "react-native";
 import MultiSelect from "react-native-multiple-select";
+
+import axiosInstance from "../utils/axiosInstance";
 import LongTextInput from "../components/LongTextInput";
 import DateTimeInput from "../components/DateTimeInput";
 import MySwitch from "../components/MySwitch";
+import ErrorMessage from "../components/ErrorMessage";
 
 const CreateEventScreen = () => {
   const [users, setUsers] = useState([]);
@@ -16,7 +19,9 @@ const CreateEventScreen = () => {
     description: "",
     faq: "",
     private: false,
+    organizers: [],
   });
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (field, value) => {
     setFormData({
@@ -27,9 +32,24 @@ const CreateEventScreen = () => {
   };
 
   const handleSubmit = () => {
-    // Handle form submission, you can send the data to your server or perform other actions
     console.log(formData);
+    console.log(users);
   };
+  // useEffect(() => (fetchUsers()), []);
+  useEffect(() => {
+    ///
+    const fetchUsers = async () => {
+      try {
+        const response = await axiosInstance.get("users/");
+        setUsers(response.data.users);
+      } catch (error) {
+        setErrorMessage(error);
+      }
+      console.log(users, "11111");
+    };
+
+    fetchUsers();
+  }, []);
 
   const items = [
     {
@@ -126,13 +146,13 @@ const CreateEventScreen = () => {
       />
       <MultiSelect
         // hideTags
-        items={items}
+        items={users}
         uniqueKey="id"
         // ref={(component) => {
         //   this.multiSelect = component;
         // }}
-        onSelectedItemsChange={onSelectedItemsChange}
-        selectedItems={selectedItems}
+        onSelectedItemsChange={(value) => handleChange("organizers", value)}
+        selectedItems={formData.organizers}
         selectText="Pick Users"
         searchInputPlaceholderText="Search Items..."
         onChangeInput={(text) => console.log(text)}
@@ -143,12 +163,13 @@ const CreateEventScreen = () => {
         selectedItemTextColor="#CCC"
         selectedItemIconColor="#CCC"
         itemTextColor="#000"
-        displayKey="name"
+        displayKey="username"
         searchInputStyle={{ color: "#CCC" }}
         submitButtonColor="#CCC"
         submitButtonText="Choose"
       />
       <Button title="submit" onPress={handleSubmit} />
+      <ErrorMessage errorMessage={errorMessage} />
     </ScrollView>
   );
 };
