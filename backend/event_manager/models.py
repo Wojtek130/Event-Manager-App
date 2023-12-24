@@ -16,8 +16,8 @@ class MyEvent(models.Model):
     description = models.TextField(blank=True, null=True)
     faq = models.TextField(blank=True, null=True)
     private = models.BooleanField(default=False)
-    participants = models.ManyToManyField(MyUser, related_name='events_participated', blank=True)
-    organizers = models.ManyToManyField(MyUser, related_name='events_organized', blank=True)
+    participants = models.ManyToManyField(MyUser, related_name='events_participants', blank=True)
+    organizers = models.ManyToManyField(MyUser, related_name='events_organizers', blank=True)
 
     def __str__(self):
         return self.name
