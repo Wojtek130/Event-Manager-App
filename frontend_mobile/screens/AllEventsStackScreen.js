@@ -1,0 +1,26 @@
+// Import necessary components from react-navigation
+import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
+
+import AllEventsListScreen from "./AllEventsListScreen";
+import EventDetailsScreen from "./EventDetailsScreen";
+
+const AllEventsStack = createStackNavigator();
+
+const AllEventsStackScreen = () => (
+  <AllEventsStack.Navigator>
+    <AllEventsStack.Screen
+      name="All Events List"
+      component={AllEventsListScreen}
+      // headerMode="none"
+      options={{ headerShown: false }}
+    />
+    <AllEventsStack.Screen
+      name="Event Details"
+      component={EventDetailsScreen}
+    />
+  </AllEventsStack.Navigator>
+);
+
+export default AllEventsStackScreen;

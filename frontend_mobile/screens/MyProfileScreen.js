@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Text, StyleSheet, Button, View, TextInput } from "react-native";
+import { useSelector } from "react-redux";
 
+import { selectUser } from "../store/authSlice";
 import axiosInstance from "../utils/axiosInstance";
 import {
   SOCIAL_MEDIA_PLATFORMS,
@@ -8,6 +10,7 @@ import {
 } from "../utils/constants";
 
 const MyProfileScreen = function ({ navigation }) {
+  const user = useSelector(selectUser);
   const initialOSM = ["", ""];
   const [userData, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -81,14 +84,15 @@ const MyProfileScreen = function ({ navigation }) {
       return newData;
     });
   };
-  // useEffect(() => {
-  //   fetchUserData();
-  // }, []);
+  useEffect(() => {
+    fetchUserData();
+  }, []);
   return (
     <>
       {!editMode ? (
         <>
-          <Text>MyProfile : {JSON.stringify(userData)}</Text>
+          {/* <Text>MyProfile : {JSON.stringify(userData)}</Text> */}
+          <Text>Hello {user}!</Text>
           {userData &&
             Object.keys(userData.social_media).map((key) => {
               if (
@@ -110,7 +114,7 @@ const MyProfileScreen = function ({ navigation }) {
               {otherSocialMedia[0]}: {otherSocialMedia[1]}
             </Text>
           )}
-          <Button title="fetch profile" onPress={fetchUserData} />
+
           {userData && <Button title="edit profile" onPress={handleEdit} />}
         </>
       ) : (

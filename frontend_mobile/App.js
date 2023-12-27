@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
 import { store, persistor } from "./store/store";
-import AppWrapper from "./components/AppWrapper";
+import AppRoutes from "./components/AppRoutes";
 
 export default function App() {
   // const [loggedIn, setLoggedIn] = useState(false);
@@ -11,7 +11,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <AppWrapper></AppWrapper>
+        <AppRoutes></AppRoutes>
       </PersistGate>
     </Provider>
   );
