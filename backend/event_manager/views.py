@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -44,13 +45,6 @@ def index_protected(request):
     print(request.user, "ssss")
     dt = datetime.datetime.now()
     return JsonResponse(data={"protected" : dt})
-
-
-# class UserProfile(View):
-#     permission_classes = [IsAuthenticated]
-#     def get(self, request):
-#         print(request, request.user, request.__dict__)
-#         return JsonResponse({"user" : "profile"})
     
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
@@ -76,21 +70,33 @@ def users(request):
     users = [{"username" : user.username, "id" : user.id} for user in MyUser.objects.all() if not user.is_superuser]
     return JsonResponse(data={"users": users})
 
-@api_view(['POST'])
+@api_view(["POST", "GET"])
 @permission_classes([IsAuthenticated])
 def event(request):
-    print(request.data)
-    event = MyEventSerializer(data=request.data, context={'request': request})
-    if event.is_valid():
-        event.save()
-        return Response(event.data, status=status.HTTP_201_CREATED)
-    try:
-        return Response(event.errors, status=status.HTTP_400_BAD_REQUEST)
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+    if request.method == "GET":
+        event_id = request.GET.get("id")
+        event = get_object_or_404(MyEvent, id=event_id)
+        serializer = MyEventSerializer(event)
+        event_data = serializer.data
+        event_data["organizers"] = list(MyUser.objects.filter(id__in=event_data["organizers"]).values_list('username', flat=True))
+        event_data["participants"] = list(MyUser.objects.filter(id__in=event_data["participants"]).values_list('username', flat=True))
+        return JsonResponse(data=event_data)
+    if request.method == "POST":
+        print(request.data)
+        event = MyEventSerializer(data=request.data, context={'request': request})
+        if event.is_valid():
+            event.save()
+            return Response(event.data, status=status.HTTP_201_CREATED)
+        try:
+            return Response(event.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def events(request):
-    events = [{"name" : event.name, "id" : event.id} for event in MyEvent.objects.all()]
+    print(request.user.id, "user ID")
+    user_id = request.user.id
+    events = [{"name" : event.name, "id" : event.id, "am_organizer" : event.organizers.filter(id=user_id).exists(), "am_participant" : event.participants.filter(id=user_id).exists()} for event in MyEvent.objects.all()]
     return JsonResponse(data={"events": events})

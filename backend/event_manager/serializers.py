@@ -26,7 +26,7 @@ class MyUserSerializer(serializers.ModelSerializer):
 class MyEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyEvent
-        fields = ['name', 'start_date', 'end_date', 'description', 'faq', 'private']
+        fields = ['name', 'start_date', 'end_date', 'description', 'faq', 'private', 'organizers', 'participants']
 
     def to_internal_value(self, data):
         # Adjust the date format before creating the model instance
