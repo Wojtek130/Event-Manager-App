@@ -25,7 +25,7 @@ export default function AppRoutes() {
         <Drawer.Screen name="Home" component={HomeScreen} />
         {user ? (
           <>
-            <Drawer.Screen name="My Events" component={MyEventsScreen} />
+            {/* <Drawer.Screen name="My Events" component={MyEventsScreen} /> */}
             <Drawer.Screen name="All Events" component={AllEventsStackScreen} />
             <Drawer.Screen name="My Profile" component={MyProfileScreen} />
             <Drawer.Screen name="Create Event" component={CreateEventScreen} />

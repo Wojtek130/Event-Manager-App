@@ -87,6 +87,7 @@ def event(request):
         if event.is_valid():
             event.save()
             return Response(event.data, status=status.HTTP_201_CREATED)
+        return JsonResponse({"ok" : "doki"})
         try:
             return Response(event.errors, status=status.HTTP_400_BAD_REQUEST)
         except:

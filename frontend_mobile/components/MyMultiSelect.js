@@ -11,7 +11,7 @@ const MyMultiSelect = (props) => {
       // }}
       onSelectedItemsChange={props.callback}
       selectedItems={props.value}
-      selectText="Pick Users"
+      selectText="Pick Organizers"
       searchInputPlaceholderText="Search Users..."
       // onChangeInput={(text) => console.log(text)}
       altFontFamily="ProximaNova-Light"

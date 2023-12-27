@@ -59,14 +59,27 @@ class MyEventSerializer(serializers.ModelSerializer):
         return data
     
     def create(self, validated_data):
-        event = MyEvent.objects.create(**validated_data)
+        print(validated_data, "@@@@@@@@@@@@@@@@@@@@@@@@@")
+        event_data = {
+            "name" : validated_data["name"],
+            "start_date" : validated_data["start_date"],
+            "end_date" : validated_data["end_date"],
+            "description" : validated_data["description"],
+            "faq" : validated_data["faq"],
+            "private" : validated_data["private"],
+        }
+        event = MyEvent.objects.create(**event_data)
+
+        # event = MyEvent.objects.create(**validated_data)
         request = self.context.get('request')
-        print("request: ", request, "!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        # print("request: ", request, "!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        organizers = []
         organizers_ids = request.data["organizers"]
         if len(organizers_ids) > 0:
             organizers = list(User.objects.filter(id__in=organizers_ids))
-            organizers.append(request.user)
-            print(organizers, type(request.user))
-            event.organizers.set(organizers)
+        organizers.append(request.user)
+        print(organizers, type(request.user), "###################")
+        event.organizers.set(organizers)
         return event
+        
 

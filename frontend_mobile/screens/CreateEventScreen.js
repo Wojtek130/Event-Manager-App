@@ -30,10 +30,21 @@ const CreateEventScreen = () => {
     private: false,
     organizers: [],
   };
+  const initialFormData2 = {
+    name: "mock01",
+    startTime: "01:05",
+    startDate: "12.12.2007",
+    endTime: "02:02",
+    endDate: "12.12.2009",
+    description: "a",
+    faq: "k",
+    private: false,
+    organizers: [],
+  };
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([]);
 
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(initialFormData2);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (field, value) => {
