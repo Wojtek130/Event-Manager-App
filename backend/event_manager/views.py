@@ -87,7 +87,6 @@ def event(request):
         if event.is_valid():
             event.save()
             return Response(event.data, status=status.HTTP_201_CREATED)
-        return JsonResponse({"ok" : "doki"})
         try:
             return Response(event.errors, status=status.HTTP_400_BAD_REQUEST)
         except:
@@ -101,3 +100,34 @@ def events(request):
     user_id = request.user.id
     events = [{"name" : event.name, "id" : event.id, "am_organizer" : event.organizers.filter(id=user_id).exists(), "am_participant" : event.participants.filter(id=user_id).exists()} for event in MyEvent.objects.all()]
     return JsonResponse(data={"events": events})
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def event_leave(request):
+    user_id = request.user.id
+    print(request)
+    print(request.data)
+    event_id = request.data.get("id")
+    event = get_object_or_404(MyEvent, id=event_id)
+    if event.organizers.filter(pk=user_id).exists():
+            return Response({'error': "the user is already an organizer of the event"}, status=status.HTTP_400_BAD_REQUEST)
+    if not event.participants.filter(pk=user_id).exists():
+        return Response({'error': "the user is not a participant of the event"}, status=status.HTTP_400_BAD_REQUEST)
+    event.participants.remove(request.user)
+    print("wojtek")
+    return JsonResponse(data={"message": "Event joined successfully."})
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def event_join(request):
+    user_id = request.user.id
+    event_id = request.data.get("id")
+    event = get_object_or_404(MyEvent, id=event_id)
+    if event.organizers.filter(pk=user_id).exists():
+            return Response({'error': "the user is already an organizer of the event"}, status=status.HTTP_400_BAD_REQUEST)
+    if event.participants.filter(pk=user_id).exists():
+        return Response({'error': "the user is already a participant of the event"}, status=status.HTTP_400_BAD_REQUEST)
+    event.participants.add(request.user)
+    print("wojtek")
+    return JsonResponse(data={"message": "Event joined successfully."})
+

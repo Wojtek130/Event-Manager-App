@@ -1,28 +1,24 @@
-import {
-  View,
-  FlatList,
-  TouchableOpacity,
-  Text,
-  TextInput,
-  Button,
-} from "react-native";
+import { FlatList, TouchableOpacity, Text } from "react-native";
 import { useState, useEffect } from "react";
 
-import MySwitch from "../components/MySwitch";
 import FilterBox from "../components/FilterBox";
 import axiosInstance from "../utils/axiosInstance";
 import ErrorMessage from "../components/ErrorMessage";
+import SuccessMessage from "../components/SuccessMessage";
 
-const AllEventsScreen = ({ navigation }) => {
+const AllEventsScreen = ({ navigation, route }) => {
   const initialFilters = {
     eventNameSubstring: "",
     amOrganizer: false,
     amParticipant: false,
   };
+
   const [errorMessage, setErrorMessage] = useState("");
   const [events, setEvents] = useState([]);
   const [eventsDisplayed, setEventsDisplayed] = useState([]);
   const [searchFilters, setSearchFilters] = useState(initialFilters);
+  const successMessage = route.params?.successMessage;
+  console.log("ciao", route.params?.successMessage);
 
   const handleFiltersChange = (field, value) => {
     setSearchFilters({
@@ -69,38 +65,13 @@ const AllEventsScreen = ({ navigation }) => {
 
     fetchData();
   }, []);
-  const handleEventPress = (eventId) => {
-    navigation.navigate("Event Details", { id: eventId });
+  const handleEventPress = (item) => {
+    navigation.navigate("Event Details", item);
   };
 
   return (
     <>
-      {/* <View>
-        <TextInput
-          placeholder="Event Name"
-          label="Name"
-          defaultValue={searchFilters.eventNameSubstring}
-          onChangeText={(text) =>
-            handleFiltersChange("eventNameSubstring", text)
-          }
-          mode="outlined"
-        />
-        <MySwitch
-          labelText="Organizer"
-          value={searchFilters.amOrganizer}
-          callback={(value) => {
-            handleFiltersChange("amOrganizer", value);
-          }}
-        />
-        <MySwitch
-          labelText="Participant"
-          value={searchFilters.amParticipant}
-          callback={(value) => {
-            handleFiltersChange("amParticipant", value);
-          }}
-        />
-        <Button title="search" onPress={handleApplyFilters} />
-      </View> */}
+      <SuccessMessage successMessage={successMessage} />
       <FilterBox
         setSearchFiltersCallback={setSearchFilters}
         eventNameSubstringValue={searchFilters.eventNameSubstring}
@@ -113,7 +84,7 @@ const AllEventsScreen = ({ navigation }) => {
         data={eventsDisplayed}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleEventPress(item.id)}>
+          <TouchableOpacity onPress={() => handleEventPress(item)}>
             <Text>{item.name}</Text>
           </TouchableOpacity>
         )}
