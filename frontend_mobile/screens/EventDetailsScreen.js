@@ -137,10 +137,9 @@ const EventDetailsScreen = function ({ route, navigation }) {
         }
         if (key == "participants" || key == "organizers") {
           return (
-            <View>
+            <View key={index}>
               <Text>{key}: </Text>
               <FlatList
-                key={index}
                 data={value}
                 keyExtractor={(item) => item}
                 renderItem={({ item }) => (

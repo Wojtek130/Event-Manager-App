@@ -50,7 +50,7 @@ def index_protected(request):
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def my_profile(request):
-    user = MyUser.objects.get(username=request.user)
+    user = get_object_or_404(MyUser, username=request.user)
     if request.method == "GET":
         print(request.user, request, "ssss")
         user_data = {"social_media" : user.social_media}
@@ -142,3 +142,10 @@ def event_delete(request, instance_id):
     event.delete()
     return JsonResponse({'message': 'Model instance deleted successfully.'})
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def profile(request, username):
+    print("right endpoint", username)
+    user = get_object_or_404(MyUser, username=username)
+    user_data = {"social_media" : user.social_media}
+    return JsonResponse(data=user_data)

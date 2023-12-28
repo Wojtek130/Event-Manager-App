@@ -28,10 +28,9 @@ const MyProfileScreen = function ({ navigation }) {
         ([key]) => !SOCIAL_MEDIA_PLATFORMS.includes(key)
       );
       const osmArray = osm[0] ? osm[0] : initialOSM;
-      console.log(osm, "@@@@@@@@@@@@@@@", osmArray);
       setOtherSocialMedia(osmArray);
     } catch (error) {
-      console.log(error, "!!!");
+      setErrorMessage(error.errorMessage);
     }
   };
   const handleEdit = () => setEditMode(true);
