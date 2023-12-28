@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import AllEventsListScreen from "./AllEventsListScreen";
 import EventDetailsScreen from "./EventDetailsScreen";
+import ProfileScreen from "./ProfileScreen";
 
 const AllEventsStack = createStackNavigator();
 
@@ -19,6 +20,10 @@ const AllEventsStackScreen = () => (
     <AllEventsStack.Screen
       name="Event Details"
       component={EventDetailsScreen}
+    />
+    <AllEventsStack.Screen
+      name="Profile"
+      component={ProfileScreen}
     />
   </AllEventsStack.Navigator>
 );

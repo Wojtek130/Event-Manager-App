@@ -21,7 +21,7 @@ const MyProfileScreen = function ({ navigation }) {
   const fetchUserData = async () => {
     console.log("fetching data called");
     try {
-      const response = await axiosInstance.get("profile/");
+      const response = await axiosInstance.get("my_profile/");
       setUserData(await response.data);
       console.log(response.data.social_media);
       const osm = Object.entries(response.data.social_media).filter(
@@ -60,7 +60,7 @@ const MyProfileScreen = function ({ navigation }) {
     console.log(newSocialMedia, "new social media");
     try {
       const response = await axiosInstance.patch(
-        "profile/",
+        "my_profile/",
         {
           social_media: newSocialMedia,
         },

@@ -49,7 +49,7 @@ def index_protected(request):
     
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
-def profile(request):
+def my_profile(request):
     user = MyUser.objects.get(username=request.user)
     if request.method == "GET":
         print(request.user, request, "ssss")

@@ -1,7 +1,9 @@
 import { Text, FlatList, TouchableOpacity, View } from "react-native";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 import axiosInstance from "../utils/axiosInstance";
+import { selectUser } from "../store/authSlice";
 import ActionButtons from "../components/ActionButtons";
 import DetailsItem from "../components/DetailsItem";
 import ErrorMessage from "../components/ErrorMessage";
@@ -9,8 +11,9 @@ import ErrorMessage from "../components/ErrorMessage";
 const EventDetailsScreen = function ({ route, navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [eventDetails, setEventDetails] = useState([]);
-
+  const user = useSelector(selectUser);
   const eventId = route.params.id;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -108,7 +111,9 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   const handleUserClick = (item) => {
     console.log(item);
-    navigation.navigate("My Profile", {
+    const destination = user == item ? "My Profile" : "Profile";
+    console.log(item);
+    navigation.navigate(destination, {
       user: item,
     });
   };
