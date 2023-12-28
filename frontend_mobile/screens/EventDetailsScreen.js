@@ -2,6 +2,7 @@ import { Text, View, Button } from "react-native";
 import { useState, useEffect } from "react";
 
 import axiosInstance from "../utils/axiosInstance";
+import ActionButtons from "../components/ActionButtons";
 import ErrorMessage from "../components/ErrorMessage";
 
 const EventDetailsScreen = function ({ route, navigation }) {
@@ -67,15 +68,16 @@ const EventDetailsScreen = function ({ route, navigation }) {
           },
         }
       );
+      if (response.status >= 200 && response.status < 300) {
+        navigation.replace("All Events List", {
+          successMessage: "successfully deleted event",
+        });
+      }
     } catch (error) {
       setErrorMessage(
         error.request.responseText ? error.request.responseText : error.message
       );
     }
-    console.log("successfully joined");
-    navigation.replace("All Events List", {
-      successMessage: "successfully joined event",
-    });
   };
   const handleEdit = () => {};
   const handleLeave = async () => {
@@ -106,19 +108,14 @@ const EventDetailsScreen = function ({ route, navigation }) {
   return (
     <>
       <Text>Event {eventId} Details</Text>
-      <View>
-        {route.params.am_organizer ? (
-          <>
-            <Button title="edit" onPress={handleEdit} />
-            <Button title="delete" onPress={handleDelete} />
-          </>
-        ) : // <Text>Not organizer</Text>
-        route.params.am_participant ? (
-          <Button title="leave" onPress={handleLeave} />
-        ) : (
-          <Button title="join" onPress={handleJoin} />
-        )}
-      </View>
+      <ActionButtons
+        amOrganizer={route.params.am_organizer}
+        amParticipant={route.params.am_participant}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        handleJoin={handleJoin}
+        handleLeave={handleLeave}
+      />
       <ErrorMessage errorMessage={errorMessage} />
     </>
   );
