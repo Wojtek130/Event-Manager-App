@@ -89,8 +89,8 @@ def event(request):
         print(request.data)
         serializer = MyEventSerializer(data=request.data, context={'request': request})
     if request.method == "PATCH":
-        print("paaaaaaaaatch")
-        event = get_object_or_404(MyEvent, name=request.data.get('name'))
+        print("paaaaaaaaatch", request.data.get("id"))
+        event = get_object_or_404(MyEvent, pk=request.data.get('id'))
         serializer = MyEventSerializer(event, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()

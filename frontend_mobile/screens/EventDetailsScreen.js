@@ -18,7 +18,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/event", {
+        const response = await axiosInstance.get("/event/", {
           params: {
             id: eventId,
           },
@@ -87,6 +87,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const handleEdit = () => {
     navigation.replace("Edit Event", {
       eventData: transformEventData(eventDetails),
+      eventId: eventId,
     });
   };
   const handleLeave = async () => {
