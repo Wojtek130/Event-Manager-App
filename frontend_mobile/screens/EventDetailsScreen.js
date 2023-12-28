@@ -1,9 +1,9 @@
-import { Text, View, Button } from "react-native";
+import { Text, FlatList, TouchableOpacity, View } from "react-native";
 import { useState, useEffect } from "react";
 
 import axiosInstance from "../utils/axiosInstance";
 import ActionButtons from "../components/ActionButtons";
-import DetailsRow from "../components/DetailsRow";
+import DetailsItem from "../components/DetailsItem";
 import ErrorMessage from "../components/ErrorMessage";
 
 const EventDetailsScreen = function ({ route, navigation }) {
@@ -106,6 +106,13 @@ const EventDetailsScreen = function ({ route, navigation }) {
     });
   };
 
+  const handleUserClick = (item) => {
+    console.log(item);
+    navigation.navigate("My Profile", {
+      user: item,
+    });
+  };
+
   return (
     <>
       <Text>Event {eventId} Details</Text>
@@ -118,16 +125,40 @@ const EventDetailsScreen = function ({ route, navigation }) {
         handleLeave={handleLeave}
       />
       {Object.entries(eventDetails).map(([key, value], index) => {
-        console.log("from loop", key, value);
+        const rowCondition = !(key == "faq" || key == "description");
+        if (key == "private") {
+          return;
+          // return <key={index}></key=>;
+        }
+        if (key == "participants" || key == "organizers") {
+          return (
+            <View>
+              <Text>{key}: </Text>
+              <FlatList
+                key={index}
+                data={value}
+                keyExtractor={(item) => item}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() => handleUserClick(item)}
+                    key={item}
+                  >
+                    <Text>{item}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          );
+        }
         return (
-          // <View key={index}>
-          //   <Text>{key}:</Text>
-          //   <Text>{value}</Text>
-          // </View>
-          <DetailsRow objectKey={key} value={value} key={index} />
+          <DetailsItem
+            objectKey={key}
+            value={value}
+            key={index}
+            row={rowCondition}
+          />
         );
       })}
-      <Text>outside loop</Text>
       <ErrorMessage errorMessage={errorMessage} />
     </>
   );

@@ -8,6 +8,7 @@ import {
   SOCIAL_MEDIA_PLATFORMS,
   SOCIAL_MEDIA_PLATFORMS_NAMES,
 } from "../utils/constants";
+import SocialMediaInfo from "../components/SocialMediaInfo";
 
 const MyProfileScreen = function ({ navigation }) {
   const user = useSelector(selectUser);
@@ -91,30 +92,11 @@ const MyProfileScreen = function ({ navigation }) {
     <>
       {!editMode ? (
         <>
-          {/* <Text>MyProfile : {JSON.stringify(userData)}</Text> */}
-          <Text>Hello {user}!</Text>
-          {userData &&
-            Object.keys(userData.social_media).map((key) => {
-              if (
-                SOCIAL_MEDIA_PLATFORMS.includes(key) &&
-                userData.social_media[key]
-              ) {
-                return (
-                  <Text key={key}>
-                    {SOCIAL_MEDIA_PLATFORMS_NAMES[key]
-                      ? SOCIAL_MEDIA_PLATFORMS_NAMES[key]
-                      : key}
-                    {""}: {userData.social_media[key]}
-                  </Text>
-                );
-              }
-            })}
-          {otherSocialMedia[0] !== "" && (
-            <Text>
-              {otherSocialMedia[0]}: {otherSocialMedia[1]}
-            </Text>
-          )}
-
+          <SocialMediaInfo
+            user={user}
+            userData={userData}
+            otherSocialMedia={otherSocialMedia}
+          />
           {userData && <Button title="edit profile" onPress={handleEdit} />}
         </>
       ) : (
