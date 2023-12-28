@@ -71,9 +71,10 @@ def users(request):
     users = [{"username" : user.username, "id" : user.id} for user in MyUser.objects.all() if not user.is_superuser]
     return JsonResponse(data={"users": users})
 
-@api_view(["POST", "GET"])
+@api_view(["POST", "GET", "PATCH"])
 @permission_classes([IsAuthenticated])
 def event(request):
+    serializer = None
     if request.method == "GET":
         event_id = request.GET.get("id")
         event = get_object_or_404(MyEvent, id=event_id)
@@ -86,14 +87,20 @@ def event(request):
         return JsonResponse(data=event_data)
     if request.method == "POST":
         print(request.data)
-        event = MyEventSerializer(data=request.data, context={'request': request})
-        if event.is_valid():
-            event.save()
-            return Response(event.data, status=status.HTTP_201_CREATED)
-        try:
-            return Response(event.errors, status=status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer = MyEventSerializer(data=request.data, context={'request': request})
+    if request.method == "PATCH":
+        print("paaaaaaaaatch")
+        event = get_object_or_404(MyEvent, name=request.data.get('name'))
+        serializer = MyEventSerializer(event, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    try:
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -129,7 +136,6 @@ def event_join(request):
     if event.participants.filter(pk=user_id).exists():
         return Response({'error': "the user is already a participant of the event"}, status=status.HTTP_400_BAD_REQUEST)
     event.participants.add(request.user)
-    print("wojtek")
     return JsonResponse(data={"message": "Event joined successfully."})
 
 @api_view(["DELETE"])

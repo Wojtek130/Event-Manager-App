@@ -7,6 +7,7 @@ import { selectUser } from "../store/authSlice";
 import ActionButtons from "../components/ActionButtons";
 import DetailsItem from "../components/DetailsItem";
 import ErrorMessage from "../components/ErrorMessage";
+import { transformEventData } from "../utils/functions";
 
 const EventDetailsScreen = function ({ route, navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
@@ -83,7 +84,11 @@ const EventDetailsScreen = function ({ route, navigation }) {
       );
     }
   };
-  const handleEdit = () => {};
+  const handleEdit = () => {
+    navigation.replace("Edit Event", {
+      eventData: transformEventData(eventDetails),
+    });
+  };
   const handleLeave = async () => {
     console.log("helloooo!");
     try {

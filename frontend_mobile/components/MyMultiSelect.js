@@ -5,13 +5,14 @@ const MyMultiSelect = (props) => {
     <MultiSelect
       // hideTags
       items={props.items}
-      uniqueKey="id"
+      // uniqueKey="id"
+      uniqueKey="username"
       // ref={(component) => {
       //   this.multiSelect = component;
       // }}
       onSelectedItemsChange={props.callback}
       selectedItems={props.value}
-      selectText="Pick Organizers"
+      selectText={props.text}
       searchInputPlaceholderText="Search Users..."
       // onChangeInput={(text) => console.log(text)}
       altFontFamily="ProximaNova-Light"

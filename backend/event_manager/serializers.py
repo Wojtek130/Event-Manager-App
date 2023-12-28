@@ -13,13 +13,17 @@ class MyUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'password', 'social_media']
 
     def validate(self, data):
+        print("validate s")
         return data
     
     def validate_social_media(self, value):
+        print("validate sm s")
+
         value_json = json.loads(value)
         return {key: value for key, value in value_json.items() if value != '' and key!=''}
     
     def create(self, validated_data):
+        print("create s")
         user = User.objects.create_user(**validated_data)
         return user
     
@@ -29,7 +33,7 @@ class MyEventSerializer(serializers.ModelSerializer):
         fields = ['name', 'start_date', 'end_date', 'description', 'faq', 'private', 'organizers', 'participants']
 
     def to_internal_value(self, data):
-        # Adjust the date format before creating the model instance
+        print(data, "to internal value")
         try:
             start_date = datetime.datetime.strptime(data["start_date"], DATETIME_FORMAT)
         except:
@@ -40,11 +44,17 @@ class MyEventSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Wrong end date/time ")
         data["start_date"] = start_date
         data["end_date"] = end_date
+        data["organizers"] = [user.id for user in User.objects.filter(username__in=data["organizers"])]
+        data["participants"] = [user.id for user in User.objects.filter(username__in=data["participants"])]
         return super().to_internal_value(data)
 
     def validate(self, data):
+        print(data, "validate blank")
+
         if data["start_date"] >= data["end_date"]:
             raise serializers.ValidationError("The End date must be after the start date")
+        if any(element in data["organizers"] for element in data["participants"]):
+            raise serializers.ValidationError("A user cannot be event's organizer and participant at the same time")
         return data
 
     def validate_name(self, data):
@@ -54,12 +64,14 @@ class MyEventSerializer(serializers.ModelSerializer):
         return data
     
     def validate_private(self, data):
+        print(data, "validate private")
+
         if not isinstance(data, bool):
             raise serializers.ValidationError("Private must a boolean value")
         return data
     
     def create(self, validated_data):
-        print(validated_data, "@@@@@@@@@@@@@@@@@@@@@@@@@")
+        print("create")
         event_data = {
             "name" : validated_data["name"],
             "start_date" : validated_data["start_date"],
@@ -78,8 +90,20 @@ class MyEventSerializer(serializers.ModelSerializer):
         if len(organizers_ids) > 0:
             organizers = list(User.objects.filter(id__in=organizers_ids))
         organizers.append(request.user)
-        print(organizers, type(request.user), "###################")
         event.organizers.set(organizers)
         return event
+    
+    def update(self, instance, validated_data):
+        print(validated_data, "validated data")
+        instance.name = validated_data.get('name', instance.name)
+        instance.start_date = validated_data.get('start_date', instance.start_date)
+        instance.end_date = validated_data.get('end_date', instance.end_date)
+        instance.description = validated_data.get('description', instance.description)
+        instance.faq = validated_data.get('faq', instance.faq)
+        instance.private = validated_data.get('private', instance.private)
+        instance.organizers.set(validated_data.get('organizers', instance.organizers.all()))
+        instance.participants.set(validated_data.get('participants', instance.participants.all()))
+        instance.save()
+        return instance
         
 
