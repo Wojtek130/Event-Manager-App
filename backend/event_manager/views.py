@@ -91,7 +91,6 @@ def event(request):
             return Response(event.errors, status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-    
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -130,4 +129,14 @@ def event_join(request):
     event.participants.add(request.user)
     print("wojtek")
     return JsonResponse(data={"message": "Event joined successfully."})
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def event_delete(request, instance_id):
+    user_id = request.user.id
+    event = get_object_or_404(MyEvent, id=instance_id)
+    if not event.organizers.filter(pk=user_id).exists():
+        return Response({'error': "the user is not an organizer of the event"}, status=status.HTTP_400_BAD_REQUEST)
+    event.delete()
+    return JsonResponse({'message': 'Model instance deleted successfully.'})
 

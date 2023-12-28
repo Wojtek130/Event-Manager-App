@@ -30,7 +30,30 @@ const EventDetailsScreen = function ({ route, navigation }) {
     fetchData();
   }, []);
 
-  const handleDelete = () => {};
+  const handleDelete = async () => {
+    try {
+      const response = await axiosInstance.delete(
+        `event/delete/${eventId}/`,
+        {
+          id: eventId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status >= 200 && response.status < 300) {
+        navigation.replace("All Events List", {
+          successMessage: "successfully deleted event",
+        });
+      }
+    } catch (error) {
+      setErrorMessage(
+        error.request.statusText ? error.request.statusText : error.message
+      );
+    }
+  };
   const handleJoin = async () => {
     try {
       const response = await axiosInstance.post(
@@ -50,8 +73,9 @@ const EventDetailsScreen = function ({ route, navigation }) {
       );
     }
     console.log("successfully joined");
-    navigation.replace("All Events List", {successMessage : "successfully joined event"});
-
+    navigation.replace("All Events List", {
+      successMessage: "successfully joined event",
+    });
   };
   const handleEdit = () => {};
   const handleLeave = async () => {
@@ -74,8 +98,9 @@ const EventDetailsScreen = function ({ route, navigation }) {
       );
     }
     console.log("successfully left");
-    navigation.replace("All Events List", {successMessage : "successfully left event"});
-
+    navigation.replace("All Events List", {
+      successMessage: "successfully left event",
+    });
   };
 
   return (
