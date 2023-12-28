@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 import axiosInstance from "../utils/axiosInstance";
 import ActionButtons from "../components/ActionButtons";
+import DetailsRow from "../components/DetailsRow";
 import ErrorMessage from "../components/ErrorMessage";
 
 const EventDetailsScreen = function ({ route, navigation }) {
@@ -116,6 +117,17 @@ const EventDetailsScreen = function ({ route, navigation }) {
         handleJoin={handleJoin}
         handleLeave={handleLeave}
       />
+      {Object.entries(eventDetails).map(([key, value], index) => {
+        console.log("from loop", key, value);
+        return (
+          // <View key={index}>
+          //   <Text>{key}:</Text>
+          //   <Text>{value}</Text>
+          // </View>
+          <DetailsRow objectKey={key} value={value} key={index} />
+        );
+      })}
+      <Text>outside loop</Text>
       <ErrorMessage errorMessage={errorMessage} />
     </>
   );

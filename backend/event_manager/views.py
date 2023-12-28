@@ -12,8 +12,9 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import datetime
 
-from .serializers import MyUserSerializer, MyEventSerializer
 from .models import MyUser, MyEvent
+from .serializers import MyUserSerializer, MyEventSerializer
+from .utils import format_datatime_from_db
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -80,6 +81,8 @@ def event(request):
         event_data = serializer.data
         event_data["organizers"] = list(MyUser.objects.filter(id__in=event_data["organizers"]).values_list('username', flat=True))
         event_data["participants"] = list(MyUser.objects.filter(id__in=event_data["participants"]).values_list('username', flat=True))
+        event_data["start_date"] = format_datatime_from_db(event_data["start_date"])
+        event_data["end_date"] = format_datatime_from_db(event_data["end_date"])
         return JsonResponse(data=event_data)
     if request.method == "POST":
         print(request.data)
@@ -113,7 +116,6 @@ def event_leave(request):
     if not event.participants.filter(pk=user_id).exists():
         return Response({'error': "the user is not a participant of the event"}, status=status.HTTP_400_BAD_REQUEST)
     event.participants.remove(request.user)
-    print("wojtek")
     return JsonResponse(data={"message": "Event joined successfully."})
 
 @api_view(["POST"])
