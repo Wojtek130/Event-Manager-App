@@ -4,8 +4,8 @@ import dayjs from "dayjs";
 // import { useSelector, useDispatch } from "react-redux";
 import { store } from "../store/store";
 import { setUser } from "../store/authSlice";
+import {baseURL} from "./constants"
 
-const baseURL = "http://127.0.0.1:8000";
 
 let authTokens = JSON.parse(store.getState()?.auth?.authTokens);
 

@@ -1,3 +1,5 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
@@ -155,3 +157,17 @@ def profile(request, username):
     user = get_object_or_404(MyUser, username=username)
     user_data = {"social_media" : user.social_media}
     return JsonResponse(data=user_data)
+
+def send_broadcast_message(request):
+    event_id = 5
+    message = "dog"
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        f"group_event_{event_id}",
+        {
+            'type': 'send_message',
+            'message': message,
+            'event_id': event_id,
+        }
+    )
+    return JsonResponse({'sending': 'message'})
