@@ -10,6 +10,7 @@ import {
   fetchNewMessages,
   fetchOldMessages,
   fetchLastFetch,
+  selectLastFetchTimestamp,
 } from "../store/newMessagesSlice";
 import HomeScreen from "../screens/HomeScreen";
 import RegisterScreen from "../screens/RegisterScreen";
@@ -26,6 +27,7 @@ const Drawer = createDrawerNavigator();
 
 export default function AppRoutes() {
   const user = useSelector(selectUser);
+  const lft = useDispatch(selectLastFetchTimestamp);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -39,6 +41,15 @@ export default function AppRoutes() {
       }
     };
     firstAnnouncementsFetch();
+    return async () => {
+      try {
+        const response = await axiosInstance.post("last_fetch/", {
+          last_fetch: lft,
+        });
+      } catch (error) {
+        console.log(error, "setting lf error");
+      }
+    };
   }, []);
   return (
     <NavigationContainer>

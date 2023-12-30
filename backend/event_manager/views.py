@@ -185,13 +185,22 @@ def new_announcements(request, timestamp):
     a = get_announcements("new", timestamp, user)
     return JsonResponse(data={"announcements" : a})
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def last_fetch(request):
     user = get_object_or_404(MyUser, username=request.user)
-    # user = get_object_or_404(MyUser, pk=user_id)
-    # print("?????????", user.last_fetch)
-    print(user, "!!!!!!!!!!!!!!!!")
-    lf = "" if user.last_fetch is None else user.last_fetch
-    return JsonResponse(data={"last_fetch" : lf})
+    if request.method == "GET":
+        print(user, "!!!!!!!!!!!!!!!!")
+        lf = "" if user.last_fetch is None else user.last_fetch
+        return JsonResponse(data={"last_fetch" : lf})
+    if request.method == "POST":
+        print(request.data)
+        last_fetch = request.data.get("last_fetch")
+        timestamp_dt = datetime.datetime.utcfromtimestamp(float(last_fetch))
+        user.last_fetch = timestamp_dt
+        user.save()
+        return JsonResponse({'message': 'Last fetch successfully updated'})
+
+
+
 

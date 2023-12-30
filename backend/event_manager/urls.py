@@ -25,7 +25,4 @@ urlpatterns = [
     path('last_fetch/', last_fetch, name='last_fetch'),
 
 
-
-
-
 ]
