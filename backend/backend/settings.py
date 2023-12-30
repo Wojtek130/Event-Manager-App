@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,7 +43,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
-    'channels',
     'event_manager',
 ]
 
@@ -79,8 +77,7 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'backend.wsgi.application'
-ASGI_APPLICATION = 'backend.asgi.application'
+WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 # Database
@@ -197,13 +194,4 @@ SIMPLE_JWT = {
 # ]
 CORS_ORIGIN_ALLOW_ALL = True
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            # adjust the Redis connection settings as needed
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
 

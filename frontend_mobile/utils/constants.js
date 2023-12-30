@@ -14,4 +14,3 @@ export const successColor = "rgb(52, 235, 131)";
 export const errorColor = "rgb(235, 58, 52)";
 export const serverURL = "127.0.0.1:8000";
 export const baseURL = `http://${serverURL}`;
-export const webSocketURL = `ws://${serverURL}/ws/chat/`;

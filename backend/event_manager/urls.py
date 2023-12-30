@@ -3,7 +3,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from .views import index, index_protected, register_user, MyTokenObtainPairView, my_profile, users, event, events, event_join, event_leave, event_delete, profile, send_broadcast_message
+from .views import index, index_protected, register_user, MyTokenObtainPairView, my_profile, users, event, events, event_join, event_leave, event_delete, profile
 
 
 urlpatterns = [
@@ -20,7 +20,6 @@ urlpatterns = [
     path('event/leave/', event_leave, name='event leave'),
     path('event/delete/<int:instance_id>/', event_delete, name='event delete'),
     path('profile/<str:username>/', profile, name='profile'),
-    path('send_mes/', send_broadcast_message, name='send mes'),
 
 
 ]

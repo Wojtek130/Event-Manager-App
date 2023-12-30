@@ -4,6 +4,3 @@ djangorestframework-simplejwt
 djangorestframework-jwt
 django-cors-headers
 jsonfield
-channels
-channels_redis
-daphne

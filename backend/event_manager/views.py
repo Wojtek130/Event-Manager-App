@@ -1,15 +1,9 @@
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
-from django.views import View
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import get_object_or_404
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import datetime
@@ -158,16 +152,3 @@ def profile(request, username):
     user_data = {"social_media" : user.social_media}
     return JsonResponse(data=user_data)
 
-def send_broadcast_message(request):
-    event_id = 5
-    message = "dog"
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        f"group_event_{event_id}",
-        {
-            'type': 'send_message',
-            'message': message,
-            'event_id': event_id,
-        }
-    )
-    return JsonResponse({'sending': 'message'})
