@@ -166,15 +166,22 @@ def get_announcements(a_type, timestamp, event_id, user_id):
     return announcements
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-def old_messages(request, timestamp, event_id, user_id):
-    print(timestamp, event_id, user_id, "!!!!!!!!")
-    print(get_announcements("old", timestamp, event_id, user_id))
-    return JsonResponse(data={"a" : "b"})
+@permission_classes([IsAuthenticated])
+def old_announcements(request, timestamp, event_id, user_id):
+    a = get_announcements("old", timestamp, event_id, user_id)
+    return JsonResponse(data={"announcements" : a})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def new_announcements(request, timestamp, event_id, user_id):
+    a = get_announcements("new", timestamp, event_id, user_id)
+    return JsonResponse(data={"announcements" : a})
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def new_messages(request, timestamp, event_id, user_id):
-    print(get_announcements("new", timestamp, event_id, user_id))
-    return JsonResponse(data={"a" : "b"})
+def last_fetch(request, user_id):
+    # user = get_object_or_404(MyUser, username=request.user)
+    user = get_object_or_404(MyUser, pk=user_id)
+
+    return JsonResponse(data={"last_fetch" : user.last_fetch})
 
