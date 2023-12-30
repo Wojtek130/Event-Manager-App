@@ -178,10 +178,11 @@ def new_announcements(request, timestamp, event_id, user_id):
     return JsonResponse(data={"announcements" : a})
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def last_fetch(request, user_id):
-    # user = get_object_or_404(MyUser, username=request.user)
-    user = get_object_or_404(MyUser, pk=user_id)
-
-    return JsonResponse(data={"last_fetch" : user.last_fetch})
+    user = get_object_or_404(MyUser, username=request.user)
+    # user = get_object_or_404(MyUser, pk=user_id)
+    # print("?????????", user.last_fetch)
+    lf = "" if user.last_fetch is None else user.last_fetch
+    return JsonResponse(data={"last_fetch" : lf})
 

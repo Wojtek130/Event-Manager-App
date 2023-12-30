@@ -22,7 +22,7 @@ urlpatterns = [
     path('profile/<str:username>/', profile, name='profile'),
     path('messages/new/<str:timestamp>/<int:event_id>/<int:user_id>/', new_announcements, name='new_messages'),
     path('messages/old/<str:timestamp>/<int:event_id>/<int:user_id>/', old_announcements, name='old_messages'),
-    path('last_fetch/<int:user_id>/', last_fetch, name='last_fetch'),
+    path('last_fetch/', last_fetch, name='last_fetch'),
 
 
 
