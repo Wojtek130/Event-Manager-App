@@ -20,8 +20,8 @@ urlpatterns = [
     path('event/leave/', event_leave, name='event leave'),
     path('event/delete/<int:instance_id>/', event_delete, name='event delete'),
     path('profile/<str:username>/', profile, name='profile'),
-    path('messages/new/<str:timestamp>/<int:event_id>/<int:user_id>/', new_announcements, name='new_messages'),
-    path('messages/old/<str:timestamp>/<int:event_id>/<int:user_id>/', old_announcements, name='old_messages'),
+    path('messages/new/<str:timestamp>/', new_announcements, name='new_messages'),
+    path('messages/old/<str:timestamp>/', old_announcements, name='old_messages'),
     path('last_fetch/', last_fetch, name='last_fetch'),
 
 

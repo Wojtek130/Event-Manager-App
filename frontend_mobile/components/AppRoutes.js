@@ -1,9 +1,16 @@
 import * as React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
 
+import axiosInstance from "../utils/axiosInstance";
 import { selectUser } from "../store/authSlice";
+import {
+  fetchNewMessages,
+  fetchOldMessages,
+  fetchLastFetch,
+} from "../store/newMessagesSlice";
 import HomeScreen from "../screens/HomeScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import MyEventsScreen from "../screens/MyEventsScreen";
@@ -19,7 +26,20 @@ const Drawer = createDrawerNavigator();
 
 export default function AppRoutes() {
   const user = useSelector(selectUser);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    const firstAnnouncementsFetch = () => {
+      try {
+        dispatch(fetchOldMessages());
+        dispatch(fetchLastFetch());
+        dispatch(fetchNewMessages());
+      } catch (error) {
+        console.log(error, "dispatch error");
+      }
+    };
+    firstAnnouncementsFetch();
+  }, []);
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">

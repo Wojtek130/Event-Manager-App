@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import datetime
@@ -17,6 +18,7 @@ from .utils import format_datatime_from_db
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
+        print("getting token ..............................")
         token = super().get_token(user)
         token['username'] = user.username
         return token
@@ -154,35 +156,42 @@ def profile(request, username):
     return JsonResponse(data=user_data)
 
 
-def get_announcements(a_type, timestamp, event_id, user_id):
+def get_announcements(a_type, timestamp, user):
     timestamp_dt = datetime.datetime.utcfromtimestamp(float(timestamp))
-    announcements = None
-    if a_type == "new":
-        announcements = Announcement.objects.filter(timestamp__gt=timestamp_dt, event=event_id, author=user_id).values()
-    elif a_type == "old":
-        announcements = Announcement.objects.filter(timestamp__lt=timestamp_dt).values()
-    # announcements = list(announcements)
-    announcements = [{k: v.strftime(DATETIME_FORMAT) if k == "timestamp" else v for k, v in a.items()} for a in announcements]
-    return announcements
+    all_a = {}
+    events = MyEvent.objects.filter(Q(organizers=user) | Q(participants=user)).distinct()
+    for e in events:
+        announcements = None
+        if a_type == "new":
+            announcements = Announcement.objects.filter(timestamp__gt=timestamp_dt, event=e.id, author=user).values()
+        elif a_type == "old":
+            announcements = Announcement.objects.filter(timestamp__lt=timestamp_dt, event=e.id, author=user.id).values()
+        if len(announcements) > 0:
+            announcements = [{k: v.strftime(DATETIME_FORMAT) if k == "timestamp" else v for k, v in a.items()} for a in announcements]
+            all_a[e.id] = announcements
+    return all_a
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def old_announcements(request, timestamp, event_id, user_id):
-    a = get_announcements("old", timestamp, event_id, user_id)
+def old_announcements(request, timestamp):
+    user = get_object_or_404(MyUser, username=request.user)
+    a = get_announcements("old", timestamp, user)
     return JsonResponse(data={"announcements" : a})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def new_announcements(request, timestamp, event_id, user_id):
-    a = get_announcements("new", timestamp, event_id, user_id)
+def new_announcements(request, timestamp):
+    user = get_object_or_404(MyUser, username=request.user)
+    a = get_announcements("new", timestamp, user)
     return JsonResponse(data={"announcements" : a})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def last_fetch(request, user_id):
+def last_fetch(request):
     user = get_object_or_404(MyUser, username=request.user)
     # user = get_object_or_404(MyUser, pk=user_id)
     # print("?????????", user.last_fetch)
+    print(user, "!!!!!!!!!!!!!!!!")
     lf = "" if user.last_fetch is None else user.last_fetch
     return JsonResponse(data={"last_fetch" : lf})
 
