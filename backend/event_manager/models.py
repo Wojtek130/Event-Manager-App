@@ -5,6 +5,7 @@ from jsonfield import JSONField
 class MyUser(AbstractUser):
     
     social_media = JSONField(default={})
+    last_fetch = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.username
@@ -21,3 +22,12 @@ class MyEvent(models.Model):
 
     def __str__(self):
         return self.name
+
+class Announcement(models.Model):
+    body = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    event = models.ForeignKey(MyEvent, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"Announcement({self.body})"

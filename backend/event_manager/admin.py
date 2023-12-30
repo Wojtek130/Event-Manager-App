@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import MyUser, MyEvent
+from .models import MyUser, MyEvent, Announcement
 
 class MyUserAdmin(UserAdmin):
+    list_display = ('id', 'username')
+
     fieldsets = (
         # *UserAdmin.fieldsets,  # original form fieldsets, expanded
         UserAdmin.fieldsets[0],  
@@ -16,8 +18,20 @@ class MyUserAdmin(UserAdmin):
         ),
     )
 
+class MyEventAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+
+
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('id', 'body', 'formatted_timestamp', 'author', 'event')
+    def formatted_timestamp(self, obj):
+        return obj.timestamp.timestamp()
+
+
 
 admin.site.register(MyUser, MyUserAdmin)
-admin.site.register(MyEvent)
+admin.site.register(MyEvent, MyEventAdmin)
+admin.site.register(Announcement, AnnouncementAdmin)
+
 
 

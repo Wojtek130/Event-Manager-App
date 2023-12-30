@@ -8,7 +8,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import datetime
 
-from .models import MyUser, MyEvent
+from .constants import DATETIME_FORMAT
+from .models import MyUser, MyEvent, Announcement
 from .serializers import MyUserSerializer, MyEventSerializer
 from .utils import format_datatime_from_db
 
@@ -151,4 +152,29 @@ def profile(request, username):
     user = get_object_or_404(MyUser, username=username)
     user_data = {"social_media" : user.social_media}
     return JsonResponse(data=user_data)
+
+
+def get_announcements(a_type, timestamp, event_id, user_id):
+    timestamp_dt = datetime.datetime.utcfromtimestamp(float(timestamp))
+    announcements = None
+    if a_type == "new":
+        announcements = Announcement.objects.filter(timestamp__gt=timestamp_dt, event=event_id, author=user_id).values()
+    elif a_type == "old":
+        announcements = Announcement.objects.filter(timestamp__lt=timestamp_dt).values()
+    # announcements = list(announcements)
+    announcements = [{k: v.strftime(DATETIME_FORMAT) if k == "timestamp" else v for k, v in a.items()} for a in announcements]
+    return announcements
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def old_messages(request, timestamp, event_id, user_id):
+    print(timestamp, event_id, user_id, "!!!!!!!!")
+    print(get_announcements("old", timestamp, event_id, user_id))
+    return JsonResponse(data={"a" : "b"})
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def new_messages(request, timestamp, event_id, user_id):
+    print(get_announcements("new", timestamp, event_id, user_id))
+    return JsonResponse(data={"a" : "b"})
 
