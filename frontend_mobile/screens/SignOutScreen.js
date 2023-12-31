@@ -1,5 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { selectLastFetchTimestamp } from "../store/messagesSlice";
+import { selectAuthTokens } from "../store/authSlice";
+
 import axiosInstance from "../utils/axiosInstance";
 
 import { clearUser } from "../store/authSlice";
@@ -9,6 +11,7 @@ import { Text, View, Button } from "react-native";
 const SignOutScreen = function ({ navigation }) {
   const dispatch = useDispatch();
   const lft = useSelector(selectLastFetchTimestamp);
+  const at = useSelector(selectAuthTokens);
 
   const handleLogout = async () => {
     try {
@@ -16,6 +19,7 @@ const SignOutScreen = function ({ navigation }) {
         last_fetch: lft,
       });
     } catch (error) {
+      console.log(at, "///////////////"); 
       console.log(error, "setting lf error");
     }
     dispatch(clearUser());

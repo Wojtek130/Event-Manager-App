@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 
 import axiosInstance from "../utils/axiosInstance";
-import { selectUser } from "../store/authSlice";
+import { selectUser, selectAuthTokens } from "../store/authSlice";
 import {
   fetchNewMessages,
   fetchOldMessages,
@@ -22,16 +22,19 @@ import CreateEventScreen from "../screens/CreateEventScreen";
 import AnnouncementsScreen from "../screens/AnnouncementsScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignOutScreen from "../screens/SignOutScreen";
+import LoggedInScreens from "./LoggedInScreens";
+import { FETCH_INTERVAL } from "../utils/constants";
 
 const Drawer = createDrawerNavigator();
 
 export default function AppRoutes() {
   const user = useSelector(selectUser);
+  const at = useSelector(selectAuthTokens);
   const lft = useDispatch(selectLastFetchTimestamp);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const firstAnnouncementsFetch = () => {
+    const firstAnnouncementsFetch = async () => {
       try {
         dispatch(fetchLastFetch())
           .then(() => {
@@ -46,7 +49,21 @@ export default function AppRoutes() {
         console.log(error, "dispatch error");
       }
     };
-    firstAnnouncementsFetch();
+    let intervalId = 0;
+    if (user) {
+      firstAnnouncementsFetch();
+      intervalId = setInterval(() => {
+        dispatch(fetchNewMessages());
+      }, FETCH_INTERVAL);
+    }
+    return async () => {
+      if (user) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [user]);
+
+  useEffect(() => {
     return async () => {
       try {
         const response = await axiosInstance.post("last_fetch/", {
@@ -54,7 +71,8 @@ export default function AppRoutes() {
         });
         console.log("turn down fetch down");
       } catch (error) {
-        console.log(error, "setting lf error");
+        console.log(user, at, "!!!!!!!!");
+        console.log(error, "setting lf error2");
       }
     };
   }, []);

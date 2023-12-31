@@ -17,6 +17,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(async (req) => {
   authTokens = JSON.parse(store.getState().auth.authTokens);
   const parsedAuthTokens = JSON.parse(authTokens);
+  console.log(authTokens, "from AI");
   req.headers.Authorization = `Bearer ${parsedAuthTokens?.access}`;
 
   const tokenData = jwtDecode(parsedAuthTokens.access);
@@ -37,7 +38,9 @@ axiosInstance.interceptors.request.use(async (req) => {
         authTokens: JSON.stringify(response.data),
       })
     );
-    req.headers.Authorization = `Bearer ${response.data.access}`;
+    // req.headers.Authorization = `Bearer ${response.data.access}`;
+    const pt = JSON.parse(JSON.parse(store.getState().auth.authTokens));
+    req.headers.Authorization = `Bearer ${pt.access}`;
   } catch (error) {
     console.error(error);
   }
