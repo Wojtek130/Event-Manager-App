@@ -160,6 +160,7 @@ def get_announcements(a_type, timestamp, user):
     timestamp_dt = datetime.datetime.utcfromtimestamp(float(timestamp))
     all_a = {}
     events = MyEvent.objects.filter(Q(organizers=user) | Q(participants=user)).distinct()
+    print(a_type, timestamp)
     for e in events:
         announcements = None
         if a_type == "new":
@@ -190,11 +191,9 @@ def new_announcements(request, timestamp):
 def last_fetch(request):
     user = get_object_or_404(MyUser, username=request.user)
     if request.method == "GET":
-        print(user, "!!!!!!!!!!!!!!!!")
-        lf = "" if user.last_fetch is None else user.last_fetch
+        lf = "" if user.last_fetch is None else user.last_fetch.timestamp()
         return JsonResponse(data={"last_fetch" : lf})
     if request.method == "POST":
-        print(request.data)
         last_fetch = request.data.get("last_fetch")
         timestamp_dt = datetime.datetime.utcfromtimestamp(float(last_fetch))
         user.last_fetch = timestamp_dt

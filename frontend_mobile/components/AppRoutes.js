@@ -33,9 +33,15 @@ export default function AppRoutes() {
   useEffect(() => {
     const firstAnnouncementsFetch = () => {
       try {
-        dispatch(fetchOldMessages());
-        dispatch(fetchLastFetch());
-        dispatch(fetchNewMessages());
+        dispatch(fetchLastFetch())
+          .then(() => {
+            dispatch(fetchOldMessages());
+            dispatch(fetchNewMessages());
+          })
+          .catch((error) => {
+            console.log("first dispatch error", error);
+          });
+        console.log("last fetch timestamp before fetching", lft);
       } catch (error) {
         console.log(error, "dispatch error");
       }
@@ -46,6 +52,7 @@ export default function AppRoutes() {
         const response = await axiosInstance.post("last_fetch/", {
           last_fetch: lft,
         });
+        console.log("turn down fetch down");
       } catch (error) {
         console.log(error, "setting lf error");
       }
