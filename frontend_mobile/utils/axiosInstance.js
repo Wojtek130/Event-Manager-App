@@ -17,7 +17,6 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(async (req) => {
   authTokens = JSON.parse(store.getState().auth.authTokens);
   const parsedAuthTokens = JSON.parse(authTokens);
-  console.log(authTokens, "from AI");
   req.headers.Authorization = `Bearer ${parsedAuthTokens?.access}`;
 
   const tokenData = jwtDecode(parsedAuthTokens.access);
