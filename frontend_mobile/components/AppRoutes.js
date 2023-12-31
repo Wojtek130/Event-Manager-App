@@ -19,7 +19,8 @@ import MyEventsScreen from "../screens/MyEventsScreen";
 import AllEventsStackScreen from "../screens/AllEventsStackScreen";
 import MyProfileScreen from "../screens/MyProfileScreen";
 import CreateEventScreen from "../screens/CreateEventScreen";
-import AnnouncementsScreen from "../screens/AnnouncementsScreen";
+import AnnouncementsListScreen from "../screens/AnnouncementsListScreen";
+import AnnouncementsStackScreen from "../screens/AnnouncementsStackScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignOutScreen from "../screens/SignOutScreen";
 import LoggedInScreens from "./LoggedInScreens";
@@ -88,7 +89,7 @@ export default function AppRoutes() {
             <Drawer.Screen name="Create Event" component={CreateEventScreen} />
             <Drawer.Screen
               name="Announcements"
-              component={AnnouncementsScreen}
+              component={AnnouncementsStackScreen}
             />
             <Drawer.Screen name="Sign Out" component={SignOutScreen} />
           </>
