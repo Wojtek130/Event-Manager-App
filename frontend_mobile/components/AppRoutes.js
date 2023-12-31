@@ -11,7 +11,7 @@ import {
   fetchOldMessages,
   fetchLastFetch,
   selectLastFetchTimestamp,
-} from "../store/newMessagesSlice";
+} from "../store/messagesSlice";
 import HomeScreen from "../screens/HomeScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import MyEventsScreen from "../screens/MyEventsScreen";

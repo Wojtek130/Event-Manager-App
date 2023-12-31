@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { selectLastFetchTimestamp } from "../store/newMessagesSlice";
+import { selectLastFetchTimestamp } from "../store/messagesSlice";
 import axiosInstance from "../utils/axiosInstance";
 
 import { clearUser } from "../store/authSlice";
