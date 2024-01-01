@@ -15,3 +15,4 @@ export const errorColor = "rgb(235, 58, 52)";
 export const serverURL = "127.0.0.1:8000";
 export const baseURL = `http://${serverURL}`;
 export const FETCH_INTERVAL = 10 * 1000;
+export const DEFAULT_DRAWER_LABEL = "600"

@@ -25,7 +25,8 @@ import AnnouncementsStackScreen from "../screens/AnnouncementsStackScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignOutScreen from "../screens/SignOutScreen";
 import LoggedInScreens from "./LoggedInScreens";
-import { FETCH_INTERVAL } from "../utils/constants";
+import { FETCH_INTERVAL, DEFAULT_DRAWER_LABEL } from "../utils/constants";
+import { isEmptyObject } from "../utils/functions";
 
 const Drawer = createDrawerNavigator();
 
@@ -95,7 +96,7 @@ export default function AppRoutes() {
               options={{
                 drawerLabelStyle: {
                   fontWeight:
-                    Object.keys(newMessages).length !== 0 ? "bold" : "normal",
+                    isEmptyObject(newMessages) ? DEFAULT_DRAWER_LABEL : "bold",
                 },
               }}
             />

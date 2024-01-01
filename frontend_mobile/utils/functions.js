@@ -48,3 +48,5 @@ export const mergeArrays = (a1, a2) => {
   }
   return mergedArray;
 };
+
+export const isEmptyObject = (o) => Object.keys(o).length === 0;
