@@ -11,7 +11,7 @@ import datetime
 
 from .constants import DATETIME_FORMAT
 from .models import MyUser, MyEvent, Announcement
-from .serializers import MyUserSerializer, MyEventSerializer
+from .serializers import MyUserSerializer, MyEventSerializer, AnnouncementSerializer
 from .utils import format_datatime_from_db
 
 
@@ -199,6 +199,16 @@ def last_fetch(request):
         user.last_fetch = timestamp_dt
         user.save()
         return JsonResponse({'message': 'Last fetch successfully updated'})
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def message(request):
+    data = {"body" : request.data["body"], "author" : request.user, "event" : request.data["body"]}
+    announcement = AnnouncementSerializer(data=data)
+    if Announcement.is_valid():
+        announcement.save()
+        return Response(announcement.data, status=status.HTTP_201_CREATED)
+    return Response(announcement.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

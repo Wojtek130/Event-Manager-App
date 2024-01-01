@@ -1,10 +1,12 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 import datetime
 import json
 
+
 from .constants import DATETIME_FORMAT
-from .models import MyEvent
+from .models import MyEvent, Announcement
 User = get_user_model()
 
 class MyUserSerializer(serializers.ModelSerializer):
@@ -107,3 +109,20 @@ class MyEventSerializer(serializers.ModelSerializer):
         return instance
         
 
+class AnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Announcement
+        fields = ['body', 'timestamp', 'author', 'event']
+
+    def to_internal_value(self, data):
+        print(data, "to internal value")
+        data["author"] = get_object_or_404(User, username=data["author"])
+        data["event"] = get_object_or_404(MyEvent, pk=data["event"])
+        return super().to_internal_value(data)
+
+    def validate_body(self, data):
+        print(data, "validate body")
+        if not isinstance(data, str) or not data:
+            raise serializers.ValidationError("Body must be a non empty string")
+        return data
+    
