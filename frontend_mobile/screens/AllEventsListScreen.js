@@ -18,7 +18,6 @@ const AllEventsScreen = ({ navigation, route }) => {
   const [eventsDisplayed, setEventsDisplayed] = useState([]);
   const [searchFilters, setSearchFilters] = useState(initialFilters);
   const successMessage = route.params?.successMessage;
-  console.log("ciao", route.params?.successMessage);
 
   const handleFiltersChange = (field, value) => {
     setSearchFilters({
@@ -54,10 +53,8 @@ const AllEventsScreen = ({ navigation, route }) => {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get("/events");
-        console.log(response.data.events, "aaa");
         setEvents(response.data.events);
         setEventsDisplayed(response.data.events);
-        console.log(response.data.events, "initial!");
       } catch (error) {
         setErrorMessage(error.message);
       }

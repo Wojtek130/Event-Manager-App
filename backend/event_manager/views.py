@@ -164,9 +164,9 @@ def get_announcements(a_type, timestamp, user):
     for e in events:
         announcements = None
         if a_type == "new":
-            announcements = Announcement.objects.filter(timestamp__gt=timestamp_dt, event=e.id, author=user).values()
+            announcements = Announcement.objects.filter(timestamp__gt=timestamp_dt, event=e.id).values()
         elif a_type == "old":
-            announcements = Announcement.objects.filter(timestamp__lt=timestamp_dt, event=e.id, author=user.id).values()
+            announcements = Announcement.objects.filter(timestamp__lt=timestamp_dt, event=e.id).values()
         if len(announcements) > 0:
             announcements = [{k: v.strftime(DATETIME_FORMAT) if k == "timestamp" else v for k, v in a.items()} for a in announcements]
             all_a[e.id] = announcements
@@ -177,6 +177,7 @@ def get_announcements(a_type, timestamp, user):
 def old_announcements(request, timestamp):
     user = get_object_or_404(MyUser, username=request.user)
     a = get_announcements("old", timestamp, user)
+    print(a, "back old")
     return JsonResponse(data={"announcements" : a})
 
 @api_view(['GET'])
@@ -184,6 +185,7 @@ def old_announcements(request, timestamp):
 def new_announcements(request, timestamp):
     user = get_object_or_404(MyUser, username=request.user)
     a = get_announcements("new", timestamp, user)
+    print(a, "back new")
     return JsonResponse(data={"announcements" : a})
 
 @api_view(['GET', 'POST'])
@@ -203,9 +205,11 @@ def last_fetch(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def message(request):
-    data = {"body" : request.data["body"], "author" : request.user, "event" : request.data["body"]}
+    data = {"body" : request.data["body"], "author" : request.user.pk, "event" : request.data["event"]}
+    print(data, "!!!!!!!!!!!!!!!!!!!!!!!!")
+    # return JsonResponse({'message': 'Last fetch successfully updated'})
     announcement = AnnouncementSerializer(data=data)
-    if Announcement.is_valid():
+    if announcement.is_valid():
         announcement.save()
         return Response(announcement.data, status=status.HTTP_201_CREATED)
     return Response(announcement.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -116,8 +116,8 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         print(data, "to internal value")
-        data["author"] = get_object_or_404(User, username=data["author"])
-        data["event"] = get_object_or_404(MyEvent, pk=data["event"])
+        # data["author"] = get_object_or_404(User, username=data["author"])
+        data["event"] = get_object_or_404(MyEvent, pk=data["event"]).pk
         return super().to_internal_value(data)
 
     def validate_body(self, data):
