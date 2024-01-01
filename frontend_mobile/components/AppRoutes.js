@@ -11,6 +11,7 @@ import {
   fetchOldMessages,
   fetchLastFetch,
   selectLastFetchTimestamp,
+  selectNewMessages,
 } from "../store/messagesSlice";
 import HomeScreen from "../screens/HomeScreen";
 import RegisterScreen from "../screens/RegisterScreen";
@@ -31,6 +32,7 @@ const Drawer = createDrawerNavigator();
 export default function AppRoutes() {
   const user = useSelector(selectUser);
   const at = useSelector(selectAuthTokens);
+  const newMessages = useSelector(selectNewMessages);
   const lft = useDispatch(selectLastFetchTimestamp);
   const dispatch = useDispatch();
 
@@ -90,6 +92,12 @@ export default function AppRoutes() {
             <Drawer.Screen
               name="Announcements"
               component={AnnouncementsStackScreen}
+              options={{
+                drawerLabelStyle: {
+                  fontWeight:
+                    Object.keys(newMessages).length !== 0 ? "bold" : "normal",
+                },
+              }}
             />
             <Drawer.Screen name="Sign Out" component={SignOutScreen} />
           </>
