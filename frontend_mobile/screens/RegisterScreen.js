@@ -125,7 +125,7 @@ const RegisterScreen = function ({ navigation }) {
           onChangeText={(text) => handleChange(item, text)}
         />
       ))}
-      <View style={styles.horizontalInputsContainer}>
+      <View style={globalStyles.containerHorizontal}>
         <TextInput
           placeholder="Other Social Media"
           value={formData.otherSocialMedia}
@@ -145,9 +145,5 @@ const RegisterScreen = function ({ navigation }) {
   );
 };
 
-const styles = StyleSheet.create({
-  horizontalInputsContainer: {
-    flexDirection: "row",
-  },
-});
+
 export default RegisterScreen;

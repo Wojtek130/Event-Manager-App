@@ -103,7 +103,7 @@ const MyProfileScreen = function ({ navigation }) {
       ) : (
         <>
           {SOCIAL_MEDIA_PLATFORMS.map((item, index) => (
-            <View key={item} style={styles.horizontalInputsContainer}>
+            <View key={item} style={globalStyles.containerHorizontal}>
               <Text>{SOCIAL_MEDIA_PLATFORMS_NAMES[item]}: </Text>
               <TextInput
                 // placeholder={SOCIAL_MEDIA_PLATFORMS_NAMES[item]}
@@ -112,7 +112,7 @@ const MyProfileScreen = function ({ navigation }) {
               />
             </View>
           ))}
-          <View style={styles.horizontalInputsContainer}>
+          <View style={globalStyles.containerHorizontal}>
             <TextInput
               placeholder={
                 !otherSocialMedia[0]
@@ -147,9 +147,5 @@ const MyProfileScreen = function ({ navigation }) {
     </View>
   );
 };
-const styles = StyleSheet.create({
-  horizontalInputsContainer: {
-    flexDirection: "row",
-  },
-});
+
 export default MyProfileScreen;
