@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, StyleSheet } from "react-native";
+import { View, Text, } from "react-native";
 import axios from "axios";
 
 import {
@@ -7,6 +7,7 @@ import {
   SOCIAL_MEDIA_PLATFORMS_NAMES,
 } from "../utils/constants";
 import MyButton from "../components/MyButton";
+import MyTextInput from "../components/MyTextInput";
 import { globalStyles } from "../utils/stylesConstants";
 
 const RegisterScreen = function ({ navigation }) {
@@ -101,37 +102,37 @@ const RegisterScreen = function ({ navigation }) {
 
   return (
     <View style={globalStyles.screen}>
-      <TextInput
+      <MyTextInput
         placeholder="Username"
         value={formData.username}
         onChangeText={(text) => handleChange("username", text)}
       />
-      <TextInput
+      <MyTextInput
         placeholder="Password"
         secureTextEntry
         value={formData.password}
         onChangeText={(text) => handleChange("password", text)}
       />
-      <TextInput
+      <MyTextInput
         placeholder="Confirm Password"
         secureTextEntry
         value={formData.confirmedPassword}
         onChangeText={(text) => handleChange("confirmedPassword", text)}
       />
       {SOCIAL_MEDIA_PLATFORMS.map((item, index) => (
-        <TextInput
+        <MyTextInput
           placeholder={SOCIAL_MEDIA_PLATFORMS_NAMES[item]}
           value={formData[item]}
           onChangeText={(text) => handleChange(item, text)}
         />
       ))}
       <View style={globalStyles.containerHorizontal}>
-        <TextInput
+        <MyTextInput
           placeholder="Other Social Media"
           value={formData.otherSocialMedia}
           onChangeText={(text) => handleChange("otherSocialMedia", text)}
         />
-        <TextInput
+        <MyTextInput
           placeholder="Other Social Media Username"
           value={formData.otherSocialMediaUsername}
           onChangeText={(text) =>

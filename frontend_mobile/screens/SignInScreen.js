@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { View, TextInput, Text } from "react-native";
+import { View, Text } from "react-native";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 import { setUser } from "../store/authSlice";
 import MyButton from "../components/MyButton";
+import MyTextInput from "../components/MyTextInput";
 import { globalStyles } from "../utils/stylesConstants";
 
 const SignInScreen = function ({ navigation }) {
@@ -53,12 +54,12 @@ const SignInScreen = function ({ navigation }) {
 
   return (
     <View style={globalStyles.screen}>
-      <TextInput
+      <MyTextInput
         placeholder="Username"
         value={username}
         onChangeText={(text) => setUsername(text)}
       />
-      <TextInput
+      <MyTextInput
         placeholder="Password"
         secureTextEntry
         value={password}

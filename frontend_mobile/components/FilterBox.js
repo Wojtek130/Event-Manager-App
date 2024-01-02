@@ -1,12 +1,14 @@
-import { TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import MySwitch from "./MySwitch";
 import MyButton from "./MyButton";
+import MyTextInput from "./MyTextInput";
+import { globalStyles } from "../utils/stylesConstants";
 
 const FilterBox = (props) => {
   return (
-    <View>
-      <TextInput
+    <View style={[globalStyles.containerHorizontal, globalStyles.containerCentered, styles.container]}>
+      <MyTextInput
         placeholder="Event Name"
         label="Name"
         defaultValue={props.eventNameSubstringValue}
@@ -33,5 +35,11 @@ const FilterBox = (props) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+
+  },
+});
 
 export default FilterBox;

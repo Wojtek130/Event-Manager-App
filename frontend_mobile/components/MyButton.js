@@ -1,6 +1,8 @@
 import { Pressable, Text, StyleSheet } from "react-native";
 import { orangePrimary } from "../utils/stylesConstants";
 
+import { borderRadius, margin, padding } from "../utils/stylesConstants";
+
 const MyButton = (props) => {
   return (
     <Pressable style={styles.button} onPress={props.onPress}>
@@ -11,13 +13,14 @@ const MyButton = (props) => {
 
 const styles = StyleSheet.create({
   button: {
-    padding: 15,
-    borderRadius: 15,
+    margin: margin,
+    padding: padding,
+    borderRadius: borderRadius,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: orangePrimary,
     textTransform: "uppercase",
-    width: "30%",
+    // width: "30%",
   },
   text: {
     color: "white",

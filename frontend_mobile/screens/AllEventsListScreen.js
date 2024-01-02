@@ -86,6 +86,7 @@ const AllEventsScreen = ({ navigation, route }) => {
             <Text>{item.name}</Text>
           </TouchableOpacity>
         )}
+        style={[globalStyles.mainChildren]}
       />
       <ErrorMessage errorMessage={errorMessage} />
     </View>

@@ -1,5 +1,7 @@
 import { TextInput } from "react-native";
 
+import { globalStyles } from "../utils/stylesConstants";
+
 const LongTextInput = (props) => {
   return (
     <TextInput
@@ -9,6 +11,7 @@ const LongTextInput = (props) => {
       multiline
       numberOfLines={4}
       mode="outlined"
+      style={globalStyles.input}
     />
   );
 };

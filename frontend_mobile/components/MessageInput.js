@@ -1,4 +1,4 @@
-import { View, TextInput, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { useState } from "react";
 
 import axiosInstance from "../utils/axiosInstance";
@@ -6,6 +6,7 @@ import ErrorMessage from "./ErrorMessage";
 import { printSuccessMessage } from "../utils/functions";
 import SuccessMessage from "./SuccessMessage";
 import MyButton from "./MyButton";
+import MyTextInput from "./MyTextInput";
 
 const MessageInput = (props) => {
   const [message, setMessage] = useState("");
@@ -42,7 +43,7 @@ const MessageInput = (props) => {
   return (
     <>
       <View>
-        <TextInput
+        <MyTextInput
           placeholder="Type message..."
           value={message}
           onChangeText={(inputText) => setMessage(inputText)}

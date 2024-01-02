@@ -1,5 +1,7 @@
 import { TextInput, View, Text, StyleSheet } from "react-native";
+
 import { TIME_FORMAT, DATE_FORMAT } from "../utils/constants";
+import { globalStyles } from "../utils/stylesConstants";
 
 const DateTimeInput = (props) => {
   const format = props.type === "date" ? DATE_FORMAT : TIME_FORMAT;
@@ -18,6 +20,7 @@ const DateTimeInput = (props) => {
         maxLength={maxLength}
         value={props.value}
         onChangeText={props.callback}
+        style={[globalStyles.input]}
       />
     </View>
   );

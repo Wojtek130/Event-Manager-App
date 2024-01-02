@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, Button, TextInput } from "react-native";
+import { ScrollView } from "react-native";
 import { useSelector } from "react-redux";
 
 import { selectUser } from "../store/authSlice";
@@ -10,6 +10,7 @@ import MySwitch from "./MySwitch";
 import MyMultiSelect from "./MyMultiSelect";
 import ErrorMessage from "./ErrorMessage";
 import SuccessMessage from "./SuccessMessage";
+import MyTextInput from "./MyTextInput";
 import { printSuccessMessage } from "../utils/functions";
 
 import {
@@ -18,6 +19,7 @@ import {
   DATE_REGEX,
   TIME_REGEX,
 } from "../utils/constants";
+import MyButton from "./MyButton";
 
 const EventForm = (props) => {
   const user = useSelector(selectUser);
@@ -202,7 +204,7 @@ const EventForm = (props) => {
 
   return (
     <ScrollView>
-      <TextInput
+      <MyTextInput
         placeholder="Event Name"
         label="Name"
         value={formData.name}
@@ -267,7 +269,7 @@ const EventForm = (props) => {
           text={"Pick Participants"}
         />
       )}
-      <Button title="submit" onPress={handleSubmit} />
+      <MyButton title="submit" onPress={handleSubmit} />
       <ErrorMessage errorMessage={errorMessage} />
       <SuccessMessage successMessage={successMessage} />
     </ScrollView>
