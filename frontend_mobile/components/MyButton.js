@@ -1,5 +1,5 @@
 import { Pressable, Text, StyleSheet } from "react-native";
-import { orangePrimary } from "../utils/globalStyles";
+import { orangePrimary } from "../utils/stylesConstants";
 
 const MyButton = (props) => {
   return (

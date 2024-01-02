@@ -7,6 +7,7 @@ import {
   SOCIAL_MEDIA_PLATFORMS_NAMES,
 } from "../utils/constants";
 import MyButton from "../components/MyButton";
+import { globalStyles } from "../utils/stylesConstants";
 
 const RegisterScreen = function ({ navigation }) {
   const initialSocialMedia = SOCIAL_MEDIA_PLATFORMS.reduce((acc, key) => {
@@ -99,7 +100,7 @@ const RegisterScreen = function ({ navigation }) {
   };
 
   return (
-    <View>
+    <View style={globalStyles.screen}>
       <TextInput
         placeholder="Username"
         value={formData.username}

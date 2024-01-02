@@ -4,9 +4,9 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-
 import { setUser } from "../store/authSlice";
 import MyButton from "../components/MyButton";
+import { globalStyles } from "../utils/stylesConstants";
 
 const SignInScreen = function ({ navigation }) {
   const dispatch = useDispatch();
@@ -52,7 +52,7 @@ const SignInScreen = function ({ navigation }) {
   };
 
   return (
-    <View>
+    <View style={globalStyles.screen}>
       <TextInput
         placeholder="Username"
         value={username}

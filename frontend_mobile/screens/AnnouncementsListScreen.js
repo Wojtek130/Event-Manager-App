@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { View, Text, FlatList } from "react-native";
+import { useSelector } from "react-redux";
 
 import ErrorMessage from "../components/ErrorMessage";
 import axiosInstance from "../utils/axiosInstance";
 import ChatHeader from "../components/ChatHeader";
 import { selectNewMessages, selectOldMessages } from "../store/messagesSlice";
+import { globalStyles } from "../utils/stylesConstants";
 
 const AnnouncementsListScreen = ({ navigation }) => {
   const [events, setEvents] = useState([]);
@@ -35,7 +36,7 @@ const AnnouncementsListScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <>
+    <View style={globalStyles.screen}>
       <Text>Announcements Screen:</Text>
       <FlatList
         data={events}
@@ -53,7 +54,7 @@ const AnnouncementsListScreen = ({ navigation }) => {
         }}
       />
       <ErrorMessage errorMessage={errorMessage} />
-    </>
+    </View>
   );
 };
 

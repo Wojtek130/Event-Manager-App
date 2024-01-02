@@ -8,6 +8,7 @@ import ActionButtons from "../components/ActionButtons";
 import DetailsItem from "../components/DetailsItem";
 import ErrorMessage from "../components/ErrorMessage";
 import { transformEventData } from "../utils/functions";
+import { globalStyles } from "../utils/stylesConstants";
 
 const EventDetailsScreen = function ({ route, navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
@@ -125,7 +126,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   };
 
   return (
-    <>
+    <View style={globalStyles.screen}>
       <Text>Event {eventId} Details</Text>
       <ActionButtons
         amOrganizer={route.params.am_organizer}
@@ -170,7 +171,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         );
       })}
       <ErrorMessage errorMessage={errorMessage} />
-    </>
+    </View>
   );
 };
 

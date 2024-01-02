@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { View, FlatList} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
 import Message from "../components/Message";
@@ -11,6 +11,7 @@ import {
   setRead,
 } from "../store/messagesSlice";
 import { mergeArrays } from "../utils/functions";
+import { globalStyles } from "../utils/stylesConstants";
 
 const AnnouncementsChatScreen = ({ route }) => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const AnnouncementsChatScreen = ({ route }) => {
   }, [newMessages, oldMessages]);
 
   return (
-    <View>
+    <View style={globalStyles.screen}>
       <FlatList
         data={allMessages}
         keyExtractor={(item) => item.id}

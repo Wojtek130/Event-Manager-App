@@ -10,6 +10,7 @@ import {
 } from "../utils/constants";
 import SocialMediaInfo from "../components/SocialMediaInfo";
 import MyButton from "../components/MyButton";
+import { globalStyles } from "../utils/stylesConstants";
 
 const MyProfileScreen = function ({ navigation }) {
   const user = useSelector(selectUser);
@@ -89,7 +90,7 @@ const MyProfileScreen = function ({ navigation }) {
     fetchUserData();
   }, []);
   return (
-    <>
+    <View style={globalStyles.screen}>
       {!editMode ? (
         <>
           <SocialMediaInfo
@@ -143,7 +144,7 @@ const MyProfileScreen = function ({ navigation }) {
           <Text>{errorMessage}</Text>
         </>
       )}
-    </>
+    </View>
   );
 };
 const styles = StyleSheet.create({

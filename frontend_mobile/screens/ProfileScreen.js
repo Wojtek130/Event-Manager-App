@@ -1,10 +1,11 @@
-import { Text } from "react-native";
+import { View } from "react-native";
 import { useState, useEffect } from "react";
 
 import SocialMediaInfo from "../components/SocialMediaInfo";
 import ErrorMessage from "../components/ErrorMessage";
 import { SOCIAL_MEDIA_PLATFORMS } from "../utils/constants";
 import axiosInstance from "../utils/axiosInstance";
+import { globalStyles } from "../utils/stylesConstants";
 
 const ProfileScreen = ({ route }) => {
   const user = route.params.user;
@@ -34,14 +35,14 @@ const ProfileScreen = ({ route }) => {
   }, []);
 
   return (
-    <>
+    <View style={globalStyles.screen}>
       <SocialMediaInfo
         user={user}
         userData={userData}
         otherSocialMedia={otherSocialMedia}
       />
       <ErrorMessage errorMessage={errorMessage} />
-    </>
+    </View>
   );
 };
 

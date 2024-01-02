@@ -1,10 +1,11 @@
-import { FlatList, TouchableOpacity, Text } from "react-native";
+import { FlatList, TouchableOpacity, Text, View } from "react-native";
 import { useState, useEffect } from "react";
 
 import FilterBox from "../components/FilterBox";
 import axiosInstance from "../utils/axiosInstance";
 import ErrorMessage from "../components/ErrorMessage";
 import SuccessMessage from "../components/SuccessMessage";
+import { globalStyles } from "../utils/stylesConstants";
 
 const AllEventsScreen = ({ navigation, route }) => {
   const initialFilters = {
@@ -67,7 +68,7 @@ const AllEventsScreen = ({ navigation, route }) => {
   };
 
   return (
-    <>
+    <View style={globalStyles.screen}>
       <SuccessMessage successMessage={successMessage} />
       <FilterBox
         setSearchFiltersCallback={setSearchFilters}
@@ -87,7 +88,7 @@ const AllEventsScreen = ({ navigation, route }) => {
         )}
       />
       <ErrorMessage errorMessage={errorMessage} />
-    </>
+    </View>
   );
 };
 
