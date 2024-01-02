@@ -15,16 +15,12 @@ import {
 } from "../store/messagesSlice";
 import HomeScreen from "../screens/HomeScreen";
 import RegisterScreen from "../screens/RegisterScreen";
-import MyEventsScreen from "../screens/MyEventsScreen";
-// import AllEventsScreen from "../screens/AllEventsScreen";
 import AllEventsStackScreen from "../screens/AllEventsStackScreen";
 import MyProfileScreen from "../screens/MyProfileScreen";
 import CreateEventScreen from "../screens/CreateEventScreen";
-import AnnouncementsListScreen from "../screens/AnnouncementsListScreen";
 import AnnouncementsStackScreen from "../screens/AnnouncementsStackScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignOutScreen from "../screens/SignOutScreen";
-import LoggedInScreens from "./LoggedInScreens";
 import { FETCH_INTERVAL, DEFAULT_DRAWER_LABEL } from "../utils/constants";
 import { isEmptyObject } from "../utils/functions";
 
@@ -86,8 +82,7 @@ export default function AppRoutes() {
         <Drawer.Screen name="Home" component={HomeScreen} />
         {user ? (
           <>
-            {/* <Drawer.Screen name="My Events" component={MyEventsScreen} /> */}
-            <Drawer.Screen name="All Events" component={AllEventsStackScreen} />
+            <Drawer.Screen name="Events" component={AllEventsStackScreen} />
             <Drawer.Screen name="My Profile" component={MyProfileScreen} />
             <Drawer.Screen name="Create Event" component={CreateEventScreen} />
             <Drawer.Screen
