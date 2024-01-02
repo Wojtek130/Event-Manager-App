@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Text } from "react-native";
+import { View, TextInput, Text } from "react-native";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import dayjs from "dayjs";
 
 
 import { setUser } from "../store/authSlice";
+import MyButton from "../components/MyButton";
 
 const SignInScreen = function ({ navigation }) {
   const dispatch = useDispatch();
@@ -64,7 +64,7 @@ const SignInScreen = function ({ navigation }) {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
-      <Button title="Log in" onPress={handleLogin} />
+      <MyButton title="Log in" onPress={handleLogin} />
       <Text>{errorMessage}</Text>
     </View>
   );

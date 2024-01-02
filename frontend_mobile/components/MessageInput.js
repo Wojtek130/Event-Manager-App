@@ -1,10 +1,11 @@
-import { View, Button, TextInput, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import { useState } from "react";
 
 import axiosInstance from "../utils/axiosInstance";
 import ErrorMessage from "./ErrorMessage";
 import { printSuccessMessage } from "../utils/functions";
 import SuccessMessage from "./SuccessMessage";
+import MyButton from "./MyButton";
 
 const MessageInput = (props) => {
   const [message, setMessage] = useState("");
@@ -48,7 +49,7 @@ const MessageInput = (props) => {
           onSubmitEditing={handleInputSubmit}
           returnKeyType="done"
         />
-        <Button title="Submit" onPress={handleInputSubmit} />
+        <MyButton title="Submit" onPress={handleInputSubmit} />
       </View>
       <ErrorMessage errorMessage={errorMessage} />
       <SuccessMessage successMessage={successMessage} />

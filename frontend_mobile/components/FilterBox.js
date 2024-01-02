@@ -1,6 +1,7 @@
-import { TextInput, View, Button } from "react-native";
+import { TextInput, View } from "react-native";
 
 import MySwitch from "./MySwitch";
+import MyButton from "./MyButton";
 
 const FilterBox = (props) => {
   return (
@@ -28,7 +29,7 @@ const FilterBox = (props) => {
           props.handleFiltersChangeCallback("amParticipant", value);
         }}
       />
-      <Button title="search" onPress={props.handleApplyFiltersCallback} />
+      <MyButton title="search" onPress={props.handleApplyFiltersCallback} />
     </View>
   );
 };

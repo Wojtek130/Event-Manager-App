@@ -1,18 +1,20 @@
-import { View, Button, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+
+import MyButton from "./MyButton";
 
 const ActionButtons = (props) => {
   return (
     <View>
     {props.amOrganizer ? (
       <>
-        <Button title="edit" onPress={props.handleEdit} />
-        <Button title="delete" onPress={props.handleDelete} />
+        <MyButton title="edit" onPress={props.handleEdit} />
+        <MyButton title="delete" onPress={props.handleDelete} />
       </>
     ) : 
     props.amParticipant ? (
-      <Button title="leave" onPress={props.handleLeave} />
+      <MyButton title="leave" onPress={props.handleLeave} />
     ) : (
-      <Button title="join" onPress={props.handleJoin} />
+      <MyButton title="join" onPress={props.handleJoin} />
     )}
   </View>
   );

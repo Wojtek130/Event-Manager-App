@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import { Text, StyleSheet, Button, View, TextInput } from "react-native";
+import { Text, StyleSheet, View, TextInput } from "react-native";
 import { useSelector } from "react-redux";
-
 import { selectUser } from "../store/authSlice";
+
 import axiosInstance from "../utils/axiosInstance";
 import {
   SOCIAL_MEDIA_PLATFORMS,
   SOCIAL_MEDIA_PLATFORMS_NAMES,
 } from "../utils/constants";
 import SocialMediaInfo from "../components/SocialMediaInfo";
+import MyButton from "../components/MyButton";
 
 const MyProfileScreen = function ({ navigation }) {
   const user = useSelector(selectUser);
@@ -96,7 +97,7 @@ const MyProfileScreen = function ({ navigation }) {
             userData={userData}
             otherSocialMedia={otherSocialMedia}
           />
-          {userData && <Button title="edit profile" onPress={handleEdit} />}
+          {userData && <MyButton title="edit profile" onPress={handleEdit} />}
         </>
       ) : (
         <>
@@ -138,7 +139,7 @@ const MyProfileScreen = function ({ navigation }) {
               }
             />
           </View>
-          <Button title="save changes" onPress={handleSave} />
+          <MyButton title="save changes" onPress={handleSave} />
           <Text>{errorMessage}</Text>
         </>
       )}

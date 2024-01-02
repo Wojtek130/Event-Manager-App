@@ -95,8 +95,9 @@ export default function AppRoutes() {
               component={AnnouncementsStackScreen}
               options={{
                 drawerLabelStyle: {
-                  fontWeight:
-                    isEmptyObject(newMessages) ? DEFAULT_DRAWER_LABEL : "bold",
+                  fontWeight: isEmptyObject(newMessages)
+                    ? DEFAULT_DRAWER_LABEL
+                    : "bold",
                 },
               }}
             />

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Text, StyleSheet } from "react-native";
+import { View, TextInput, Text, StyleSheet } from "react-native";
 import axios from "axios";
 
 import {
   SOCIAL_MEDIA_PLATFORMS,
   SOCIAL_MEDIA_PLATFORMS_NAMES,
 } from "../utils/constants";
+import MyButton from "../components/MyButton";
 
 const RegisterScreen = function ({ navigation }) {
   const initialSocialMedia = SOCIAL_MEDIA_PLATFORMS.reduce((acc, key) => {
@@ -137,7 +138,7 @@ const RegisterScreen = function ({ navigation }) {
           }
         />
       </View>
-      <Button title="Register" onPress={handleRegister} />
+      <MyButton title="Register" onPress={handleRegister} />
       <Text>{errorMessage}</Text>
     </View>
   );

@@ -86,7 +86,6 @@ const messagesSlice = createSlice({
           action.payload?.announcements
         );
       }
-      console.log(action.payload?.announcements, "has been set");
       state.lastFetchTimestamp = Date.now() / 1000;
     });
     builder.addCase(fetchNewMessages.pending, (state) => {
