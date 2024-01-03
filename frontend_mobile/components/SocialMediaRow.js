@@ -8,22 +8,21 @@ const SocialMediaRow = (props) => {
       style={[
         globalStyles.containerHorizontal,
         globalStyles.containerCentered,
-        styles.container,
+        globalStyles.labelValuecontainer,
       ]}
       key={props.key}
     >
-      <Text style={globalStyles.input}>{props.valueLabel}</Text>
-      <Text style={globalStyles.input}>{props.value}</Text>
+      <Text style={[globalStyles.input, globalStyles.textLabel]}>
+        {props.valueLabel}
+      </Text>
+      <Text style={[globalStyles.input, globalStyles.textValue]}>{props.value}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: "strech",
-    justifyContent: "space-between",
-    width : width50Per,
-  },
+
+
 });
 
 export default SocialMediaRow;

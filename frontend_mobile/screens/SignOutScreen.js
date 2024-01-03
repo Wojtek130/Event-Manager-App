@@ -26,7 +26,7 @@ const SignOutScreen = function ({ navigation }) {
   };
   return (
     <View style={globalStyles.screen}>
-      <Text>Sign Out</Text>
+      <Text style={globalStyles.input}>Sign Out</Text>
     </View>
   );
 };

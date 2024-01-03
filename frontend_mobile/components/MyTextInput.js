@@ -11,7 +11,7 @@ const MyTextInput = (props) => {
       value={props.value}
       onChangeText={props.onChangeText}
       mode="outlined"
-      style={[globalStyles.input]}
+      style={[globalStyles.input, props.style]}
     />
   );
 };

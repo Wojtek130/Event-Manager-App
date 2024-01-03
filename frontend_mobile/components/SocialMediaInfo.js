@@ -8,9 +8,6 @@ import SocialMediaRow from "./SocialMediaRow";
 import { globalStyles } from "../utils/stylesConstants";
 
 const SocialMediaInfo = (props) => {
-  console.log("sci", props.userData);
-  console.log("sci", props.otherSocialMedia);
-
   return (
     <>
       <Text style={globalStyles.input}>Hello {props.user}!</Text>

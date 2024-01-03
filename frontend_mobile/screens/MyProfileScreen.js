@@ -103,17 +103,32 @@ const MyProfileScreen = function ({ navigation }) {
         </>
       ) : (
         <>
+      <Text style={globalStyles.input}>Edit your profile</Text>
           {SOCIAL_MEDIA_PLATFORMS.map((item, index) => (
-            <View key={item} style={globalStyles.containerHorizontal}>
-              <Text style={globalStyles.input}>{SOCIAL_MEDIA_PLATFORMS_NAMES[item]}: </Text>
+            <View
+              key={item}
+              style={[
+                globalStyles.containerHorizontal,
+                globalStyles.labelValuecontainer,
+              ]}
+            >
+              <Text style={[globalStyles.input, globalStyles.textLabel]}>
+                {SOCIAL_MEDIA_PLATFORMS_NAMES[item]}{" "}
+              </Text>
               <MyTextInput
                 // placeholder={SOCIAL_MEDIA_PLATFORMS_NAMES[item]}
                 defaultValue={userData.social_media[item]}
                 onChangeText={(text) => handleChange(item, text)}
+                style={globalStyles.textValue}
               />
             </View>
           ))}
-          <View style={globalStyles.containerHorizontal}>
+          <View
+            style={[
+              globalStyles.containerHorizontal,
+              globalStyles.labelValuecontainer,
+            ]}
+          >
             <MyTextInput
               placeholder={
                 !otherSocialMedia[0]
@@ -126,6 +141,7 @@ const MyProfileScreen = function ({ navigation }) {
                   return [text, prevState[1]];
                 })
               }
+              style={globalStyles.textLabel}
             />
             <MyTextInput
               placeholder={
@@ -139,6 +155,7 @@ const MyProfileScreen = function ({ navigation }) {
                   return [prevState[0], text];
                 })
               }
+              style={globalStyles.textValue}
             />
           </View>
           <MyButton title="save changes" onPress={handleSave} />

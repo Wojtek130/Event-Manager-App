@@ -48,4 +48,16 @@ export const globalStyles = StyleSheet.create({
     },
     headerTintColor: "white",
   },
+  textLabel: {
+    width: "30%",
+    textAlign: "center",
+  },
+  textValue: {
+    width: "30%",
+  },
+  labelValuecontainer: {
+    alignItems: "strech",
+    justifyContent: "space-evenly",
+    width: width50Per,
+  },
 });
