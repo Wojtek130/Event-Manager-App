@@ -1,4 +1,4 @@
-import { FlatList, TouchableOpacity, Text, View } from "react-native";
+import { FlatList, View } from "react-native";
 import { useState, useEffect } from "react";
 
 import FilterBox from "../components/FilterBox";
@@ -6,6 +6,7 @@ import axiosInstance from "../utils/axiosInstance";
 import ErrorMessage from "../components/ErrorMessage";
 import SuccessMessage from "../components/SuccessMessage";
 import ListItem from "../components/ListItem";
+import MyFlatList from "../components/MyFlatList.js";
 import { globalStyles } from "../utils/stylesConstants";
 
 const AllEventsScreen = ({ navigation, route }) => {
@@ -79,9 +80,8 @@ const AllEventsScreen = ({ navigation, route }) => {
         handleFiltersChangeCallback={handleFiltersChange}
         handleApplyFiltersCallback={handleApplyFilters}
       />
-      <FlatList
+      <MyFlatList
         data={eventsDisplayed}
-        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ListItem
             item={item}
@@ -89,7 +89,6 @@ const AllEventsScreen = ({ navigation, route }) => {
             isChatHeader={false}
           />
         )}
-        style={[globalStyles.mainChildren]}
       />
       <ErrorMessage errorMessage={errorMessage} />
     </View>

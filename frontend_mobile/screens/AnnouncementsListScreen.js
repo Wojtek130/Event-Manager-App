@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import ErrorMessage from "../components/ErrorMessage";
 import axiosInstance from "../utils/axiosInstance";
 import ListItem from "../components/ListItem";
+import MyFlatList from "../components/MyFlatList";
 import { selectNewMessages, selectOldMessages } from "../store/messagesSlice";
 import { globalStyles } from "../utils/stylesConstants";
 
@@ -40,9 +41,8 @@ const AnnouncementsListScreen = ({ navigation }) => {
   return (
     <View style={globalStyles.screen}>
       <Text>Announcements Screen:</Text>
-      <FlatList
+      <MyFlatList
         data={events}
-        keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
           if (item.am_organizer || item.am_participant) {
             return (
