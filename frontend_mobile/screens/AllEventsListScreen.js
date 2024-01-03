@@ -5,6 +5,7 @@ import FilterBox from "../components/FilterBox";
 import axiosInstance from "../utils/axiosInstance";
 import ErrorMessage from "../components/ErrorMessage";
 import SuccessMessage from "../components/SuccessMessage";
+import ListItem from "../components/ListItem";
 import { globalStyles } from "../utils/stylesConstants";
 
 const AllEventsScreen = ({ navigation, route }) => {
@@ -82,9 +83,11 @@ const AllEventsScreen = ({ navigation, route }) => {
         data={eventsDisplayed}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleEventPress(item)}>
-            <Text>{item.name}</Text>
-          </TouchableOpacity>
+          <ListItem
+            item={item}
+            onPress={() => handleEventPress(item)}
+            isChatHeader={false}
+          />
         )}
         style={[globalStyles.mainChildren]}
       />

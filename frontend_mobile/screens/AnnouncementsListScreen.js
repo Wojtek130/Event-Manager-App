@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 import ErrorMessage from "../components/ErrorMessage";
 import axiosInstance from "../utils/axiosInstance";
-import ChatHeader from "../components/ChatHeader";
+import ListItem from "../components/ListItem";
 import { selectNewMessages, selectOldMessages } from "../store/messagesSlice";
 import { globalStyles } from "../utils/stylesConstants";
 
@@ -46,11 +46,14 @@ const AnnouncementsListScreen = ({ navigation }) => {
         renderItem={({ item }) => {
           if (item.am_organizer || item.am_participant) {
             return (
-              <ChatHeader
+              <ListItem
                 item={item}
-                navigation={navigation}
-                unreadMessagesAvailable={unreadMessagesAvailable(item, newMessages)}
+                unreadMessagesAvailable={unreadMessagesAvailable(
+                  item,
+                  newMessages
+                )}
                 onPress={() => handleEventPress(item)}
+                isChatHeader={true}
               />
             );
           }

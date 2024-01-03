@@ -3,11 +3,17 @@ import { StyleSheet, View } from "react-native";
 import MySwitch from "./MySwitch";
 import MyButton from "./MyButton";
 import MyTextInput from "./MyTextInput";
-import { globalStyles } from "../utils/stylesConstants";
+import { globalStyles, margin, borderRadius, padding} from "../utils/stylesConstants";
 
 const FilterBox = (props) => {
   return (
-    <View style={[globalStyles.containerHorizontal, globalStyles.containerCentered, styles.container]}>
+    <View
+      style={[
+        globalStyles.containerHorizontal,
+        globalStyles.containerCentered,
+        styles.container,
+      ]}
+    >
       <MyTextInput
         placeholder="Event Name"
         label="Name"
@@ -38,7 +44,11 @@ const FilterBox = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-
+    borderColor: "white",
+    borderWidth: 2,
+    padding: 3,
+    margin: margin,
+    borderRadius: borderRadius,
   },
 });
 
