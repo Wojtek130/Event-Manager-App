@@ -8,6 +8,7 @@ export const orangePrimary = "rgb(222, 129, 33)";
 export const margin = 5;
 export const padding = 15;
 export const borderRadius = 15;
+export const width50Per = "50%";
 
 export const globalStyles = StyleSheet.create({
   screen: {

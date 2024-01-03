@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Text, StyleSheet, View, TextInput } from "react-native";
+import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/authSlice";
 
@@ -10,6 +10,7 @@ import {
 } from "../utils/constants";
 import SocialMediaInfo from "../components/SocialMediaInfo";
 import MyButton from "../components/MyButton";
+import MyTextInput from "../components/MyTextInput";
 import { globalStyles } from "../utils/stylesConstants";
 
 const MyProfileScreen = function ({ navigation }) {
@@ -104,8 +105,8 @@ const MyProfileScreen = function ({ navigation }) {
         <>
           {SOCIAL_MEDIA_PLATFORMS.map((item, index) => (
             <View key={item} style={globalStyles.containerHorizontal}>
-              <Text>{SOCIAL_MEDIA_PLATFORMS_NAMES[item]}: </Text>
-              <TextInput
+              <Text style={globalStyles.input}>{SOCIAL_MEDIA_PLATFORMS_NAMES[item]}: </Text>
+              <MyTextInput
                 // placeholder={SOCIAL_MEDIA_PLATFORMS_NAMES[item]}
                 defaultValue={userData.social_media[item]}
                 onChangeText={(text) => handleChange(item, text)}
@@ -113,7 +114,7 @@ const MyProfileScreen = function ({ navigation }) {
             </View>
           ))}
           <View style={globalStyles.containerHorizontal}>
-            <TextInput
+            <MyTextInput
               placeholder={
                 !otherSocialMedia[0]
                   ? "Other Social Media"
@@ -126,7 +127,7 @@ const MyProfileScreen = function ({ navigation }) {
                 })
               }
             />
-            <TextInput
+            <MyTextInput
               placeholder={
                 !otherSocialMedia[1]
                   ? "Other Social Media Username"

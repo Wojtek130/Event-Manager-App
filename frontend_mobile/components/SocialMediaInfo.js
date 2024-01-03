@@ -1,8 +1,11 @@
 import { Text } from "react-native";
+
 import {
   SOCIAL_MEDIA_PLATFORMS,
   SOCIAL_MEDIA_PLATFORMS_NAMES,
 } from "../utils/constants";
+import SocialMediaRow from "./SocialMediaRow";
+import { globalStyles } from "../utils/stylesConstants";
 
 const SocialMediaInfo = (props) => {
   console.log("sci", props.userData);
@@ -10,7 +13,7 @@ const SocialMediaInfo = (props) => {
 
   return (
     <>
-      <Text>Hello {props.user}!</Text>
+      <Text style={globalStyles.input}>Hello {props.user}!</Text>
       {props.userData &&
         Object.keys(props.userData.social_media).map((key) => {
           if (
@@ -18,19 +21,23 @@ const SocialMediaInfo = (props) => {
             props.userData.social_media[key]
           ) {
             return (
-              <Text key={key}>
-                {SOCIAL_MEDIA_PLATFORMS_NAMES[key]
-                  ? SOCIAL_MEDIA_PLATFORMS_NAMES[key]
-                  : key}
-                {""}: {props.userData.social_media[key]}
-              </Text>
+              <SocialMediaRow
+                key={key}
+                valueLabel={
+                  SOCIAL_MEDIA_PLATFORMS_NAMES[key]
+                    ? SOCIAL_MEDIA_PLATFORMS_NAMES[key]
+                    : key
+                }
+                value={props.userData.social_media[key]}
+              />
             );
           }
         })}
       {props.otherSocialMedia[0] !== "" && (
-        <Text>
-          {props.otherSocialMedia[0]}: {props.otherSocialMedia[1]}
-        </Text>
+        <SocialMediaRow
+          valueLabel={props.otherSocialMedia[0]}
+          value={props.otherSocialMedia[1]}
+        />
       )}
     </>
   );
