@@ -124,25 +124,16 @@ const EventDetailsScreen = function ({ route, navigation }) {
       user: item,
     });
   };
-
   return (
     <View style={globalStyles.screen}>
-      <Text>Event {eventId} Details</Text>
-      <ActionButtons
-        amOrganizer={route.params.am_organizer}
-        amParticipant={route.params.am_participant}
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-        handleJoin={handleJoin}
-        handleLeave={handleLeave}
-      />
+      <Text style={globalStyles.input}>Event {eventId} Details</Text>
       {Object.entries(eventDetails).map(([key, value], index) => {
         const rowCondition = !(key == "faq" || key == "description");
         if (key == "private") {
           return;
           // return <key={index}></key=>;
         }
-        if (key == "participants" || key == "organizers") {
+        if (key === "participants" || key === "organizers") {
           return (
             <View key={index}>
               <Text>{key}: </Text>
@@ -170,6 +161,14 @@ const EventDetailsScreen = function ({ route, navigation }) {
           />
         );
       })}
+      <ActionButtons
+        amOrganizer={route.params.am_organizer}
+        amParticipant={route.params.am_participant}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        handleJoin={handleJoin}
+        handleLeave={handleLeave}
+      />
       <ErrorMessage errorMessage={errorMessage} />
     </View>
   );

@@ -1,10 +1,11 @@
 import { View, StyleSheet } from "react-native";
 
 import MyButton from "./MyButton";
+import { globalStyles } from "../utils/stylesConstants";
 
 const ActionButtons = (props) => {
   return (
-    <View>
+    <View style={[globalStyles.containerHorizontal]}>
     {props.amOrganizer ? (
       <>
         <MyButton title="edit" onPress={props.handleEdit} />

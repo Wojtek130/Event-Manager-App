@@ -13,7 +13,7 @@ const DateTimeInput = (props) => {
 
   return (
     <View style={styles.containerHorizontal}>
-      <Text>{props.labelText} </Text>
+      <Text style={globalStyles.input}>{props.labelText} </Text>
       <TextInput
         placeholder={placeholder}
         keyboardType="numeric"
