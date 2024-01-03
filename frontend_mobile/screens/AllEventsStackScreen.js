@@ -1,17 +1,15 @@
-// Import necessary components from react-navigation
-import { NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import AllEventsListScreen from "./AllEventsListScreen";
 import EventDetailsScreen from "./EventDetailsScreen";
 import ProfileScreen from "./ProfileScreen";
 import EditEventScreen from "./EditEventScreen";
+import { globalStyles } from "../utils/stylesConstants";
 
 const AllEventsStack = createStackNavigator();
 
 const AllEventsStackScreen = () => (
-  <AllEventsStack.Navigator>
+  <AllEventsStack.Navigator screenOptions={globalStyles.commonDrawersOptions}>
     <AllEventsStack.Screen
       name="All Events List"
       component={AllEventsListScreen}

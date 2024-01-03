@@ -1,15 +1,13 @@
-// Import necessary components from react-navigation
-import { NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import AnnouncementsChatScreen from "./AnnouncementsChatScreen";
 import AnnouncementsListScreen from "./AnnouncementsListScreen";
+import { globalStyles } from "../utils/stylesConstants";
 
 const AnnouncementsStack = createStackNavigator();
 
 const AnnouncementsStackScreen = () => (
-  <AnnouncementsStack.Navigator>
+  <AnnouncementsStack.Navigator screenOptions={globalStyles.commonDrawersOptions}>
     <AnnouncementsStack.Screen
       name="Announcements Headers"
       component={AnnouncementsListScreen}

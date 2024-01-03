@@ -23,7 +23,7 @@ import SignInScreen from "../screens/SignInScreen";
 import SignOutScreen from "../screens/SignOutScreen";
 import { FETCH_INTERVAL, DEFAULT_DRAWER_LABEL } from "../utils/constants";
 import { isEmptyObject } from "../utils/functions";
-import { bluePrimary } from "../utils/stylesConstants";
+import { bluePrimary, globalStyles } from "../utils/stylesConstants";
 
 const Drawer = createDrawerNavigator();
 
@@ -81,7 +81,7 @@ export default function AppRoutes() {
     <NavigationContainer>
       <Drawer.Navigator
         initialRouteName="Home"
-        screenOptions={commonDrawersOptions}
+        screenOptions={globalStyles.commonDrawersOptions}
       >
         <Drawer.Screen name="Home" component={HomeScreen} />
         {user ? (
@@ -112,16 +112,3 @@ export default function AppRoutes() {
     </NavigationContainer>
   );
 }
-
-const commonDrawersOptions = {
-  drawerLabelStyle: {
-    color: "white", 
-  },
-  drawerStyle: {
-    backgroundColor: bluePrimary,
-  },
-  headerStyle: {
-    backgroundColor: bluePrimary,
-  },
-  headerTintColor: "white",
-};

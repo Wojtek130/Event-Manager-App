@@ -36,4 +36,16 @@ export const globalStyles = StyleSheet.create({
   //   alignSelf: "stretch",
   //   backgroundColor: "pink",
   // },
+  commonDrawersOptions: {
+    drawerLabelStyle: {
+      color: "white",
+    },
+    drawerStyle: {
+      backgroundColor: bluePrimary,
+    },
+    headerStyle: {
+      backgroundColor: bluePrimary,
+    },
+    headerTintColor: "white",
+  },
 });
