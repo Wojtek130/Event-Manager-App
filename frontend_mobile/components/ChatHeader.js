@@ -2,12 +2,12 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 
 const ChatHeader = (props) => {
-  const handleEventPress = () => {
-    props.navigation.navigate("Announcements Chat", { item: props.item });
-  };
+  // const handleEventPress = () => {
+  //   props.navigation.navigate("Announcements Chat", { item: props.item });
+  // };
   return (
     <View>
-      <TouchableOpacity onPress={handleEventPress}>
+      <TouchableOpacity onPress={props.onPress}>
         <Text
           style={
             props.unreadMessagesAvailable

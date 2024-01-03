@@ -34,7 +34,9 @@ const AnnouncementsListScreen = ({ navigation }) => {
 
     fetchData();
   }, []);
-
+  const handleEventPress = (item) => {
+    navigation.navigate("Announcements Chat", { item: item });
+  };
   return (
     <View style={globalStyles.screen}>
       <Text>Announcements Screen:</Text>
@@ -48,6 +50,7 @@ const AnnouncementsListScreen = ({ navigation }) => {
                 item={item}
                 navigation={navigation}
                 unreadMessagesAvailable={unreadMessagesAvailable(item, newMessages)}
+                onPress={() => handleEventPress(item)}
               />
             );
           }
