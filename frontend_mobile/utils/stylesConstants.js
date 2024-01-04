@@ -20,6 +20,9 @@ export const globalStyles = StyleSheet.create({
   containerHorizontal: {
     flexDirection: "row",
   },
+  containerVertical: {
+    flexDirection: "column",
+  },
   containerCentered: {
     justifyContent: "center",
     alignItems: "center",

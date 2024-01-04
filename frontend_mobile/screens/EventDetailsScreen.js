@@ -3,6 +3,7 @@ import {
   FlatList,
   TouchableOpacity,
   View,
+  ScrollView,
   FlatListComponent,
 } from "react-native";
 import { useState, useEffect } from "react";
@@ -11,10 +12,11 @@ import { useSelector } from "react-redux";
 import axiosInstance from "../utils/axiosInstance";
 import { selectUser } from "../store/authSlice";
 import ActionButtons from "../components/ActionButtons";
-import DetailsItem from "../components/DetailsItem";
 import ErrorMessage from "../components/ErrorMessage";
 import { transformEventData } from "../utils/functions";
 import { globalStyles } from "../utils/stylesConstants";
+import DetailsItemRow from "../components/DetailsItemRow";
+import DetailsItemColumn from "../components/DetailsItemColumn";
 
 const EventDetailsScreen = function ({ route, navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
@@ -149,21 +151,18 @@ const EventDetailsScreen = function ({ route, navigation }) {
   console.log("vb", detailsVerticalBox);
   console.log("flb", detailsFlatlistBox);
   return (
-    <View style={globalStyles.screen}>
+    <ScrollView contentContainerStyle={globalStyles.screen}>
       <Text style={globalStyles.input}>Event {eventId} Details</Text>
       {/* <View style={[globalStyles.labelValuecontainer]}> */}
       {/* <View style={[]}> */}
-        {detailsHorizontalBox.map((item) => {
-          const [key, value, index] = item;
-          return (
-            <DetailsItem
-              objectKey={key}
-              value={value}
-              key={index}
-              row={true}
-            />
-          );
-        })}
+      {detailsHorizontalBox.map((item) => {
+        const [key, value, index] = item;
+        return <DetailsItemRow objectKey={key} value={value} key={index} />;
+      })}
+      {detailsVerticalBox.map((item) => {
+        const [key, value, index] = item;
+        return <DetailsItemColumn objectKey={key} value={value} key={index} />;
+      })}
       {/* </View> */}
       {/* {Object.entries(eventDetails).map(([key, value], index) => {
         const rowCondition = !(key == "faq" || key == "description");
@@ -208,7 +207,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         handleLeave={handleLeave}
       />
       <ErrorMessage errorMessage={errorMessage} />
-    </View>
+    </ScrollView>
   );
 };
 
