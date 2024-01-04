@@ -1,4 +1,10 @@
-import { Text, FlatList, TouchableOpacity, View } from "react-native";
+import {
+  Text,
+  FlatList,
+  TouchableOpacity,
+  View,
+  FlatListComponent,
+} from "react-native";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -124,10 +130,42 @@ const EventDetailsScreen = function ({ route, navigation }) {
       user: item,
     });
   };
+  const detailsHorizontalBox = new Array();
+  const detailsVerticalBox = new Array();
+  const detailsFlatlistBox = new Array();
+  Object.entries(eventDetails).forEach(([key, value], index) => {
+    // console.log("true key: ", k);
+    const currentItem = [key, value, index];
+    if (key == "private") {
+    } else if (key === "participants" || key === "organizers") {
+      detailsFlatlistBox.push(currentItem);
+    } else if (key == "faq" || key == "description") {
+      detailsVerticalBox.push(currentItem);
+    } else {
+      detailsHorizontalBox.push(currentItem);
+    }
+  });
+  console.log("hb", detailsHorizontalBox);
+  console.log("vb", detailsVerticalBox);
+  console.log("flb", detailsFlatlistBox);
   return (
     <View style={globalStyles.screen}>
       <Text style={globalStyles.input}>Event {eventId} Details</Text>
-      {Object.entries(eventDetails).map(([key, value], index) => {
+      {/* <View style={[globalStyles.labelValuecontainer]}> */}
+      {/* <View style={[]}> */}
+        {detailsHorizontalBox.map((item) => {
+          const [key, value, index] = item;
+          return (
+            <DetailsItem
+              objectKey={key}
+              value={value}
+              key={index}
+              row={true}
+            />
+          );
+        })}
+      {/* </View> */}
+      {/* {Object.entries(eventDetails).map(([key, value], index) => {
         const rowCondition = !(key == "faq" || key == "description");
         if (key == "private") {
           return;
@@ -160,7 +198,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
             row={rowCondition}
           />
         );
-      })}
+      })} */}
       <ActionButtons
         amOrganizer={route.params.am_organizer}
         amParticipant={route.params.am_participant}

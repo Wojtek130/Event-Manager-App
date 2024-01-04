@@ -5,10 +5,19 @@ import { globalStyles } from "../utils/stylesConstants";
 const DetailsItem = (props) => {
   return (
     <View
-      style={[globalStyles.labelValuecontainer, props.row ? styles.horizontalContainer : styles.verticalContainer]}
+      style={[
+        // props.row ? styles.horizontalContainer : styles.verticalContainer,
+        globalStyles.containerHorizontal,
+        globalStyles.containerCentered,
+        globalStyles.labelValuecontainer,
+      ]}
     >
-      <Text style={[globalStyles.input, globalStyles.textLabel]}>{props.objectKey}</Text>
-      <Text style={[globalStyles.input, globalStyles.textValue]}>{props.value}</Text>
+      <Text style={[globalStyles.input, globalStyles.textLabel]}>
+        {props.objectKey}
+      </Text>
+      <Text style={[globalStyles.input, globalStyles.textValue]}>
+        {props.value}
+      </Text>
     </View>
   );
 };
@@ -19,6 +28,9 @@ const styles = StyleSheet.create({
   },
   verticalContainer: {
     flexDirection: "column",
+  },
+  container: {
+    width: "75%",
   },
 });
 
