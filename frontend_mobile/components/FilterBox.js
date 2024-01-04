@@ -11,6 +11,7 @@ const FilterBox = (props) => {
       style={[
         globalStyles.containerHorizontal,
         globalStyles.containerCentered,
+        globalStyles.border,
         styles.container,
       ]}
     >
@@ -44,11 +45,8 @@ const FilterBox = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: "white",
-    borderWidth: 2,
     padding: 3,
     margin: margin,
-    borderRadius: borderRadius,
   },
 });
 

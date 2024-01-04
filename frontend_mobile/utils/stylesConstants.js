@@ -63,4 +63,9 @@ export const globalStyles = StyleSheet.create({
     justifyContent: "space-evenly",
     width: width50Per,
   },
+  border: {
+    borderColor: "white",
+    borderWidth: 2,
+    borderRadius: borderRadius,
+  },
 });

@@ -17,6 +17,7 @@ import { transformEventData } from "../utils/functions";
 import { globalStyles } from "../utils/stylesConstants";
 import DetailsItemRow from "../components/DetailsItemRow";
 import DetailsItemColumn from "../components/DetailsItemColumn";
+import DetailsPeople from "../components/DetailsPeople";
 
 const EventDetailsScreen = function ({ route, navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
@@ -150,6 +151,15 @@ const EventDetailsScreen = function ({ route, navigation }) {
   console.log("hb", detailsHorizontalBox);
   console.log("vb", detailsVerticalBox);
   console.log("flb", detailsFlatlistBox);
+  let organizers = detailsFlatlistBox[0];
+  let participants = detailsFlatlistBox[1];
+  if (organizers) {
+    organizers = organizers[1];
+  }
+  if (participants) {
+    participants = participants[1];
+  }
+  console.log(organizers, participants, "aaa");
   return (
     <ScrollView contentContainerStyle={globalStyles.screen}>
       <Text style={globalStyles.input}>Event {eventId} Details</Text>
@@ -163,6 +173,43 @@ const EventDetailsScreen = function ({ route, navigation }) {
         const [key, value, index] = item;
         return <DetailsItemColumn objectKey={key} value={value} key={index} />;
       })}
+      <DetailsPeople
+        people={participants}
+        peopleRole={"Participants"}
+        onPressCallback={(item) => handleUserClick(item)}
+      />
+      <DetailsPeople
+        people={organizers}
+        peopleRole={"Organizers"}
+        onPressCallback={(item) => handleUserClick(item)}
+      />
+
+      {/* {participants && (
+        <View
+          style={[
+            globalStyles.containerHorizontal,
+            globalStyles.containerCentered,
+            globalStyles.labelValuecontainer,
+          ]}
+        >
+          <Text style={[globalStyles.input, globalStyles.textLabel]}>
+            {"Participants"}
+          </Text>
+          <FlatList
+            data={participants}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => handleUserClick(item)}
+                key={item}
+                style={[globalStyles.input]}
+              >
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      )} */}
       {/* </View> */}
       {/* {Object.entries(eventDetails).map(([key, value], index) => {
         const rowCondition = !(key == "faq" || key == "description");
