@@ -45,6 +45,7 @@ const MyMultiSelect = (props) => {
       styleMainWrapper={[styles.multiSelectMainWrapper]}
       styleDropdownMenuSubsection={{ backgroundColor: "rgb(33, 126, 222)", color:"pink" }}
       styleTextTag={{ backgroundColor: "yellow" }}
+      textColor="white"
 
     />
   );
