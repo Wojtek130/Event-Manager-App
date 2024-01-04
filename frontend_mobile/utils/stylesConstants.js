@@ -3,8 +3,9 @@ import { Pressable, Text, StyleSheet } from "react-native";
 export const bluePrimary = "rgb(33, 126, 222)";
 export const bluePrimaryLight = "rgba(33, 126, 222, 0.5)";
 export const bluePrimaryTheLightest = "rgba(33, 126, 222, 0.1)";
-
 export const orangePrimary = "rgb(222, 129, 33)";
+export const successColor = "rgb(62, 193, 114)";
+export const errorColor = "rgb(215, 40, 52)";
 export const margin = 5;
 export const padding = 15;
 export const borderRadius = 15;
