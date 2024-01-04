@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, } from "react-native";
+import { View, Text } from "react-native";
 import axios from "axios";
 
 import {
@@ -9,6 +9,8 @@ import {
 import MyButton from "../components/MyButton";
 import MyTextInput from "../components/MyTextInput";
 import { globalStyles } from "../utils/stylesConstants";
+import ErrorMessage from "../components/ErrorMessage";
+import SuccessMessage from "../components/SuccessMessage";
 
 const RegisterScreen = function ({ navigation }) {
   const initialSocialMedia = SOCIAL_MEDIA_PLATFORMS.reduce((acc, key) => {
@@ -32,6 +34,7 @@ const RegisterScreen = function ({ navigation }) {
     }));
   };
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const clearInputFields = () => {
     setFormData(() => initialInputs);
@@ -89,8 +92,7 @@ const RegisterScreen = function ({ navigation }) {
       console.log(response, "!!!!!!!!!");
       if (response.status >= 200 && response.status < 300) {
         const data = response.data;
-        console.log(data, "resp");
-        setErrorMessage("Successful registration");
+        setSuccessMessage("Successful registration");
       } else {
         setErrorMessage("Log in failed");
       }
@@ -141,10 +143,10 @@ const RegisterScreen = function ({ navigation }) {
         />
       </View>
       <MyButton title="Register" onPress={handleRegister} />
-      <Text>{errorMessage}</Text>
+      <ErrorMessage errorMessage={errorMessage} />
+      <SuccessMessage successMessage={successMessage} />
     </View>
   );
 };
-
 
 export default RegisterScreen;
