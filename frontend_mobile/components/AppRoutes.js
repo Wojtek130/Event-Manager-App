@@ -70,9 +70,7 @@ export default function AppRoutes() {
         const response = await axiosInstance.post("last_fetch/", {
           last_fetch: lft,
         });
-        console.log("turn down fetch down");
       } catch (error) {
-        console.log(user, at, "!!!!!!!!");
         console.log(error, "setting lf error2");
       }
     };
@@ -97,6 +95,7 @@ export default function AppRoutes() {
                   fontWeight: isEmptyObject(newMessages)
                     ? DEFAULT_DRAWER_LABEL
                     : "bold",
+                    color: "white",
                 },
               }}
             />
