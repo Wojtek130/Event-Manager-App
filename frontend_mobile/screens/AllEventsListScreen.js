@@ -22,35 +22,35 @@ const AllEventsScreen = ({ navigation, route }) => {
   const [searchFilters, setSearchFilters] = useState(initialFilters);
   const successMessage = route.params?.successMessage;
 
-  const handleFiltersChange = (field, value) => {
-    setSearchFilters({
-      ...searchFilters,
-      [field]: value,
-    });
-    console.log(value, "new");
-  };
+  // const handleFiltersChange = (field, value) => {
+  //   setSearchFilters({
+  //     ...searchFilters,
+  //     [field]: value,
+  //   });
+  //   console.log(value, "new");
+  // };
 
-  const handleApplyFilters = () => {
-    const newEvents = new Array();
-    console.log(searchFilters, "filters");
-    Object.entries(events).forEach(([key, value]) => {
-      const amOrganizerCondition = searchFilters.amOrganizer
-        ? value.am_organizer
-        : true;
-      const amParticipantCondition = searchFilters.amParticipant
-        ? value.am_participant
-        : true;
-      if (
-        value.name.includes(searchFilters.eventNameSubstring) &&
-        amOrganizerCondition &&
-        amParticipantCondition
-      ) {
-        newEvents.push(value);
-      }
-    });
-    console.log(newEvents, "new events");
-    setEventsDisplayed(newEvents);
-  };
+  // const handleApplyFilters = () => {
+  //   const newEvents = new Array();
+  //   console.log(searchFilters, "filters");
+  //   Object.entries(events).forEach(([key, value]) => {
+  //     const amOrganizerCondition = searchFilters.amOrganizer
+  //       ? value.am_organizer
+  //       : true;
+  //     const amParticipantCondition = searchFilters.amParticipant
+  //       ? value.am_participant
+  //       : true;
+  //     if (
+  //       value.name.includes(searchFilters.eventNameSubstring) &&
+  //       amOrganizerCondition &&
+  //       amParticipantCondition
+  //     ) {
+  //       newEvents.push(value);
+  //     }
+  //   });
+  //   console.log(newEvents, "new events");
+  //   setEventsDisplayed(newEvents);
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,12 +73,15 @@ const AllEventsScreen = ({ navigation, route }) => {
     <View style={globalStyles.screen}>
       <SuccessMessage successMessage={successMessage} />
       <FilterBox
-        setSearchFiltersCallback={setSearchFilters}
+        searchFilters={searchFilters}
+        setSearchFilters={setSearchFilters}
+        setEventsDisplayed={setEventsDisplayed}
         eventNameSubstringValue={searchFilters.eventNameSubstring}
         amOrganizerValue={searchFilters.amOrganizer}
         amParticipantValue={searchFilters.amParticipant}
-        handleFiltersChangeCallback={handleFiltersChange}
-        handleApplyFiltersCallback={handleApplyFilters}
+        // handleFiltersChangeCallback={handleFiltersChange}
+        // handleApplyFiltersCallback={handleApplyFilters}
+        events={events}
       />
       <MyFlatList
         data={eventsDisplayed}

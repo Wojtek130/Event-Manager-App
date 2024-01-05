@@ -6,6 +6,35 @@ import MyTextInput from "./MyTextInput";
 import { globalStyles, margin, borderRadius, padding} from "../utils/stylesConstants";
 
 const FilterBox = (props) => {
+  const handleFiltersChange = (field, value) => {
+    props.setSearchFilters({
+      ...props.searchFilters,
+      [field]: value,
+    });
+    console.log(value, "new");
+  };
+
+  const handleApplyFilters = () => {
+    const newEvents = new Array();
+    console.log(props.searchFilters, "filters");
+    Object.entries(props.events).forEach(([key, value]) => {
+      const amOrganizerCondition = props.searchFilters.amOrganizer
+        ? value.am_organizer
+        : true;
+      const amParticipantCondition = props.searchFilters.amParticipant
+        ? value.am_participant
+        : true;
+      if (
+        value.name.includes(props.searchFilters.eventNameSubstring) &&
+        amOrganizerCondition &&
+        amParticipantCondition
+      ) {
+        newEvents.push(value);
+      }
+    });
+    console.log(newEvents, "new events");
+    props.setEventsDisplayed(newEvents);
+  };
   return (
     <View
       style={[
@@ -20,7 +49,9 @@ const FilterBox = (props) => {
         label="Name"
         defaultValue={props.eventNameSubstringValue}
         onChangeText={(text) =>
-          props.handleFiltersChangeCallback("eventNameSubstring", text)
+          // props.handleFiltersChangeCallback("eventNameSubstring", text)
+          handleFiltersChange("eventNameSubstring", text)
+
         }
         mode="outlined"
       />
@@ -28,17 +59,21 @@ const FilterBox = (props) => {
         labelText="Organizer"
         value={props.amOrganizerValue}
         callback={(value) => {
-          props.handleFiltersChangeCallback("amOrganizer", value);
+          // props.handleFiltersChangeCallback("amOrganizer", value);
+          handleFiltersChange("amOrganizer", value);
+
         }}
       />
       <MySwitch
         labelText="Participant"
         value={props.amParticipantValue}
         callback={(value) => {
-          props.handleFiltersChangeCallback("amParticipant", value);
+          // props.handleFiltersChangeCallback("amParticipant", value);
+          handleFiltersChange("amParticipant", value);
+
         }}
       />
-      <MyButton title="search" onPress={props.handleApplyFiltersCallback} />
+      <MyButton title="search" onPress={handleApplyFilters} />
     </View>
   );
 };
