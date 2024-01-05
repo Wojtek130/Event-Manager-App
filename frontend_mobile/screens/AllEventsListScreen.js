@@ -79,8 +79,6 @@ const AllEventsScreen = ({ navigation, route }) => {
         eventNameSubstringValue={searchFilters.eventNameSubstring}
         amOrganizerValue={searchFilters.amOrganizer}
         amParticipantValue={searchFilters.amParticipant}
-        // handleFiltersChangeCallback={handleFiltersChange}
-        // handleApplyFiltersCallback={handleApplyFilters}
         events={events}
       />
       <MyFlatList
