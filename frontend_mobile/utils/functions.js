@@ -50,3 +50,14 @@ export const mergeArrays = (a1, a2) => {
 };
 
 export const isEmptyObject = (o) => Object.keys(o).length === 0;
+
+export const getStringErrorMessage = (errorObj) => {
+  let message = "";
+  Object.entries(errorObj).forEach(([key, value]) => {
+    console.log(key, value);
+    value.forEach((item) => {
+      message += `${item} (${key}), `;
+    });
+  });
+  return message;
+};

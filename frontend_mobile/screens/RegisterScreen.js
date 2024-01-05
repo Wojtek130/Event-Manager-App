@@ -11,6 +11,7 @@ import MyTextInput from "../components/MyTextInput";
 import { globalStyles } from "../utils/stylesConstants";
 import ErrorMessage from "../components/ErrorMessage";
 import SuccessMessage from "../components/SuccessMessage";
+import { getStringErrorMessage } from "../utils/functions";
 
 const RegisterScreen = function ({ navigation }) {
   const initialSocialMedia = SOCIAL_MEDIA_PLATFORMS.reduce((acc, key) => {
@@ -94,10 +95,17 @@ const RegisterScreen = function ({ navigation }) {
         const data = response.data;
         setSuccessMessage("Successful registration");
       } else {
-        setErrorMessage("Log in failed");
+        setErrorMessage("Registration failed");
+        console.log("error !");
       }
     } catch (error) {
-      setErrorMessage("Log in failed");
+      const eMObj = error?.response?.data;
+      if (eMObj) {
+        const eMStr = getStringErrorMessage(eMObj)
+        setErrorMessage(eMStr);
+      } else {
+        setErrorMessage("Registration failed");
+      }
     }
     clearInputFields();
   };

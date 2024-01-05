@@ -85,7 +85,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
       );
       if (response.status >= 200 && response.status < 300) {
         navigation.replace("All Events List", {
-          successMessage: "successfully deleted event",
+          successMessage: "successfully joined event",
         });
       }
     } catch (error) {
