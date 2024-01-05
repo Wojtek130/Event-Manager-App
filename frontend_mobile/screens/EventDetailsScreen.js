@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   FlatListComponent,
+  StyleSheet,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -14,7 +15,7 @@ import { selectUser } from "../store/authSlice";
 import ActionButtons from "../components/ActionButtons";
 import ErrorMessage from "../components/ErrorMessage";
 import { transformEventData } from "../utils/functions";
-import { globalStyles } from "../utils/stylesConstants";
+import { globalStyles, bluePrimaryLight } from "../utils/stylesConstants";
 import DetailsItemRow from "../components/DetailsItemRow";
 import DetailsItemColumn from "../components/DetailsItemColumn";
 import DetailsPeople from "../components/DetailsPeople";
@@ -161,7 +162,8 @@ const EventDetailsScreen = function ({ route, navigation }) {
   }
   console.log(organizers, participants, "aaa");
   return (
-    <ScrollView contentContainerStyle={globalStyles.screen}>
+    // <ScrollView contentContainerStyle={globalStyles.screen}>
+    <ScrollView contentContainerStyle={styles.scrollView}>
       <Text style={globalStyles.input}>Event {eventId} Details</Text>
       {/* <View style={[globalStyles.labelValuecontainer]}> */}
       {/* <View style={[]}> */}
@@ -257,5 +259,14 @@ const EventDetailsScreen = function ({ route, navigation }) {
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollView: {
+    backgroundColor: bluePrimaryLight,
+    paddingVertical: 200,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 export default EventDetailsScreen;

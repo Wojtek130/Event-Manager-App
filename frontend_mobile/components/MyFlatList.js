@@ -6,7 +6,7 @@ const MyFlatList = (props) => {
   return (
     <FlatList
       data={props.data}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.name}
       renderItem={props.renderItem}
       style={[globalStyles.mainChildren, styles.flatList]}
     />
