@@ -61,9 +61,9 @@ const SignInScreen = function ({ navigation }) {
       />
       <MyTextInput
         placeholder="Password"
-        secureTextEntry
         value={password}
         onChangeText={(text) => setPassword(text)}
+        secureTextEntry={true}
       />
       <MyButton title="Log in" onPress={handleLogin} />
       <Text>{errorMessage}</Text>

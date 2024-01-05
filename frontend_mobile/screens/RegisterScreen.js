@@ -94,6 +94,7 @@ const RegisterScreen = function ({ navigation }) {
       if (response.status >= 200 && response.status < 300) {
         const data = response.data;
         setSuccessMessage("Successful registration");
+        clearInputFields();
       } else {
         setErrorMessage("Registration failed");
         console.log("error !");
@@ -101,13 +102,12 @@ const RegisterScreen = function ({ navigation }) {
     } catch (error) {
       const eMObj = error?.response?.data;
       if (eMObj) {
-        const eMStr = getStringErrorMessage(eMObj)
+        const eMStr = getStringErrorMessage(eMObj);
         setErrorMessage(eMStr);
       } else {
         setErrorMessage("Registration failed");
       }
     }
-    clearInputFields();
   };
 
   return (
@@ -119,13 +119,14 @@ const RegisterScreen = function ({ navigation }) {
       />
       <MyTextInput
         placeholder="Password"
-        secureTextEntry
+        secureTextEntry={true}
         value={formData.password}
         onChangeText={(text) => handleChange("password", text)}
+        isHidden={true}
       />
       <MyTextInput
         placeholder="Confirm Password"
-        secureTextEntry
+        secureTextEntry={true}
         value={formData.confirmedPassword}
         onChangeText={(text) => handleChange("confirmedPassword", text)}
       />
@@ -134,6 +135,7 @@ const RegisterScreen = function ({ navigation }) {
           placeholder={SOCIAL_MEDIA_PLATFORMS_NAMES[item]}
           value={formData[item]}
           onChangeText={(text) => handleChange(item, text)}
+          key={index}
         />
       ))}
       <View style={globalStyles.containerHorizontal}>
