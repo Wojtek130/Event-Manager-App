@@ -28,6 +28,7 @@ const AnnouncementsListScreen = ({ navigation }) => {
       try {
         const response = await axiosInstance.get("/events");
         setEvents(response.data.events);
+        console.log(response.data.events);
       } catch (error) {
         setErrorMessage(error.message);
       }
@@ -40,7 +41,7 @@ const AnnouncementsListScreen = ({ navigation }) => {
   };
   return (
     <View style={globalStyles.screen}>
-      <Text>Announcements Screen:</Text>
+      <Text style={globalStyles.input}>Announcements Screen:</Text>
       <MyFlatList
         data={events}
         renderItem={({ item }) => {

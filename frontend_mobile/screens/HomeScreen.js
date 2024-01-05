@@ -9,7 +9,7 @@ const HomeScreen = function ({ navigation }) {
 
   return (
     <View style={[globalStyles.screen, styles.mainContainer]}>
-      <Text style={globalStyles.input}> Home</Text>
+      <Text style={globalStyles.input}> Welcome to Event Manager</Text>
       {user ? (
         <Text style={globalStyles.input}> Logged in as : {user}</Text>
       ) : (
