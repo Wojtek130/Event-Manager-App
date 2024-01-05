@@ -49,9 +49,7 @@ const FilterBox = (props) => {
         label="Name"
         defaultValue={props.eventNameSubstringValue}
         onChangeText={(text) =>
-          // props.handleFiltersChangeCallback("eventNameSubstring", text)
           handleFiltersChange("eventNameSubstring", text)
-
         }
         mode="outlined"
       />
@@ -59,18 +57,14 @@ const FilterBox = (props) => {
         labelText="Organizer"
         value={props.amOrganizerValue}
         callback={(value) => {
-          // props.handleFiltersChangeCallback("amOrganizer", value);
           handleFiltersChange("amOrganizer", value);
-
         }}
       />
       <MySwitch
         labelText="Participant"
         value={props.amParticipantValue}
         callback={(value) => {
-          // props.handleFiltersChangeCallback("amParticipant", value);
           handleFiltersChange("amParticipant", value);
-
         }}
       />
       <MyButton title="search" onPress={handleApplyFilters} />

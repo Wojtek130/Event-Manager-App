@@ -46,10 +46,6 @@ const AnnouncementsListScreen = ({ navigation }) => {
       };
       fetchData();
     });
-
-    // return () => {
-    //   focusListener.remove();
-    // };
   }, [navigation]);
   const handleEventPress = (item) => {
     navigation.navigate("Announcements Chat", { item: item });
