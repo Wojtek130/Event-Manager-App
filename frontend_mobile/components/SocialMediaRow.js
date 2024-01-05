@@ -10,7 +10,7 @@ const SocialMediaRow = (props) => {
         globalStyles.containerCentered,
         globalStyles.labelValuecontainer,
       ]}
-      key={props.key}
+      // key={props.key}
     >
       <Text style={[globalStyles.input, globalStyles.textLabel]}>
         {props.valueLabel}

@@ -23,19 +23,6 @@ const AnnouncementsListScreen = ({ navigation }) => {
 
   const unreadMessagesAvailable = (item, a) => !!a[item.id];
   console.log(oldMessages);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axiosInstance.get("/events");
-  //       setEvents(response.data.events);
-  //       console.log(response.data.events);
-  //     } catch (error) {
-  //       setErrorMessage(error.message);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
   useEffect(() => {
     const focusListener = navigation.addListener('focus', () => {
       const fetchData = async () => {
@@ -47,13 +34,9 @@ const AnnouncementsListScreen = ({ navigation }) => {
           setErrorMessage(error.message);
         }
       };
-  
       fetchData();
-      // Call your function here
-      console.log('Screen is focused! Call your function here.');
     });
 
-    // Clean up the listener when the component unmounts
     return () => {
       focusListener.remove();
     };
