@@ -1,23 +1,24 @@
 from django.test import TestCase, RequestFactory
-from rest_framework.test import force_authenticate
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
-from .views import index_protected
 from django.contrib.auth import get_user_model
+import datetime
 import json
 from parameterized import parameterized
 
+from .models import MyEvent
+
 User = get_user_model()
 
+USERNAME = "mockuser"
+PASSWORD = "mockpassword"
 INITIAL_SOCIAL_MEDIA = {"fb" :"mockFB", "ig" : "mockIG"}
 
 class IndexProtectedViewTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        username = "mockuser"
-        password = "mockpassword"
+        username = USERNAME
+        password = PASSWORD
         self.user = User.objects.create_user(
             username=username,
             password=password,
@@ -29,7 +30,15 @@ class IndexProtectedViewTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.tokens = response.data
-
+        self.event = event_instance = MyEvent.objects.create(
+            name='mock_event',
+            start_date=datetime.datetime.now(),
+            end_date=datetime.datetime.now() + datetime.timedelta(days=10),
+            description="mock description",
+            faq='mock faq',
+            private=False
+        )
+        self.event.organizers.add(self.user)
     def send_request(self, endpoint, request_type, data=None):
         response = None
         if request_type == "GET":
@@ -81,5 +90,30 @@ class IndexProtectedViewTest(TestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.social_media, social_media)
 
+    def test_users(self):
+        response = self.send_request("/users/", "GET")
+        content = self.get_content(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertIn("users", content)
+        users = content["users"]
+        self.assertGreater(len(users), 0)
+        user_1 = users[0]
+        self.assertIn("username", user_1)
+        self.assertIn("id", user_1)
+
+    def test_event_get(self):
+        print(self.event.id)
+        response = self.send_request(f"/event?id={self.event.id}", "GET")
+        content = self.get_content(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        print(content)
+        # self.assertIn("users", content)
+        # users = content["users"]
+        # self.assertGreater(len(users), 0)
+        # user_1 = users[0]
+        # self.assertIn("username", user_1)
+        # self.assertIn("id", user_1)
 
 
