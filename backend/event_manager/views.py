@@ -18,7 +18,6 @@ from .utils import format_datatime_from_db
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
-        print("getting token ..............................")
         token = super().get_token(user)
         token['username'] = user.username
         return token
@@ -42,7 +41,6 @@ def index(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def index_protected(request):
-    print(request.user, "ssss")
     dt = datetime.datetime.now()
     return JsonResponse(data={"protected" : dt})
     
@@ -51,12 +49,10 @@ def index_protected(request):
 def my_profile(request):
     user = get_object_or_404(MyUser, username=request.user)
     if request.method == "GET":
-        print(request.user, request, "ssss")
         user_data = {"social_media" : user.social_media}
         return JsonResponse(data=user_data)
     if request.method == "PATCH":
         user_fields = [field.name for field in user._meta.get_fields()]
-        print(user_fields)
         for k, v in request.data.items():
             if k in user_fields:
                 setattr(user, k, v)

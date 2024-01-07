@@ -7,9 +7,11 @@ from django.http import JsonResponse
 from .views import index_protected
 from django.contrib.auth import get_user_model
 import json
+from parameterized import parameterized
 
 User = get_user_model()
 
+INITIAL_SOCIAL_MEDIA = {"fb" :"mockFB", "ig" : "mockIG"}
 
 class IndexProtectedViewTest(TestCase):
     def setUp(self):
@@ -19,7 +21,7 @@ class IndexProtectedViewTest(TestCase):
         self.user = User.objects.create_user(
             username=username,
             password=password,
-            social_media={"fb" :"mockFB", "ig" : "mockIG"}
+            social_media=INITIAL_SOCIAL_MEDIA
         )
         response = self.client.post('/auth/token/', {
             'username': username,
@@ -32,10 +34,10 @@ class IndexProtectedViewTest(TestCase):
         response = None
         if request_type == "GET":
             response = self.client.get(endpoint, HTTP_AUTHORIZATION=f'Bearer {self.tokens["access"]}')
-        elif request_type == "PATH":
-            response = self.client.patch(endpoint, data=data, content_type='application/json')
+        elif request_type == "PATCH":
+            response = self.client.patch(endpoint, data=data, content_type='application/json', HTTP_AUTHORIZATION=f'Bearer {self.tokens["access"]}')
         elif request_type == "POST":
-            response = self.client.post(endpoint, data=data, content_type='application/json')
+            response = self.client.post(endpoint, data=data, content_type='application/json', HTTP_AUTHORIZATION=f'Bearer {self.tokens["access"]}')
         return response
     
     def get_content(self, response):
@@ -59,5 +61,25 @@ class IndexProtectedViewTest(TestCase):
         self.assertIn("ig", social_media)
         self.assertEqual(social_media["fb"], "mockFB")
         self.assertEqual(social_media["ig"], "mockIG")
+
+    @parameterized.expand([
+        ({},),
+        ({"wa" : "mockWA"},),
+        ({"snapchat" : "mockSC"},),
+        ({"fb" : "mockFB2", "snapchat" : "mockSC"},),
+        ({"mockSocialMedia" : "mockSocialMediaUser", }),
+        ({"mockSocialMedia" : "mockSocialMediaUser", "snapchat" : "mockSC"},),
+    ])
+    def test_profile_patch(self, social_media):
+        data = {"social_media" : social_media}
+        response = self.send_request("/my_profile/", "PATCH", data)
+        content = self.get_content(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertIn("message", content)
+        self.assertEqual(content["message"], "Profile updated successfully.")
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.social_media, social_media)
+
 
 
