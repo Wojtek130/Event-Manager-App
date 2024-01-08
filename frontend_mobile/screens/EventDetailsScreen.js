@@ -49,17 +49,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   const handleDelete = async () => {
     try {
-      const response = await axiosInstance.delete(
-        `event/delete/${eventId}/`,
-        {
-          id: eventId,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axiosInstance.delete(`event/delete/${eventId}/`);
       if (response.status >= 200 && response.status < 300) {
         navigation.replace("All Events List", {
           successMessage: "successfully deleted event",

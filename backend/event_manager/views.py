@@ -59,6 +59,13 @@ def my_profile(request):
         user.save()
         return JsonResponse(data={"message": "Profile updated successfully."})
     return JsonResponse(data={"error": "Method not allowed"}, status=405)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def profile(request, username):
+    user = get_object_or_404(MyUser, username=username)
+    user_data = {"social_media" : user.social_media}
+    return JsonResponse(data=user_data)
     
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -141,16 +148,7 @@ def event_delete(request, instance_id):
     if not event.organizers.filter(pk=user_id).exists():
         return Response({'error': "the user is not an organizer of the event"}, status=status.HTTP_400_BAD_REQUEST)
     event.delete()
-    return JsonResponse({'message': 'Model instance deleted successfully.'})
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def profile(request, username):
-    print("right endpoint", username)
-    user = get_object_or_404(MyUser, username=username)
-    user_data = {"social_media" : user.social_media}
-    return JsonResponse(data=user_data)
-
+    return JsonResponse({'message': "Event deleted successfully."})
 
 def get_announcements(a_type, timestamp, user):
     timestamp_dt = datetime.datetime.utcfromtimestamp(float(timestamp))

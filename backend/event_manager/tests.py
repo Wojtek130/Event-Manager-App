@@ -67,6 +67,24 @@ class EventManagerTest(TestCase):
             private=private
         )
         self.event_2.organizers.add(self.user2)
+        self.event_4 = MyEvent.objects.create(
+            name=event_name + "4",
+            start_date=start_date,
+            end_date=end_date,
+            description=description + "4",
+            faq=faq + "4",
+            private=private
+        )
+        self.event_4.organizers.add(self.user2)
+        self.event_5 = MyEvent.objects.create(
+            name=event_name + "5",
+            start_date=start_date,
+            end_date=end_date,
+            description=description + "5",
+            faq=faq + "5",
+            private=private
+        )
+        self.event_5.organizers.add(self.user)
 
     def send_request(self, endpoint, request_type, data=None):
         response = None
@@ -76,6 +94,8 @@ class EventManagerTest(TestCase):
             response = self.client.patch(endpoint, data=data, content_type='application/json', HTTP_AUTHORIZATION=f'Bearer {self.tokens["access"]}')
         elif request_type == "POST":
             response = self.client.post(endpoint, data=data, content_type='application/json', HTTP_AUTHORIZATION=f'Bearer {self.tokens["access"]}')
+        elif request_type == "DELETE":
+            response = self.client.delete(endpoint, content_type='application/json', HTTP_AUTHORIZATION=f'Bearer {self.tokens["access"]}')
         return response
     
     def get_content(self, response):
@@ -88,7 +108,7 @@ class EventManagerTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response, JsonResponse)
 
-    def test_profile_get(self):
+    def test_my_profile_get(self):
         response = self.send_request("/my_profile/", "GET")
         content = self.get_content(response)
         self.assertEqual(response.status_code, 200)
@@ -99,6 +119,17 @@ class EventManagerTest(TestCase):
         self.assertIn("ig", social_media)
         self.assertEqual(social_media["fb"], "mockFB")
         self.assertEqual(social_media["ig"], "mockIG")
+
+    def test_profile_get(self):
+        response = self.send_request(f"/profile/{self.user2}/", "GET")
+        content = self.get_content(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        print(content)
+        self.assertIn("social_media", content)
+        social_media = content["social_media"]
+        self.assertIn("wa", social_media)
+        self.assertEqual(social_media["wa"], "mockWA2")
 
     @parameterized.expand([
         ({},),
@@ -226,7 +257,6 @@ class EventManagerTest(TestCase):
         data = {"id" : self.event.id}
         response = self.send_request("/event/leave/", "POST", data)
         content = self.get_content(response)
-        print(content)
         self.event.refresh_from_db()
         self.assertEqual(response.status_code, 400)
         self.assertIsInstance(response, Response)
@@ -264,4 +294,32 @@ class EventManagerTest(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIsInstance(response, Response)
         self.assertIn("error", content)
-        self.assertEqual(content["error"], "the user is not a participant of the event")
+        self.assertEqual(content["error"], "the user is already a participant of the event")
+
+    def test_event_join_successful(self):
+        data = {"id" : self.event_4.id}
+        response = self.send_request("/event/join/", "POST", data)
+        content = self.get_content(response)
+        self.event.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertIn("message", content)
+        self.assertEqual(content["message"], "Event joined successfully.")
+
+    def test_event_delete_no_organizer(self):
+        response = self.send_request(f"/event/delete/{self.event_2.pk}/", "DELETE")
+        content = self.get_content(response)
+        self.event.refresh_from_db()
+        self.assertEqual(response.status_code, 400)
+        self.assertIsInstance(response, Response)
+        self.assertIn("error", content)
+        self.assertEqual(content["error"], "the user is not an organizer of the event")
+
+    def test_event_delete_successful(self):
+        response = self.send_request(f"/event/delete/{self.event_5.pk}/", "DELETE")
+        content = self.get_content(response)
+        self.event.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertIn("message", content)
+        self.assertEqual(content["message"], "Event deleted successfully.")
