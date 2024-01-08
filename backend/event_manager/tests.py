@@ -11,35 +11,63 @@ from .models import MyEvent
 
 User = get_user_model()
 
-USERNAME = "mockuser"
-PASSWORD = "mockpassword"
-INITIAL_SOCIAL_MEDIA = {"fb" :"mockFB", "ig" : "mockIG"}
 
 class EventManagerTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        username = USERNAME
-        password = PASSWORD
+        username = "mockuser"
+        password = "mockpassword"
         self.user = User.objects.create_user(
             username=username,
             password=password,
-            social_media=INITIAL_SOCIAL_MEDIA
+            social_media={"fb" :"mockFB", "ig" : "mockIG"}
         )
         response = self.client.post('/auth/token/', {
             'username': username,
             'password': password,
         })
+        self.user2 = User.objects.create_user(
+            username=username + "2",
+            password=password + "2",
+            social_media={"wa" :"mockWA2"}
+        )
         self.assertEqual(response.status_code, 200)
         self.tokens = response.data
+        event_name = "mock_event"
+        start_date = datetime.datetime.now().replace(second=0, microsecond=0)
+        end_date = (datetime.datetime.now() + datetime.timedelta(days=10)).replace(second=0, microsecond=0)
+        description = "mock description"
+        faq = "mock faq"
+        private = False
         self.event = MyEvent.objects.create(
-            name='mock_event',
-            start_date=datetime.datetime.now().replace(second=0, microsecond=0),
-            end_date=(datetime.datetime.now() + datetime.timedelta(days=10)).replace(second=0, microsecond=0),
-            description="mock description",
-            faq='mock faq',
-            private=False
+            name=event_name,
+            start_date=start_date,
+            end_date=end_date,
+            description=description,
+            faq=faq,
+            private=private
         )
         self.event.organizers.add(self.user)
+        self.event_2 = MyEvent.objects.create(
+            name=event_name + "2",
+            start_date=start_date,
+            end_date=end_date,
+            description=description + "2",
+            faq=faq + "2",
+            private=private
+        )
+        self.event_2.organizers.add(self.user2)
+        self.event_2.participants.add(self.user)
+        self.event_3 = MyEvent.objects.create(
+            name=event_name + "3",
+            start_date=start_date,
+            end_date=end_date,
+            description=description + "3",
+            faq=faq + "3",
+            private=private
+        )
+        self.event_2.organizers.add(self.user2)
+
     def send_request(self, endpoint, request_type, data=None):
         response = None
         if request_type == "GET":
@@ -114,11 +142,11 @@ class EventManagerTest(TestCase):
 
     def test_event_post(self):
         events_before = list(MyEvent.objects.all())
-        new_name = "mock_event2"
+        new_name = "mock_event_post"
         new_start_date = "01.01.2024 15:00"
         new_end_date = "02.01.2024 16:00"
-        new_description = "mock description2"
-        new_faq = "mock faq2"
+        new_description = "mock description_post"
+        new_faq = "mock faq post"
         new_private = False
         data = {
             "name": new_name,
@@ -132,7 +160,6 @@ class EventManagerTest(TestCase):
           }
         response = self.send_request("/event/", "POST", data)
         content = self.get_content(response)
-        print(content)
         self.assertEqual(response.status_code, 201)
         self.assertIsInstance(response, Response)
         events_after = MyEvent.objects.all()
@@ -205,3 +232,36 @@ class EventManagerTest(TestCase):
         self.assertIsInstance(response, Response)
         self.assertIn("error", content)
         self.assertEqual(content["error"], "the user is already an organizer of the event")
+
+    def test_event_leave_no_participant(self):
+        data = {"id" : self.event_3.id}
+        response = self.send_request("/event/leave/", "POST", data)
+        content = self.get_content(response)
+        self.event.refresh_from_db()
+        self.assertEqual(response.status_code, 400)
+        self.assertIsInstance(response, Response)
+        self.assertIn("error", content)
+        self.assertEqual(content["error"], "the user is not a participant of the event")
+
+    def test_event_leave_successful(self):
+        data = {"id" : self.event_2.id}
+        self.assertIn(self.user, self.event_2.participants.all())
+        response = self.send_request("/event/leave/", "POST", data)
+        content = self.get_content(response)
+        self.event.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertIn("message", content)
+        self.assertEqual(content["message"], "Event left successfully.")
+        self.event_2.refresh_from_db()
+        self.assertNotIn(self.user, self.event_2.participants.all())
+
+    def test_event_join_already_participant(self):
+        data = {"id" : self.event_2.id}
+        response = self.send_request("/event/join/", "POST", data)
+        content = self.get_content(response)
+        self.event.refresh_from_db()
+        self.assertEqual(response.status_code, 400)
+        self.assertIsInstance(response, Response)
+        self.assertIn("error", content)
+        self.assertEqual(content["error"], "the user is not a participant of the event")

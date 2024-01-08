@@ -118,7 +118,7 @@ def event_leave(request):
     if not event.participants.filter(pk=user_id).exists():
         return Response({'error': "the user is not a participant of the event"}, status=status.HTTP_400_BAD_REQUEST)
     event.participants.remove(request.user)
-    return JsonResponse(data={"message": "Event joined successfully."})
+    return JsonResponse(data={"message": "Event left successfully."})
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
