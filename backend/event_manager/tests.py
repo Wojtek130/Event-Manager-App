@@ -14,7 +14,7 @@ USERNAME = "mockuser"
 PASSWORD = "mockpassword"
 INITIAL_SOCIAL_MEDIA = {"fb" :"mockFB", "ig" : "mockIG"}
 
-class IndexProtectedViewTest(TestCase):
+class EventManagerTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         username = USERNAME
@@ -30,10 +30,10 @@ class IndexProtectedViewTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.tokens = response.data
-        self.event = event_instance = MyEvent.objects.create(
+        self.event = MyEvent.objects.create(
             name='mock_event',
-            start_date=datetime.datetime.now(),
-            end_date=datetime.datetime.now() + datetime.timedelta(days=10),
+            start_date=datetime.datetime.now().replace(second=0, microsecond=0),
+            end_date=(datetime.datetime.now() + datetime.timedelta(days=10)).replace(second=0, microsecond=0),
             description="mock description",
             faq='mock faq',
             private=False
@@ -103,17 +103,35 @@ class IndexProtectedViewTest(TestCase):
         self.assertIn("id", user_1)
 
     def test_event_get(self):
-        print(self.event.id)
-        response = self.send_request(f"/event?id={self.event.id}", "GET")
+        response = self.send_request(f"/event/?id={self.event.id}", "GET")
         content = self.get_content(response)
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response, JsonResponse)
-        print(content)
-        # self.assertIn("users", content)
-        # users = content["users"]
-        # self.assertGreater(len(users), 0)
-        # user_1 = users[0]
-        # self.assertIn("username", user_1)
-        # self.assertIn("id", user_1)
+        self.assertIn("organizers", content)
+        users = content["organizers"]
+        self.assertGreater(len(users), 0)
 
+    def test_event_post(self):
+        events_before = list(MyEvent.objects.all())
+        new_name = "mock_event2"
+        data = {
+            "name": new_name,
+            "start_date": "01.01.2024 15:00",
+            "end_date": "02.01.2024 16:00",
+            "description": "mock description2",
+            "faq": "mock faq2",
+            "private": False,
+            "organizers": [],
+            "participants": [],
+          }
+        response = self.send_request("/event/", "POST", data)
+        content = self.get_content(response)
+        self.assertEqual(response.status_code, 201)
+        self.assertIsInstance(response, Response)
+        events_after = MyEvent.objects.all()
+        self.assertGreater(len(events_after), len(events_before))
+        new_event = list(filter(lambda e: not e in events_before, events_after))[0]
+        print(new_event)
+        # self.assertIn("organizers", content)
+        # users = content["organizers"]
 

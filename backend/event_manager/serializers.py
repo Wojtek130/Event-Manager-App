@@ -35,7 +35,6 @@ class MyEventSerializer(serializers.ModelSerializer):
         fields = ['name', 'start_date', 'end_date', 'description', 'faq', 'private', 'organizers', 'participants']
 
     def to_internal_value(self, data):
-        print(data, "to internal value")
         try:
             start_date = datetime.datetime.strptime(data["start_date"], DATETIME_FORMAT)
         except:
@@ -50,8 +49,8 @@ class MyEventSerializer(serializers.ModelSerializer):
         data["participants"] = [user.id for user in User.objects.filter(username__in=data["participants"])]
         return super().to_internal_value(data)
 
-    def validate(self, data):
-        print(data, "validate blank")
+    # def validate(self, data):
+    #     print(data, "validate blank")
 
         if data["start_date"] >= data["end_date"]:
             raise serializers.ValidationError("The End date must be after the start date")
@@ -60,20 +59,16 @@ class MyEventSerializer(serializers.ModelSerializer):
         return data
 
     def validate_name(self, data):
-        print(data, "validate name")
         if not data:
             raise serializers.ValidationError("Event name cannot be empty")
         return data
     
     def validate_private(self, data):
-        print(data, "validate private")
-
         if not isinstance(data, bool):
             raise serializers.ValidationError("Private must a boolean value")
         return data
     
     def create(self, validated_data):
-        print("create")
         event_data = {
             "name" : validated_data["name"],
             "start_date" : validated_data["start_date"],
@@ -96,7 +91,6 @@ class MyEventSerializer(serializers.ModelSerializer):
         return event
     
     def update(self, instance, validated_data):
-        print(validated_data, "validated data")
         instance.name = validated_data.get('name', instance.name)
         instance.start_date = validated_data.get('start_date', instance.start_date)
         instance.end_date = validated_data.get('end_date', instance.end_date)

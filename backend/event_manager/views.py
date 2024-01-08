@@ -72,6 +72,7 @@ def event(request):
     serializer = None
     if request.method == "GET":
         event_id = request.GET.get("id")
+        print(event_id, "view")
         event = get_object_or_404(MyEvent, id=event_id)
         serializer = MyEventSerializer(event)
         event_data = serializer.data
@@ -81,7 +82,6 @@ def event(request):
         event_data["end_date"] = format_datatime_from_db(event_data["end_date"])
         return JsonResponse(data=event_data)
     if request.method == "POST":
-        print(request.data)
         serializer = MyEventSerializer(data=request.data, context={'request': request})
     if request.method == "PATCH":
         print("paaaaaaaaatch", request.data.get("id"))
