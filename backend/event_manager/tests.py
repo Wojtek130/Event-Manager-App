@@ -170,7 +170,7 @@ class EventManagerTest(TestCase):
         response = self.send_request("/event/", "PATCH", data)
         content = self.get_content(response)
         self.event.refresh_from_db()
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response, Response)
         self.assertEqual(self.event.name, new_name)
         self.assertEqual(self.event.description, new_description)

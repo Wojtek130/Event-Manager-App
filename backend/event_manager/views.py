@@ -88,7 +88,8 @@ def event(request):
         serializer = MyEventSerializer(event, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        resp_status = status.HTTP_201_CREATED if request.method == "POST" else 200
+        return Response(serializer.data, status=resp_status)
     try:
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
