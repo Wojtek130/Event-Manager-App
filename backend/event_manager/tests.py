@@ -7,7 +7,7 @@ import json
 from parameterized import parameterized
 
 from .constants import DATETIME_FORMAT
-from .models import MyEvent
+from .models import MyEvent, Announcement
 
 User = get_user_model()
 
@@ -20,7 +20,8 @@ class EventManagerTest(TestCase):
         self.user = User.objects.create_user(
             username=username,
             password=password,
-            social_media={"fb" :"mockFB", "ig" : "mockIG"}
+            social_media={"fb" :"mockFB", "ig" : "mockIG"},
+            last_fetch = datetime.datetime.now().replace(second=0, microsecond=0)
         )
         response = self.client.post('/auth/token/', {
             'username': username,
@@ -323,3 +324,41 @@ class EventManagerTest(TestCase):
         self.assertIsInstance(response, JsonResponse)
         self.assertIn("message", content)
         self.assertEqual(content["message"], "Event deleted successfully.")
+
+    def test_message(self):
+        messages = list(Announcement.objects.all())
+        body = "mock body"
+        data = {
+            "event": self.event.pk,
+            "body": body,
+          }
+        response = self.send_request("/message/", "POST", data)
+        content = self.get_content(response)
+        self.assertEqual(response.status_code, 201)
+        self.assertIsInstance(response, Response)
+        messages_after = Announcement.objects.all()
+        self.assertGreater(len(messages_after), len(messages))
+        new_message = list(filter(lambda m: not m in messages, messages_after))[0]
+        self.assertEqual(new_message.author.pk, self.user.pk)
+        self.assertEqual(new_message.body, body)
+
+    def test_last_fetch_get(self):
+        last_fetch = self.user.last_fetch.timestamp()
+        response = self.send_request("/last_fetch/", "GET")
+        content = self.get_content(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertIn("last_fetch", content)
+        self.assertEqual(content["last_fetch"], last_fetch)
+
+    def test_last_fetch_post(self):
+        new_last_fetch = datetime.datetime.now().timestamp()
+        data = {"last_fetch" : new_last_fetch}
+        response = self.send_request("/last_fetch/", "POST", data)
+        content = self.get_content(response)
+        self.user.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertIn("message", content)
+        self.assertEqual(content["message"], "Last fetch successfully updated.")
+        self.assertEqual(self.user.last_fetch.timestamp(), new_last_fetch)

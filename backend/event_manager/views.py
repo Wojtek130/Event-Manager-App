@@ -79,7 +79,6 @@ def event(request):
     serializer = None
     if request.method == "GET":
         event_id = request.GET.get("id")
-        print(event_id, "view")
         event = get_object_or_404(MyEvent, id=event_id)
         serializer = MyEventSerializer(event)
         event_data = serializer.data
@@ -107,7 +106,6 @@ def event(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def events(request):
-    print(request.user.id, "user ID")
     user_id = request.user.id
     events = [{"name" : event.name, "id" : event.id, "am_organizer" : event.organizers.filter(id=user_id).exists(), "am_participant" : event.participants.filter(id=user_id).exists()} for event in MyEvent.objects.all()]
     return JsonResponse(data={"events": events})
@@ -116,8 +114,6 @@ def events(request):
 @permission_classes([IsAuthenticated])
 def event_leave(request):
     user_id = request.user.id
-    print(request)
-    print(request.data)
     event_id = request.data.get("id")
     event = get_object_or_404(MyEvent, id=event_id)
     if event.organizers.filter(pk=user_id).exists():
@@ -154,7 +150,6 @@ def get_announcements(a_type, timestamp, user):
     timestamp_dt = datetime.datetime.utcfromtimestamp(float(timestamp))
     all_a = {}
     events = MyEvent.objects.filter(Q(organizers=user) | Q(participants=user)).distinct()
-    print(a_type, timestamp)
     for e in events:
         announcements = None
         if a_type == "new":
@@ -194,13 +189,13 @@ def last_fetch(request):
         timestamp_dt = datetime.datetime.utcfromtimestamp(float(last_fetch))
         user.last_fetch = timestamp_dt
         user.save()
-        return JsonResponse({'message': 'Last fetch successfully updated'})
+        return JsonResponse({"message": "Last fetch successfully updated."})
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def message(request):
     data = {"body" : request.data["body"], "author" : request.user.pk, "event" : request.data["event"]}
-    print(data, "!!!!!!!!!!!!!!!!!!!!!!!!")
+    print(data, "")
     # return JsonResponse({'message': 'Last fetch successfully updated'})
     announcement = AnnouncementSerializer(data=data)
     if announcement.is_valid():
