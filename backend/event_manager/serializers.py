@@ -49,9 +49,7 @@ class MyEventSerializer(serializers.ModelSerializer):
         data["participants"] = [user.id for user in User.objects.filter(username__in=data["participants"])]
         return super().to_internal_value(data)
 
-    # def validate(self, data):
-    #     print(data, "validate blank")
-
+    def validate(self, data):
         if data["start_date"] >= data["end_date"]:
             raise serializers.ValidationError("The End date must be after the start date")
         if any(element in data["organizers"] for element in data["participants"]):
@@ -78,10 +76,7 @@ class MyEventSerializer(serializers.ModelSerializer):
             "private" : validated_data["private"],
         }
         event = MyEvent.objects.create(**event_data)
-
-        # event = MyEvent.objects.create(**validated_data)
         request = self.context.get('request')
-        # print("request: ", request, "!!!!!!!!!!!!!!!!!!!!!!!!!!")
         organizers = []
         organizers_ids = request.data["organizers"]
         if len(organizers_ids) > 0:

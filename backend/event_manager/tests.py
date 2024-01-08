@@ -6,6 +6,7 @@ import datetime
 import json
 from parameterized import parameterized
 
+from .constants import DATETIME_FORMAT
 from .models import MyEvent
 
 User = get_user_model()
@@ -114,24 +115,68 @@ class EventManagerTest(TestCase):
     def test_event_post(self):
         events_before = list(MyEvent.objects.all())
         new_name = "mock_event2"
+        new_start_date = "01.01.2024 15:00"
+        new_end_date = "02.01.2024 16:00"
+        new_description = "mock description2"
+        new_faq = "mock faq2"
+        new_private = False
         data = {
             "name": new_name,
-            "start_date": "01.01.2024 15:00",
-            "end_date": "02.01.2024 16:00",
-            "description": "mock description2",
-            "faq": "mock faq2",
+            "start_date": new_start_date,
+            "end_date": new_end_date,
+            "description": new_description,
+            "faq": new_faq,
             "private": False,
             "organizers": [],
             "participants": [],
           }
         response = self.send_request("/event/", "POST", data)
         content = self.get_content(response)
+        print(content)
         self.assertEqual(response.status_code, 201)
         self.assertIsInstance(response, Response)
         events_after = MyEvent.objects.all()
         self.assertGreater(len(events_after), len(events_before))
         new_event = list(filter(lambda e: not e in events_before, events_after))[0]
-        print(new_event)
-        # self.assertIn("organizers", content)
-        # users = content["organizers"]
+        self.assertEqual(new_event.name, new_name)
+        self.assertEqual(new_event.description, new_description)
+        self.assertEqual(new_event.start_date.strftime(DATETIME_FORMAT), new_start_date)
+        self.assertEqual(new_event.end_date.strftime(DATETIME_FORMAT), new_end_date)
+        self.assertEqual(new_event.faq, new_faq)
+        self.assertEqual(new_event.private, new_private)
+        self.assertGreater(len(new_event.organizers.all()), 0)
 
+
+    def test_event_patch(self):
+        new_name = self.event.name
+        new_start_date = self.event.start_date.strftime(DATETIME_FORMAT)
+        new_end_date = self.event.end_date.strftime(DATETIME_FORMAT)
+        new_description = "mock description modified"
+        new_faq = "mock faq modified"
+        new_private = self.event.private
+        new_organizers = [o.username for o in self.event.organizers.all()]
+        new_participants = [p.username for p in self.event.participants.all()]
+        data = {
+            "name": new_name,
+            "start_date": new_start_date,
+            "end_date": new_end_date,
+            "description": new_description,
+            "faq": new_faq,
+            "private": False,
+            "organizers": new_organizers,
+            "participants": new_participants,
+            "id" : self.event.pk,
+          }
+        response = self.send_request("/event/", "PATCH", data)
+        content = self.get_content(response)
+        self.event.refresh_from_db()
+        self.assertEqual(response.status_code, 201)
+        self.assertIsInstance(response, Response)
+        self.assertEqual(self.event.name, new_name)
+        self.assertEqual(self.event.description, new_description)
+        self.assertEqual(self.event.start_date.strftime(DATETIME_FORMAT), new_start_date)
+        self.assertEqual(self.event.end_date.strftime(DATETIME_FORMAT), new_end_date)
+        self.assertEqual(self.event.faq, new_faq)
+        self.assertEqual(self.event.private, new_private)
+        self.assertGreater(len(self.event.organizers.all()), 0)
+        self.assertIn(self.user, self.event.organizers.all())
