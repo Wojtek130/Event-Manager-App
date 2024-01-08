@@ -180,3 +180,28 @@ class EventManagerTest(TestCase):
         self.assertEqual(self.event.private, new_private)
         self.assertGreater(len(self.event.organizers.all()), 0)
         self.assertIn(self.user, self.event.organizers.all())
+
+    def test_events(self):
+        response = self.send_request("/events/", "GET")
+        content = self.get_content(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertIn("events", content)
+        events = content["events"]
+        self.assertGreater(len(events), 0)
+        event_1 = events[0]
+        self.assertIn("name", event_1)
+        self.assertIn("id", event_1)
+        self.assertIn("am_organizer", event_1)
+        self.assertIn("am_participant", event_1)
+
+    def test_event_leave_organizer(self):
+        data = {"id" : self.event.id}
+        response = self.send_request("/event/leave/", "POST", data)
+        content = self.get_content(response)
+        print(content)
+        self.event.refresh_from_db()
+        self.assertEqual(response.status_code, 400)
+        self.assertIsInstance(response, Response)
+        self.assertIn("error", content)
+        self.assertEqual(content["error"], "the user is already an organizer of the event")
