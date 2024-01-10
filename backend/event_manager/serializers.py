@@ -15,17 +15,13 @@ class MyUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'password', 'social_media']
 
     def validate(self, data):
-        print("validate s")
         return data
     
     def validate_social_media(self, value):
-        print("validate sm s")
-
         value_json = json.loads(value)
         return {key: value for key, value in value_json.items() if value != '' and key!=''}
     
     def create(self, validated_data):
-        print("create s")
         user = User.objects.create_user(**validated_data)
         return user
     
@@ -104,13 +100,11 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         fields = ['body', 'timestamp', 'author', 'event']
 
     def to_internal_value(self, data):
-        print(data, "to internal value")
         # data["author"] = get_object_or_404(User, username=data["author"])
         data["event"] = get_object_or_404(MyEvent, pk=data["event"]).pk
         return super().to_internal_value(data)
 
     def validate_body(self, data):
-        print(data, "validate body")
         if not isinstance(data, str) or not data:
             raise serializers.ValidationError("Body must be a non empty string")
         return data

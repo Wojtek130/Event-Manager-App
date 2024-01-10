@@ -86,6 +86,17 @@ class EventManagerTest(TestCase):
             private=private
         )
         self.event_5.organizers.add(self.user)
+        body = "body"
+        self.message = Announcement.objects.create(
+            body = body,
+            author = self.user,
+            event = self.event,
+        )
+        self.message_2 = Announcement.objects.create(
+            body = body + "2",
+            author = self.user,
+            event = self.event,
+        )
 
     def send_request(self, endpoint, request_type, data=None):
         response = None
@@ -362,3 +373,83 @@ class EventManagerTest(TestCase):
         self.assertIn("message", content)
         self.assertEqual(content["message"], "Last fetch successfully updated.")
         self.assertEqual(self.user.last_fetch.timestamp(), new_last_fetch)
+
+    def test_last_fetch_get(self):
+        last_fetch = self.user.last_fetch.timestamp()
+        response = self.send_request("/last_fetch/", "GET")
+        content = self.get_content(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertIn("last_fetch", content)
+        self.assertEqual(content["last_fetch"], last_fetch)
+
+    def test_new_announcements(self):
+        timestamp = (datetime.datetime.now() - datetime.timedelta(days=10)).timestamp()
+        response = self.send_request(f"/messages/new/{timestamp}/", "GET")
+        content = self.get_content(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertIn("announcements", content)
+        announcements = content["announcements"]
+        for _, messages in announcements.items():
+            for m in messages:
+                m_date = m["timestamp"]
+                m_timestamp = datetime.datetime.strptime(m_date, DATETIME_FORMAT).timestamp()
+                self.assertGreaterEqual(m_timestamp, timestamp)
+    
+    def test_old_announcements(self):
+        timestamp = (datetime.datetime.now() + datetime.timedelta(days=10)).timestamp()
+        response = self.send_request(f"/messages/old/{timestamp}/", "GET")
+        content = self.get_content(response)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertIn("announcements", content)
+        announcements = content["announcements"]
+        for _, messages in announcements.items():
+            for m in messages:
+                m_date = m["timestamp"]
+                m_timestamp = datetime.datetime.strptime(m_date, DATETIME_FORMAT).timestamp()
+                self.assertLessEqual(m_timestamp, timestamp)
+
+    @parameterized.expand([
+        ("/protected/",),
+        ("profile/mock/",),
+        ("/users/",),
+        ("/my_profile/",),
+        ("/event/",),
+        ("/events/",),
+        ("/messages/new/123/",),
+        ("/messages/old/132/",),
+        ("/last_fetch/",),
+    ])
+    def test_unauthorized_get(self, endpoint):
+        response = self.client.get(endpoint)
+        self.assertTrue(response.status_code == 401 or response.status_code == 404)
+                
+    @parameterized.expand([
+        ("/event/",),
+        ("/event/join/",),
+        ("/event/leave/",),
+        ("/last_fetch/",),
+    ])
+    def test_unauthorized_post(self, endpoint):
+        response = self.client.post(endpoint)
+        self.assertTrue(response.status_code == 401 or response.status_code == 404)
+
+    @parameterized.expand([
+        ("/event/",),
+        ("/my_profile/",),
+    ])
+    def test_unauthorized_patch(self, endpoint):
+        response = self.client.patch(endpoint)
+        self.assertTrue(response.status_code == 401 or response.status_code == 404)
+
+    @parameterized.expand([
+        ("/event/delete/",),
+    ])
+    def test_unauthorized_delete(self, endpoint):
+        response = self.client.delete(endpoint)
+        self.assertTrue(response.status_code == 401 or response.status_code == 404)
+
+
+
