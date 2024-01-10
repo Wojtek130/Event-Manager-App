@@ -28,6 +28,15 @@ class MyTokenObtainPairView(TokenObtainPairView):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
+    """
+    registates a new user
+    request's format:
+    {
+        username: string,
+        password: string,
+        social_media: stringified json,
+    }
+    """
     user = MyUserSerializer(data=request.data)
     if user.is_valid():
         user.save()
@@ -47,6 +56,16 @@ def index_protected(request):
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def my_profile(request):
+    """
+    GET:
+        returns information about the user's profile
+    PATCH:
+        updates the user's profile
+        request's format:
+        {
+          social_media: json,
+        },
+    """
     user = get_object_or_404(MyUser, username=request.user)
     if request.method == "GET":
         user_data = {"social_media" : user.social_media}
@@ -63,6 +82,9 @@ def my_profile(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def profile(request, username):
+    """
+    returns information about the chosen user's profile 
+    """
     user = get_object_or_404(MyUser, username=username)
     user_data = {"social_media" : user.social_media}
     return JsonResponse(data=user_data)
@@ -70,12 +92,36 @@ def profile(request, username):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def users(request):
+    """
+    returns information about all users 
+    """
     users = [{"username" : user.username, "id" : user.id} for user in MyUser.objects.all() if not user.is_superuser]
     return JsonResponse(data={"users": users})
 
 @api_view(["POST", "GET", "PATCH"])
 @permission_classes([IsAuthenticated])
 def event(request):
+    """
+    GET:
+        returns information about the chosen event
+    POST:
+        create an event
+    PATCH:
+        updates an event
+
+        request's format (POST and PATCH):
+        {
+            name: string,
+            start_date: string (format dd.mm.yyyy hh:mm),
+            end_date: string (format dd.mm.yyyy hh:mm),
+            description: string,
+            faq: string,
+            private: boolean,
+            organizers: int[],
+            participants: int[],
+            id: int,
+          }
+    """
     serializer = None
     if request.method == "GET":
         event_id = request.GET.get("id")
@@ -106,6 +152,9 @@ def event(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def events(request):
+    """
+    returns information about all user's events (the user is either an organizer or a participant)
+    """
     user_id = request.user.id
     events = [{"name" : event.name, "id" : event.id, "am_organizer" : event.organizers.filter(id=user_id).exists(), "am_participant" : event.participants.filter(id=user_id).exists()} for event in MyEvent.objects.all()]
     return JsonResponse(data={"events": events})
@@ -113,6 +162,13 @@ def events(request):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def event_leave(request):
+    """
+    performs leaving an event by the user
+    request's format
+    {
+        id: int
+    }
+    """
     user_id = request.user.id
     event_id = request.data.get("id")
     event = get_object_or_404(MyEvent, id=event_id)
@@ -126,6 +182,13 @@ def event_leave(request):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def event_join(request):
+    """
+    performs joining an event by the user
+    request's format
+    {
+        id: int
+    }
+    """
     user_id = request.user.id
     event_id = request.data.get("id")
     event = get_object_or_404(MyEvent, id=event_id)
@@ -139,6 +202,10 @@ def event_join(request):
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
 def event_delete(request, instance_id):
+    """
+    performs deleting an event by the user
+    instance_id : int
+    """
     user_id = request.user.id
     event = get_object_or_404(MyEvent, id=instance_id)
     if not event.organizers.filter(pk=user_id).exists():
@@ -164,6 +231,10 @@ def get_announcements(a_type, timestamp, user):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def old_announcements(request, timestamp):
+    """
+    returns all announcements for all user's events before a given timestamp
+    timestamp : int
+    """
     user = get_object_or_404(MyUser, username=request.user)
     a = get_announcements("old", timestamp, user)
     print(a, "back old")
@@ -172,6 +243,10 @@ def old_announcements(request, timestamp):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def new_announcements(request, timestamp):
+    """
+    returns all announcements for all user's events after a given timestamp
+    timestamp : int
+    """
     user = get_object_or_404(MyUser, username=request.user)
     a = get_announcements("new", timestamp, user)
     print(a, "back new")
@@ -180,6 +255,16 @@ def new_announcements(request, timestamp):
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def last_fetch(request):
+    """
+    GET:
+        returns the time of the last fetch of announcements by the user
+    POST:
+        sets the time of the last fetch of announcements by the user
+        request's format:
+        {
+          last_fetch: int,
+        },
+    """
     user = get_object_or_404(MyUser, username=request.user)
     if request.method == "GET":
         lf = "" if user.last_fetch is None else user.last_fetch.timestamp()
@@ -194,6 +279,13 @@ def last_fetch(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def message(request):
+    """
+    creates a new announcement
+    {
+        event: int,
+        body: string,
+    }
+    """
     data = {"body" : request.data["body"], "author" : request.user.pk, "event" : request.data["event"]}
     print(data, "")
     # return JsonResponse({'message': 'Last fetch successfully updated'})
