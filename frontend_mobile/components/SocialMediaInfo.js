@@ -10,7 +10,7 @@ import { globalStyles } from "../utils/stylesConstants";
 const SocialMediaInfo = (props) => {
   return (
     <>
-      <Text style={globalStyles.input}>Hello {props.user}!</Text>
+      <Text style={globalStyles.input}>User: {props.user}</Text>
       {props.userData &&
         Object.keys(props.userData.social_media).map((key) => {
           if (
