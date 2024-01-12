@@ -19,8 +19,8 @@ import AllEventsStackScreen from "../screens/AllEventsStackScreen";
 import MyProfileScreen from "../screens/MyProfileScreen";
 import CreateEventScreen from "../screens/CreateEventScreen";
 import AnnouncementsStackScreen from "../screens/AnnouncementsStackScreen";
-import SignInScreen from "../screens/SignInScreen";
-import SignOutScreen from "../screens/SignOutScreen";
+import LogInScreen from "../screens/LogInScreen";
+import LogOutScreen from "../screens/LogOutScreen";
 import { FETCH_INTERVAL, DEFAULT_DRAWER_LABEL } from "../utils/constants";
 import { isEmptyObject } from "../utils/functions";
 import { bluePrimary, globalStyles } from "../utils/stylesConstants";
@@ -99,11 +99,11 @@ export default function AppRoutes() {
                 },
               }}
             />
-            <Drawer.Screen name="Sign Out" component={SignOutScreen} />
+            <Drawer.Screen name="Log Out" component={LogOutScreen} />
           </>
         ) : (
           <>
-            <Drawer.Screen name="Sign In" component={SignInScreen} />
+            <Drawer.Screen name="Log In" component={LogInScreen} />
             <Drawer.Screen name="Register" component={RegisterScreen} />
           </>
         )}
