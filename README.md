@@ -20,9 +20,10 @@ Install all required packages:
 pip3 install -r requirements.txt
 ```
 
-Run server:
+Migrate the db and run the server:
 ```
 cd backend
+python3 manage.py migrate
 python3 manage.py runserver
 ```
 

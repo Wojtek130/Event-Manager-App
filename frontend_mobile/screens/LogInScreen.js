@@ -8,6 +8,8 @@ import { setUser } from "../store/authSlice";
 import MyButton from "../components/MyButton";
 import MyTextInput from "../components/MyTextInput";
 import { globalStyles } from "../utils/stylesConstants";
+import ErrorMessage from "../components/ErrorMessage";
+
 
 const LogInScreen = function ({ navigation }) {
   const dispatch = useDispatch();
@@ -66,7 +68,7 @@ const LogInScreen = function ({ navigation }) {
         secureTextEntry={true}
       />
       <MyButton title="Log in" onPress={handleLogin} />
-      <Text>{errorMessage}</Text>
+      <ErrorMessage errorMessage={errorMessage} />
     </View>
   );
 };
