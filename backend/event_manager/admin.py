@@ -6,7 +6,6 @@ class MyUserAdmin(UserAdmin):
     list_display = ('id', 'username')
 
     fieldsets = (
-        # *UserAdmin.fieldsets,  # original form fieldsets, expanded
         UserAdmin.fieldsets[0],  
         (                     
             "Custom fields", 

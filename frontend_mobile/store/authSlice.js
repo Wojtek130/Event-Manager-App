@@ -11,7 +11,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state.authTokens = JSON.stringify(action.payload.authTokens); // !!! to change
+      state.authTokens = JSON.stringify(action.payload.authTokens);
       // state.user = "BestUser"
       state.user = jwtDecode(action.payload.authTokens).username;
     },

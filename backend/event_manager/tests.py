@@ -137,7 +137,6 @@ class EventManagerTest(TestCase):
         content = self.get_content(response)
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response, JsonResponse)
-        print(content)
         self.assertIn("social_media", content)
         social_media = content["social_media"]
         self.assertIn("wa", social_media)

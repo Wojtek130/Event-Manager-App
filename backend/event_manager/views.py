@@ -237,7 +237,6 @@ def old_announcements(request, timestamp):
     """
     user = get_object_or_404(MyUser, username=request.user)
     a = get_announcements("old", timestamp, user)
-    print(a, "back old")
     return JsonResponse(data={"announcements" : a})
 
 @api_view(['GET'])
@@ -249,7 +248,6 @@ def new_announcements(request, timestamp):
     """
     user = get_object_or_404(MyUser, username=request.user)
     a = get_announcements("new", timestamp, user)
-    print(a, "back new")
     return JsonResponse(data={"announcements" : a})
 
 @api_view(['GET', 'POST'])
@@ -287,7 +285,6 @@ def message(request):
     }
     """
     data = {"body" : request.data["body"], "author" : request.user.pk, "event" : request.data["event"]}
-    print(data, "")
     # return JsonResponse({'message': 'Last fetch successfully updated'})
     announcement = AnnouncementSerializer(data=data)
     if announcement.is_valid():
