@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: orangePrimary,
     textTransform: "uppercase",
-    // width: "30%",
   },
   text: {
     color: "white",

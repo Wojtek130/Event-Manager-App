@@ -6,7 +6,6 @@ import { store, persistor } from "./store/store";
 import AppRoutes from "./components/AppRoutes";
 
 export default function App() {
-  // const [loggedIn, setLoggedIn] = useState(false);
 
   return (
     <Provider store={store}>

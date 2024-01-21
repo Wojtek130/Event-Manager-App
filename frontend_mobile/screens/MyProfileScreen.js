@@ -113,7 +113,6 @@ const MyProfileScreen = function ({ navigation }) {
                 {SOCIAL_MEDIA_PLATFORMS_NAMES[item]}{" "}
               </Text>
               <MyTextInput
-                // placeholder={SOCIAL_MEDIA_PLATFORMS_NAMES[item]}
                 defaultValue={userData.social_media[item]}
                 onChangeText={(text) => handleChange(item, text)}
                 style={globalStyles.textValue}

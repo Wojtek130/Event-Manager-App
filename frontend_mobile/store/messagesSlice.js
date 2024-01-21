@@ -105,7 +105,6 @@ const messagesSlice = createSlice({
       state.status = "failed";
       state.error = action.error.message;
     });
-    ///
 
     builder.addCase(fetchLastFetch.fulfilled, (state, action) => {
       const lf = action.payload?.last_fetch;

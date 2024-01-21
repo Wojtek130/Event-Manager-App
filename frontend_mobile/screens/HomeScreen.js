@@ -21,9 +21,6 @@ const HomeScreen = function ({ navigation }) {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    // borderColor: "pink",
-    // backgroundColor: "yellow",
-    // alignItems: "center"
   },
 });
 export default HomeScreen;

@@ -188,7 +188,6 @@ const EventForm = (props) => {
     }
   };
   useEffect(() => {
-    ///
     const fetchUsers = async () => {
       try {
         const response = await axiosInstance.get("users/");

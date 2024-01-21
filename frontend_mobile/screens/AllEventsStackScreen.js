@@ -13,7 +13,6 @@ const AllEventsStackScreen = () => (
     <AllEventsStack.Screen
       name="All Events List"
       component={AllEventsListScreen}
-      // headerMode="none"
       options={{ headerShown: false }}
     />
     <AllEventsStack.Screen

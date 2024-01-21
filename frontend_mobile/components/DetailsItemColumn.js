@@ -7,7 +7,6 @@ const DetailsItemColumn = (props) => {
     <View
       style={[
         globalStyles.containerVertical,
-        // globalStyles.containerHorizontal,
         globalStyles.containerCentered,
         globalStyles.labelValuecontainer,
         styles.container,
@@ -34,7 +33,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     height: "40%",
-    // backgroundColor: "pink",
   },
   textValue: {
     height: "70%",

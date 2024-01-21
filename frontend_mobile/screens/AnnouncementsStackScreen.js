@@ -11,7 +11,6 @@ const AnnouncementsStackScreen = () => (
     <AnnouncementsStack.Screen
       name="Announcements Headers"
       component={AnnouncementsListScreen}
-      // headerMode="none"
       options={{ headerShown: false }}
     />
     <AnnouncementsStack.Screen

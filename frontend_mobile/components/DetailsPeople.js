@@ -25,7 +25,6 @@ const DetailsPeople = (props) => {
       <Text style={[globalStyles.input, globalStyles.textLabel, styles.label]}>
         {props.peopleRole}
       </Text>
-      {/* <View style={[styles.flatListContainer]}> */}
       <FlatList
         data={props.people}
         keyExtractor={(item) => item}
@@ -41,7 +40,6 @@ const DetailsPeople = (props) => {
         )}
       />
     </View>
-    // </View>
   );
 };
 

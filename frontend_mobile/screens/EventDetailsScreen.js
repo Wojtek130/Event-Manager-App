@@ -142,11 +142,8 @@ const EventDetailsScreen = function ({ route, navigation }) {
     participants = participants[1];
   }
   return (
-    // <ScrollView contentContainerStyle={globalStyles.screen}>
     <ScrollView contentContainerStyle={styles.scrollView}>
       <Text style={globalStyles.input}>Event {eventId} Details</Text>
-      {/* <View style={[globalStyles.labelValuecontainer]}> */}
-      {/* <View style={[]}> */}
       {detailsHorizontalBox.map((item) => {
         const [key, value, index] = item;
         return <DetailsItemRow objectKey={key} value={value} key={index} />;
@@ -165,68 +162,6 @@ const EventDetailsScreen = function ({ route, navigation }) {
         peopleRole={"Organizers"}
         onPressCallback={(item) => handleUserClick(item)}
       />
-
-      {/* {participants && (
-        <View
-          style={[
-            globalStyles.containerHorizontal,
-            globalStyles.containerCentered,
-            globalStyles.labelValuecontainer,
-          ]}
-        >
-          <Text style={[globalStyles.input, globalStyles.textLabel]}>
-            {"Participants"}
-          </Text>
-          <FlatList
-            data={participants}
-            keyExtractor={(item) => item}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => handleUserClick(item)}
-                key={item}
-                style={[globalStyles.input]}
-              >
-                <Text>{item}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      )} */}
-      {/* </View> */}
-      {/* {Object.entries(eventDetails).map(([key, value], index) => {
-        const rowCondition = !(key == "faq" || key == "description");
-        if (key == "private") {
-          return;
-          // return <key={index}></key=>;
-        }
-        if (key === "participants" || key === "organizers") {
-          return (
-            <View key={index}>
-              <Text>{key}: </Text>
-              <FlatList
-                data={value}
-                keyExtractor={(item) => item}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() => handleUserClick(item)}
-                    key={item}
-                  >
-                    <Text>{item}</Text>
-                  </TouchableOpacity>
-                )}
-              />
-            </View>
-          );
-        }
-        return (
-          <DetailsItem
-            objectKey={key}
-            value={value}
-            key={index}
-            row={rowCondition}
-          />
-        );
-      })} */}
       <ActionButtons
         amOrganizer={route.params.am_organizer}
         amParticipant={route.params.am_participant}

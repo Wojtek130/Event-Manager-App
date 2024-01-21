@@ -27,20 +27,6 @@ const AllEventsScreen = ({ navigation, route }) => {
       setSearchFilters(initialFilters);
     });
   }, [navigation]);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axiosInstance.get("/events");
-  //       setEvents(response.data.events);
-  //       setEventsDisplayed(response.data.events);
-  //     } catch (error) {
-  //       setErrorMessage(error.message);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-  ///
   useEffect(() => {
     const focusListener = navigation.addListener("focus", () => {
       const fetchData = async () => {

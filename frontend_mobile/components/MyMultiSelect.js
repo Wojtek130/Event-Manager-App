@@ -27,13 +27,11 @@ const MyMultiSelect = (props) => {
       itemTextColor="rgba(33, 126, 222, 0.5)"
       displayKey="username"
       searchInputStyle={{ color: "rgb(33, 126, 222)" }}
-      // styleIndicator={{ color: "white" }}
       submitButtonColor={globalStyles.bluePrimary}
       submitButtonText="Choose"
       styleMainWrapper={[styles.multiSelectMainWrapper]}
       styleDropdownMenuSubsection={{
         backgroundColor: "rgb(33, 126, 222)",
-        // color: "pink",
       }}
       textColor="white"
       fontFamily="sans-serif"

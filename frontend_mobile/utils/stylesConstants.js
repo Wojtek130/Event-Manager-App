@@ -29,17 +29,12 @@ export const globalStyles = StyleSheet.create({
     alignItems: "center",
   },
   input: {
-    // backgroundColor: bluePrimaryTheLightest,
     backgroundColor: bluePrimary,
     color: "white",
     margin: margin,
     padding: padding,
     borderRadius: borderRadius,
   },
-  // mainChildren: {
-  //   alignSelf: "stretch",
-  //   backgroundColor: "pink",
-  // },
   commonDrawersOptions: {
     drawerLabelStyle: {
       color: "white",
