@@ -100,7 +100,6 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         fields = ['body', 'timestamp', 'author', 'event']
 
     def to_internal_value(self, data):
-        # data["author"] = get_object_or_404(User, username=data["author"])
         data["event"] = get_object_or_404(MyEvent, pk=data["event"]).pk
         return super().to_internal_value(data)
 

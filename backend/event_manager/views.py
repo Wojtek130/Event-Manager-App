@@ -285,7 +285,6 @@ def message(request):
     }
     """
     data = {"body" : request.data["body"], "author" : request.user.pk, "event" : request.data["event"]}
-    # return JsonResponse({'message': 'Last fetch successfully updated'})
     announcement = AnnouncementSerializer(data=data)
     if announcement.is_valid():
         announcement.save()

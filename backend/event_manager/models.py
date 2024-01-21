@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from jsonfield import JSONField
-# Create your models here.
+
 class MyUser(AbstractUser):
     """
     A class representing an user
