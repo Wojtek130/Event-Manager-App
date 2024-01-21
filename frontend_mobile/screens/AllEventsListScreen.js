@@ -21,7 +21,12 @@ const AllEventsScreen = ({ navigation, route }) => {
   const [eventsDisplayed, setEventsDisplayed] = useState([]);
   const [searchFilters, setSearchFilters] = useState(initialFilters);
   const successMessage = route.params?.successMessage;
-
+  useEffect(() => {
+    const focusListener = navigation.addListener("focus", () => {
+      setErrorMessage("");
+      setSearchFilters(initialFilters);
+    });
+  }, [navigation]);
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -47,7 +52,7 @@ const AllEventsScreen = ({ navigation, route }) => {
           setErrorMessage(error.message);
         }
       };
-  
+
       fetchData();
     });
   }, [navigation]);

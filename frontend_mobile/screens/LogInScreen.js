@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -17,6 +17,14 @@ const LogInScreen = function ({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    const focusListener = navigation.addListener("focus", () => {
+      setUsername("");
+      setPassword("");
+      setErrorMessage("");
+    });
+  }, [navigation]);
 
   const handleLogin = async () => {
     setErrorMessage("");

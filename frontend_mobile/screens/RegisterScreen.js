@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import axios from "axios";
 
@@ -14,6 +14,7 @@ import SuccessMessage from "../components/SuccessMessage";
 import { getStringErrorMessage } from "../utils/functions";
 
 const RegisterScreen = function ({ navigation }) {
+
   const initialSocialMedia = SOCIAL_MEDIA_PLATFORMS.reduce((acc, key) => {
     acc[key] = "";
     return acc;
@@ -40,6 +41,13 @@ const RegisterScreen = function ({ navigation }) {
   const clearInputFields = () => {
     setFormData(() => initialInputs);
   };
+
+  useEffect(() => {
+    const focusListener = navigation.addListener("focus", () => {
+      setErrorMessage("");
+      setSuccessMessage("");
+    });
+  }, [navigation]);
 
   const getAllGivenSocialMedia = (data) => {
     const socialMedia = {};
