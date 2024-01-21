@@ -11,12 +11,10 @@ const FilterBox = (props) => {
       ...props.searchFilters,
       [field]: value,
     });
-    console.log(value, "new");
   };
 
   const handleApplyFilters = () => {
     const newEvents = new Array();
-    console.log(props.searchFilters, "filters");
     Object.entries(props.events).forEach(([key, value]) => {
       const amOrganizerCondition = props.searchFilters.amOrganizer
         ? value.am_organizer
@@ -32,7 +30,6 @@ const FilterBox = (props) => {
         newEvents.push(value);
       }
     });
-    console.log(newEvents, "new events");
     props.setEventsDisplayed(newEvents);
   };
   return (

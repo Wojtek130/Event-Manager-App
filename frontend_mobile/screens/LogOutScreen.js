@@ -19,10 +19,9 @@ const LogOutScreen = function ({ navigation }) {
         last_fetch: lft,
       });
     } catch (error) {
-      console.log(error, "setting lf error");
+      console.error(error);
     }
     dispatch(clearUser());
-    console.log("loggging out");
   };
   return (
     <View style={globalStyles.screen}>

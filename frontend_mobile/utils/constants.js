@@ -13,5 +13,5 @@ export const DATE_REGEX = /^\d{2}\.\d{2}\.\d{4}$/;
 
 export const serverURL = "127.0.0.1:8000";
 export const baseURL = `http://${serverURL}`;
-export const FETCH_INTERVAL = 10 * 1000;
+export const FETCH_INTERVAL = 5 * 1000;
 export const DEFAULT_DRAWER_LABEL = "600"

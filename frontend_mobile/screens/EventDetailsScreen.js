@@ -37,7 +37,6 @@ const EventDetailsScreen = function ({ route, navigation }) {
             "Content-Type": "application/json",
           },
         });
-        console.log(response.data, "aaa");
         setEventDetails(response.data);
       } catch (error) {
         setErrorMessage(error.message);
@@ -92,7 +91,6 @@ const EventDetailsScreen = function ({ route, navigation }) {
     });
   };
   const handleLeave = async () => {
-    console.log("helloooo!");
     try {
       const response = await axiosInstance.post(
         "event/leave/",
@@ -110,16 +108,13 @@ const EventDetailsScreen = function ({ route, navigation }) {
         error.request.responseText ? error.request.responseText : error.message
       );
     }
-    console.log("successfully left");
     navigation.replace("All Events List", {
       successMessage: "successfully left event",
     });
   };
 
   const handleUserClick = (item) => {
-    console.log(item);
     const destination = user == item ? "My Profile" : "Profile";
-    console.log(item);
     navigation.navigate(destination, {
       user: item,
     });
@@ -128,7 +123,6 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const detailsVerticalBox = new Array();
   const detailsFlatlistBox = new Array();
   Object.entries(eventDetails).forEach(([key, value], index) => {
-    // console.log("true key: ", k);
     const currentItem = [key, value, index];
     if (key == "private") {
     } else if (key === "participants" || key === "organizers") {
@@ -139,9 +133,6 @@ const EventDetailsScreen = function ({ route, navigation }) {
       detailsHorizontalBox.push(currentItem);
     }
   });
-  console.log("hb", detailsHorizontalBox);
-  console.log("vb", detailsVerticalBox);
-  console.log("flb", detailsFlatlistBox);
   let organizers = detailsFlatlistBox[0];
   let participants = detailsFlatlistBox[1];
   if (organizers) {
@@ -150,7 +141,6 @@ const EventDetailsScreen = function ({ route, navigation }) {
   if (participants) {
     participants = participants[1];
   }
-  console.log(organizers, participants, "aaa");
   return (
     // <ScrollView contentContainerStyle={globalStyles.screen}>
     <ScrollView contentContainerStyle={styles.scrollView}>

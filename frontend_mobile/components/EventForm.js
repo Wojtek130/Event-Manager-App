@@ -29,7 +29,6 @@ const EventForm = (props) => {
     });
   }, [props.navigation]);
   const user = useSelector(selectUser);
-  console.log("current user", user);
   const initialFormData = {
     name: "",
     startTime: "",
@@ -71,7 +70,6 @@ const EventForm = (props) => {
   };
 
   const handleSubmit = async () => {
-    console.log(events);
     setErrorMessage("");
     setSuccessMessage("");
     if (!formData.name) {
@@ -93,7 +91,6 @@ const EventForm = (props) => {
       !TIME_REGEX.test(formData.startTime) ||
       !TIME_REGEX.test(formData.endTime)
     ) {
-      console.log(formData.startTime, formData.endTime);
       setErrorMessage(`Times must be in format: ${TIME_FORMAT}`);
       return;
     }
@@ -117,7 +114,6 @@ const EventForm = (props) => {
       );
       return;
     }
-    console.log(formData, props.eventId, "before sending");
     try {
       let response;
       if (!props.creating) {
@@ -169,7 +165,6 @@ const EventForm = (props) => {
           : "Event Successfully modified"
       );
     } catch (error) {
-      console.log(error);
       setErrorMessage(
         error.request.responseText ? error.request.responseText : error.message
       );
@@ -201,7 +196,6 @@ const EventForm = (props) => {
       } catch (error) {
         setErrorMessage(error);
       }
-      console.log(users, "11111");
     };
 
     fetchUsers();

@@ -36,8 +36,6 @@ export const axiosInstanceArgs = (getState, dispatch) => {
         })
       );
       const pt = JSON.parse(JSON.parse(getState().auth.authTokens));
-      // console.log(pt.access === response.data.access, "@@@@@@@@@@@");
-      // req.headers.Authorization = `Bearer ${response.data.access}`;
       req.headers.Authorization = `Bearer ${pt.access}`;
     } catch (error) {
       console.error(error);

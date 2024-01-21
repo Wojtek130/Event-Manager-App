@@ -17,7 +17,6 @@ const fetchLastFetch = createAsyncThunk(
 const fetchNewMessages = createAsyncThunk(
   "messages/fetchNewMessages",
   async (arg, { getState, dispatch }) => {
-    console.log("------------");
     const response = await axiosInstanceArgs(getState, dispatch).get(
       `messages/new/${getState().messages.lastFetchTimestamp}/`
     );
@@ -28,7 +27,6 @@ const fetchNewMessages = createAsyncThunk(
 const fetchOldMessages = createAsyncThunk(
   "messages/fetchOldMessages",
   async (arg, { getState, dispatch }) => {
-    console.log("------------");
     const response = await axiosInstanceArgs(getState, dispatch).get(
       `messages/old/${getState().messages.lastFetchTimestamp}/`
     );
@@ -61,7 +59,6 @@ const messagesSlice = createSlice({
     setRead: (state, action) => {
       const eventId = action.payload["eventId"];
       const messages = action.payload["messages"];
-      console.log(action.payload);
       if (state.newMessages.hasOwnProperty(eventId)) {
         delete state.newMessages[eventId];
       }
@@ -77,7 +74,6 @@ const messagesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchNewMessages.fulfilled, (state, action) => {
-      console.log("fulfilled new", action.payload);
       state.status = "succeeded new";
 
       if (action.payload?.announcements) {
@@ -89,47 +85,33 @@ const messagesSlice = createSlice({
       state.lastFetchTimestamp = Date.now() / 1000;
     });
     builder.addCase(fetchNewMessages.pending, (state) => {
-      console.log("loading new");
-
       state.status = "loading";
     });
     builder.addCase(fetchNewMessages.rejected, (state, action) => {
-      console.log("failed new");
-      console.log(action.error.message);
-
       state.status = "failed";
       state.error = action.error.message;
     });
     ////
     builder.addCase(fetchOldMessages.fulfilled, (state, action) => {
-      console.log("fulfilled old", action.payload);
       state.status = "succeeded old";
       if (action.payload?.announcements) {
         state.oldMessages = action.payload?.announcements;
       }
     });
     builder.addCase(fetchOldMessages.pending, (state) => {
-      console.log("loading old");
-
       state.status = "loading";
     });
     builder.addCase(fetchOldMessages.rejected, (state, action) => {
-      console.log("failed old");
-      console.log(action.error.message);
-
       state.status = "failed";
       state.error = action.error.message;
     });
     ///
 
     builder.addCase(fetchLastFetch.fulfilled, (state, action) => {
-      console.log("fulfilled flf", action.payload);
       const lf = action.payload?.last_fetch;
       state.lastFetchTimestamp = lf ? lf : 0;
     });
     builder.addCase(fetchLastFetch.rejected, (state, action) => {
-      console.log("failed flf");
-      console.log(action.error.message);
       state.error = action.error.message;
     });
   },

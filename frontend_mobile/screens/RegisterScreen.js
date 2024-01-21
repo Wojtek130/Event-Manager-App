@@ -81,9 +81,6 @@ const RegisterScreen = function ({ navigation }) {
       return;
     }
     const socialMedia = getAllGivenSocialMedia(formData);
-    console.log("Username:", formData.username);
-    console.log("Password:", formData.password);
-    console.log("Social Media:", socialMedia);
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/auth/register/",
@@ -98,14 +95,12 @@ const RegisterScreen = function ({ navigation }) {
           },
         }
       );
-      console.log(response, "!!!!!!!!!");
       if (response.status >= 200 && response.status < 300) {
         const data = response.data;
         setSuccessMessage("Successful registration");
         clearInputFields();
       } else {
         setErrorMessage("Registration failed");
-        console.log("error !");
       }
     } catch (error) {
       const eMObj = error?.response?.data;

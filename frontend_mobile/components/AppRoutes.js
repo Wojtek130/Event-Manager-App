@@ -43,11 +43,10 @@ export default function AppRoutes() {
             dispatch(fetchNewMessages());
           })
           .catch((error) => {
-            console.log("first dispatch error", error);
+            console.error("first dispatch error", error);
           });
-        console.log("last fetch timestamp before fetching", lft);
       } catch (error) {
-        console.log(error, "dispatch error");
+        console.error(error, "dispatch error");
       }
     };
     let intervalId = 0;
@@ -71,7 +70,7 @@ export default function AppRoutes() {
           last_fetch: lft,
         });
       } catch (error) {
-        console.log(error, "setting lf error2");
+        console.error(error);
       }
     };
   }, []);

@@ -26,12 +26,9 @@ const AnnouncementsListScreen = ({ navigation }) => {
   const oldMessages = useSelector(selectOldMessages);
 
   useEffect(() => {
-    console.log(oldMessages, "important component");
-    console.log(newMessages, "important component");
   }, [newMessages, oldMessages]);
 
   const unreadMessagesAvailable = (item, a) => !!a[item.id];
-  console.log(oldMessages);
   useEffect(() => {
     const focusListener = navigation.addListener("focus", () => {
       const fetchData = async () => {
@@ -39,7 +36,6 @@ const AnnouncementsListScreen = ({ navigation }) => {
           const response = await axiosInstance.get("/events");
           setEvents(response.data.events);
           setEventsDisplayed(response.data.events);
-          console.log(response.data.events);
         } catch (error) {
           setErrorMessage(error.message);
         }

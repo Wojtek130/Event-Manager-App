@@ -22,11 +22,9 @@ const MyProfileScreen = function ({ navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   const fetchUserData = async () => {
-    console.log("fetching data called");
     try {
       const response = await axiosInstance.get("my_profile/");
       setUserData(await response.data);
-      console.log(response.data.social_media);
       const osm = Object.entries(response.data.social_media).filter(
         ([key]) => !SOCIAL_MEDIA_PLATFORMS.includes(key)
       );
@@ -59,7 +57,6 @@ const MyProfileScreen = function ({ navigation }) {
     if (otherSocialMedia[0] && otherSocialMedia[1]) {
       newSocialMedia[otherSocialMedia[0]] = otherSocialMedia[1];
     }
-    console.log(newSocialMedia, "new social media");
     try {
       const response = await axiosInstance.patch(
         "my_profile/",

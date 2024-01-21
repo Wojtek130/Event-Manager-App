@@ -11,7 +11,6 @@ export const printSuccessMessage = (
 export const transformEventData = (eventData) => {
   const newEventData = {};
   Object.entries(eventData).forEach(([key, value]) => {
-    console.log(`Key: ${key}, Value: ${value}`);
     if (key == "start_date" || key == "end_date") {
       const [d, t] = value.split(" ");
       newEventData[key == "start_date" ? "startDate" : "endDate"] = d;
@@ -54,7 +53,6 @@ export const isEmptyObject = (o) => Object.keys(o).length === 0;
 export const getStringErrorMessage = (errorObj) => {
   let message = "";
   Object.entries(errorObj).forEach(([key, value]) => {
-    console.log(key, value);
     value.forEach((item) => {
       message += `${item} (${key}), `;
     });

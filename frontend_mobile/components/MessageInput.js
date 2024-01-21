@@ -14,7 +14,6 @@ const MessageInput = (props) => {
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleInputSubmit = async () => {
-    console.log("Input submitted:", message);
     try {
       const response = await axiosInstance.post(
         "message/",

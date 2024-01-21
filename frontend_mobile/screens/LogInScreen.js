@@ -45,7 +45,6 @@ const LogInScreen = function ({ navigation }) {
           },
         }
       );
-      console.log(response, "!!!!!!!!!");
       if (response.status === 200) {
         const data = response.data;
         const decodedData = jwtDecode(data.access);

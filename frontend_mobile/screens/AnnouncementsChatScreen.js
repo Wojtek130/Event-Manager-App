@@ -20,7 +20,6 @@ const AnnouncementsChatScreen = ({ route }) => {
   const newMessages = useSelector(selectNewMessages)[item.id];
   const oldMessages = useSelector(selectOldMessages)[item.id];
   let allMessages = mergeArrays(oldMessages, newMessages);
-  console.log(oldMessages, newMessages, "new mes");
   useEffect(() => {
     if (newMessages) {
       dispatch(setRead({ eventId: item.id, messages: newMessages }));
