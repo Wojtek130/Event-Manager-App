@@ -22,6 +22,13 @@ import {
 import MyButton from "./MyButton";
 
 const EventForm = (props) => {
+  useEffect(() => {
+    const focusListener = props.navigation.addListener("focus", () => {
+      // console.log("123456789");
+      setErrorMessage("");
+      setSuccessMessage("");
+    });
+  }, [props.navigation]);
   const user = useSelector(selectUser);
   console.log("current user", user);
   const initialFormData = {

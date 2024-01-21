@@ -1,12 +1,13 @@
 import { View } from "react-native";
+import { useEffect } from "react";
 
 import EventForm from "../components/EventForm";
 import { globalStyles } from "../utils/stylesConstants";
 
-const CreateEventScreen = () => {
+const CreateEventScreen = ({ navigation }) => {
   return (
     <View style={globalStyles.screen}>
-      <EventForm creating={true} />
+      <EventForm creating={true} navigation={navigation} />
     </View>
   );
 };
