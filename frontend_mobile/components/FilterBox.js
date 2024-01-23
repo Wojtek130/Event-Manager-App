@@ -15,6 +15,7 @@ const FilterBox = (props) => {
 
   const handleApplyFilters = () => {
     const newEvents = new Array();
+    console.log("ppppppp");
     Object.entries(props.events).forEach(([key, value]) => {
       const amOrganizerCondition = props.searchFilters.amOrganizer
         ? value.am_organizer
@@ -30,6 +31,7 @@ const FilterBox = (props) => {
         newEvents.push(value);
       }
     });
+    console.log("callllling");
     props.setEventsDisplayed(newEvents);
   };
   return (

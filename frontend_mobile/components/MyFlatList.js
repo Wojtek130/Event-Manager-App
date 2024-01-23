@@ -3,12 +3,14 @@ import { StyleSheet, FlatList } from "react-native";
 import { globalStyles, width50Per } from "../utils/stylesConstants";
 
 const MyFlatList = (props) => {
+  // console.log(props.data, "lllll");
   return (
     <FlatList
       data={props.data}
       keyExtractor={(item) => item.name}
       renderItem={props.renderItem}
       style={[globalStyles.mainChildren, styles.flatList]}
+      windowSize={Number.MAX_SAFE_INTEGER}
     />
   );
 };
