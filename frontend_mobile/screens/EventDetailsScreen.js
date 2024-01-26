@@ -1,10 +1,6 @@
 import {
   Text,
-  FlatList,
-  TouchableOpacity,
-  View,
   ScrollView,
-  FlatListComponent,
   StyleSheet,
 } from "react-native";
 import { useState, useEffect } from "react";

@@ -1,5 +1,4 @@
 import { View } from "react-native";
-import { useEffect } from "react";
 
 import EventForm from "../components/EventForm";
 import { globalStyles } from "../utils/stylesConstants";

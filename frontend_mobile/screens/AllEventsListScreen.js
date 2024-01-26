@@ -1,4 +1,4 @@
-import { FlatList, View } from "react-native";
+import { View } from "react-native";
 import { useState, useEffect } from "react";
 
 import FilterBox from "../components/FilterBox";
