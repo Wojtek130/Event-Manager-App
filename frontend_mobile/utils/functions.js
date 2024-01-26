@@ -1,3 +1,6 @@
+import { jwtDecode } from "jwt-decode";
+import dayjs from "dayjs";
+
 export const printSuccessMessage = (
   response,
   setSuccessMessageCallback,
@@ -59,3 +62,10 @@ export const getStringErrorMessage = (errorObj) => {
   });
   return message;
 };
+
+export const isTokenExpired = (parsedAuthTokens) => {
+  const tokenData = jwtDecode(parsedAuthTokens.access);
+  const expirationDate = dayjs.unix(tokenData.exp);
+  const nowDate = dayjs();
+  return expirationDate.isBefore(nowDate);
+}

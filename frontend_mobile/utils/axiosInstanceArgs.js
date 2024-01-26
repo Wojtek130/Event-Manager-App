@@ -1,29 +1,22 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import dayjs from "dayjs";
 import { setUser } from "../store/authSlice";
 import { baseURL } from "./constants";
+import { isTokenExpired } from "./functions";
 
 export const axiosInstanceArgs = (getState, dispatch) => {
-  let authTokens = JSON.parse(getState()?.auth?.authTokens);
+  let tokens = JSON.parse(getState()?.auth?.authTokens);
 
   const axiosInstance = axios.create({
     baseURL,
-    headers: { Authorization: `Bearer ${authTokens?.access}` },
+    headers: { Authorization: `Bearer ${tokens?.access}` },
   });
 
   axiosInstance.interceptors.request.use(async (req) => {
-    authTokens = JSON.parse(getState().auth.authTokens);
-    const parsedAuthTokens = JSON.parse(authTokens);
+    tokens = JSON.parse(getState().auth.authTokens);
+    const parsedAuthTokens = JSON.parse(tokens);
     req.headers.Authorization = `Bearer ${parsedAuthTokens?.access}`;
 
-    const tokenData = jwtDecode(parsedAuthTokens.access);
-
-    const expirationDate = dayjs.unix(tokenData.exp);
-    const nowDate = dayjs();
-    const isExpired = expirationDate.isBefore(nowDate);
-
-    if (!isExpired) {
+    if (!isTokenExpired(parsedAuthTokens)) {
       return req;
     }
     try {
