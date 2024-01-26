@@ -1,4 +1,4 @@
-import { Pressable, Text, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 export const bluePrimary = "rgb(33, 126, 222)";
 export const bluePrimaryLight = "rgba(33, 126, 222, 0.5)";

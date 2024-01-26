@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 
 import axiosInstanceArgs from "../utils/axiosInstanceArgs";
 import { mergeArrays, mergeObjectsWithArrays } from "../utils/functions";
