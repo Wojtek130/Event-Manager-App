@@ -41,18 +41,6 @@ const EventForm = (props) => {
     organizers: [],
     participants: [],
   };
-  const initialFormData2 = {
-    name: "mock01",
-    startTime: "01:05",
-    startDate: "12.12.2007",
-    endTime: "02:02",
-    endDate: "12.12.2009",
-    description: "a",
-    faq: "k",
-    private: false,
-    organizers: [],
-    participants: [],
-  };
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([]);
 

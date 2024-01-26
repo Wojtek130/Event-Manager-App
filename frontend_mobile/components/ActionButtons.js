@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 
 import MyButton from "./MyButton";
 import { globalStyles } from "../utils/stylesConstants";

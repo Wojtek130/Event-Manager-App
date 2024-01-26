@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import MySwitch from "./MySwitch";
 import MyButton from "./MyButton";
 import MyTextInput from "./MyTextInput";
-import { globalStyles, margin, borderRadius, padding} from "../utils/stylesConstants";
+import { globalStyles, margin} from "../utils/stylesConstants";
 
 const FilterBox = (props) => {
   const handleFiltersChange = (field, value) => {
