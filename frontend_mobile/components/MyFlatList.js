@@ -3,7 +3,6 @@ import { StyleSheet, FlatList } from "react-native";
 import { globalStyles, width50Per } from "../utils/stylesConstants";
 
 const MyFlatList = (props) => {
-  // console.log(props.data, "lllll");
   return (
     <FlatList
       data={props.data}

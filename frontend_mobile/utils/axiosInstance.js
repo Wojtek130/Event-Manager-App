@@ -29,7 +29,6 @@ axiosInstance.interceptors.request.use(async (req) => {
         authTokens: JSON.stringify(response.data),
       })
     );
-    // req.headers.Authorization = `Bearer ${response.data.access}`;
     const pt = JSON.parse(JSON.parse(store.getState().auth.authTokens));
     req.headers.Authorization = `Bearer ${pt.access}`;
   } catch (error) {

@@ -36,7 +36,7 @@ const fetchOldMessages = createAsyncThunk(
 const initialState = {
   oldMessages: {},
   newMessages: {},
-  status: "idle", // 'idle', 'loading', 'succeeded', 'failed'
+  status: "idle",
   error: null,
   lastFetchTimestamp: 0,
 };
