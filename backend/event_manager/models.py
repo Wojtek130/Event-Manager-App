@@ -4,7 +4,7 @@ from jsonfield import JSONField
 
 class MyUser(AbstractUser):
     """
-    A class representing an user
+    A class representing a user
 
     Additional Attributes:
     social_media 
